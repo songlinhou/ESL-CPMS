@@ -128,8 +128,13 @@ function setupLoginStatus() {
         $('#qrGenerateModal').modal("show");
         location_1.showCoordinates();
     });
-    // setup QR scanner
-    qr_1.setupQRScanner('scanner');
+    $('#joinConversationBtn').on("click", function (e) {
+        e.preventDefault();
+        // setup QR scanner
+        //setupQRScanner('scanner');
+        console.log("try scanning");
+        $('#qrScannerModal').modal("show");
+    });
 }
 $(document).ready(function () {
     setupLoginStatus();

@@ -112,7 +112,7 @@
                                     <div class="card-body">
                                       <h5 class="card-title"><i class="fas fa-hands-helping" style="margin-right: 10px;"></i>Response</h5>
                                       <p class="card-text">Response to a conversation initialized before. </p>
-                                      <a href="#" class="btn btn-primary btn-block" style="font-size:14px;">Join Conversation</a>
+                                      <a href="#" class="btn btn-primary btn-block" style="font-size:14px;" id="joinConversationBtn">Join Conversation</a>
                                     </div>
                                   </div>
                     </div>
@@ -392,20 +392,21 @@
 
     <!-- <script type="text/javascript" src="src/js/qr/require.js"></script> -->
     <script>
-        //use QR support
+        // setup camera
 
-        // let __awesome_qr_base_path = "src/js/qr"; 
-
-        // // require awesome-qr.js
-        // require([__awesome_qr_base_path + '/awesome-qr'], function (AwesomeQR) {
-        //   // ... and make use of it
-        //   AwesomeQR.create({
-        //     text: 'Makito loves Kafuu Chino.',
-        //     size: 800,
-        //     margin: 20,
-        //     bindElement: 'qrcode'
-        //   });
-        // });
+        let scanner = new Instascan.Scanner({ video: document.getElementById('scanner') });
+        scanner.addListener('scan', function (content) {
+          console.log(content);
+        });
+        Instascan.Camera.getCameras().then(function (cameras) {
+          if (cameras.length > 0) {
+            scanner.start(cameras[0]);
+          } else {
+            console.error('No cameras found.');
+          }
+        }).catch(function (e) {
+          console.error(e);
+        });
 
         //custom code
 
