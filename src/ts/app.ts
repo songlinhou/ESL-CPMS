@@ -140,7 +140,7 @@ function setupLoginStatus(){
     });
 
     // setup QR scanner
-    //setupQRScanner()
+    setupQRScanner('scanner')
 
 }
 

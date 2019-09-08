@@ -21,6 +21,7 @@ function setupQRScanner(video_id) {
     var scanner = new Instascan.Scanner({ video: $("#" + video_id)[0] });
     scanner.addListener('scan', function (content) {
         console.log(content);
+        alert(content);
     });
     Instascan.Camera.getCameras().then(function (cameras) {
         if (cameras.length > 0) {

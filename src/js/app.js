@@ -129,7 +129,7 @@ function setupLoginStatus() {
         location_1.showCoordinates();
     });
     // setup QR scanner
-    //setupQRScanner()
+    qr_1.setupQRScanner('scanner');
 }
 $(document).ready(function () {
     setupLoginStatus();

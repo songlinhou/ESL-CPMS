@@ -21,7 +21,8 @@ export function generateQRCodeAddr(content:string,size:string="150x150"):string{
 export function setupQRScanner(video_id:string){
     let scanner = new Instascan.Scanner({ video: $( `#${video_id}` )[0] });
     scanner.addListener('scan', function (content:string) {
-    console.log(content);
+        console.log(content);
+        alert(content);
     });
     Instascan.Camera.getCameras().then(function (cameras:any) {
     if (cameras.length > 0) {
