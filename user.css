@@ -1,0 +1,42 @@
+.nav-logo {
+    height: 32px;
+}
+
+.hero-img {
+    background: url("images/hero_img2.jpg") no-repeat;
+    background-position: top;
+    background-size: cover;
+}
+
+.hero-img-overlay {
+}
+
+.hero-title {
+    color:white;
+    z-index: 1;
+}
+
+.hero-title-desc {
+    color:white;
+}
+
+.container-bg {
+    background:"#f5f8fd";
+    width: 100%;
+}
+
+.font-red {
+    color: #a22935;
+}
+
+.section-shadow {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.footer {
+    position: relative;
+    margin-top: -150px; /* negative value of footer height */
+    height: 150px;
+    clear:both;
+    padding-top:20px;
+  } 

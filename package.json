@@ -1,0 +1,21 @@
+{
+  "name": "project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "lite-server",
+    "build": "tsc src/ts/*.ts --outDir src/js"
+  },
+  "author": "ray",
+  "license": "ISC",
+  "dependencies": {
+    "@types/bootstrap": "^4.3.1",
+    "bootstrap": "^4.3.1",
+    "canvas": "^2.6.0",
+    "jquery": "^3.4.1",
+    "sass": "^1.23.0-module.beta.1",
+    "systemjs": "^0.21.5"
+  }
+}

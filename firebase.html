@@ -1,0 +1,44 @@
+<html>
+
+<head>
+    <title>Firebase test</title>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/6.5.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.5.0/firebase-firestore.js"></script>
+</head>
+
+<body>
+
+
+
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#config-web-app -->
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyBll_TlDEIa17btF05Vi2FhsxaR22HBdas",
+    authDomain: "esl-platform-ca6b6.firebaseapp.com",
+    databaseURL: "https://esl-platform-ca6b6.firebaseio.com",
+    projectId: "esl-platform-ca6b6",
+    storageBucket: "",
+    messagingSenderId: "629764141551",
+    appId: "1:629764141551:web:c4dd8b30a635e6c9"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
+  const db = firebase.firestore();
+  //db.settings({timestampsInSnapshots: true});
+  db.collection('cafe').get().then((snapshot) => {
+    snapshot.docs.forEach(doc => {
+        console.log(doc.data());
+    });
+  });
+</script>
+
+
+
+</body>
+</html>
