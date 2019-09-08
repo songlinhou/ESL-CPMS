@@ -18,6 +18,8 @@ export function generateQRCodeAddr(content:string,size:string="150x150"):string{
     return `https://api.qrserver.com/v1/create-qr-code/?size=${size}&data=${content}`;
 }
 
+
+
 export function setupQRScanner(video_id:string){
     let scanner = new Instascan.Scanner({ video: $( `#${video_id}` )[0] });
     scanner.addListener('scan', function (content:string) {

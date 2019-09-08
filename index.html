@@ -394,19 +394,19 @@
     <script>
         // setup camera
 
-        let scanner = new Instascan.Scanner({ video: document.getElementById('scanner') });
-        scanner.addListener('scan', function (content) {
-          console.log(content);
-        });
-        Instascan.Camera.getCameras().then(function (cameras) {
-          if (cameras.length > 0) {
-            scanner.start(cameras[0]);
-          } else {
-            console.error('No cameras found.');
-          }
-        }).catch(function (e) {
-          console.error(e);
-        });
+        // let scanner = new Instascan.Scanner({ video: document.getElementById('scanner') });
+        // scanner.addListener('scan', function (content) {
+        //   console.log(content);
+        // });
+        // Instascan.Camera.getCameras().then(function (cameras) {
+        //   if (cameras.length > 0) {
+        //     scanner.start(cameras[0]);
+        //   } else {
+        //     console.error('No cameras found.');
+        //   }
+        // }).catch(function (e) {
+        //   console.error(e);
+        // });
 
         //custom code
 
@@ -423,8 +423,7 @@
     
     </script>
 
-    <!-- test purpose -->
-    <script src="https://jsconsole.com/js/remote.js?9d4f0f0b-7bbb-422a-89f9-5c709a3ba0ae"></script>
+    <!-- test purpose: JSCONSOLE -->
 
 </body>
 </html>

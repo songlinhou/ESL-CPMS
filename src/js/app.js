@@ -131,7 +131,7 @@ function setupLoginStatus() {
     $('#joinConversationBtn').on("click", function (e) {
         e.preventDefault();
         // setup QR scanner
-        //setupQRScanner('scanner');
+        qr_1.setupQRScanner('scanner');
         console.log("try scanning");
         $('#qrScannerModal').modal("show");
     });
