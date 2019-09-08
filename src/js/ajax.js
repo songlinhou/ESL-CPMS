@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var global_base_url = 'http://34.66.91.169:8888';
 function sendJsonp(url, data, method, callback) {
     return $.ajax({
@@ -21,3 +21,4 @@ exports.sendJsonp = sendJsonp;
 //         method: method,
 //     });
 // }
+//# sourceMappingURL=ajax.js.map

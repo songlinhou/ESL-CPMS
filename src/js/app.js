@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var formatChecker_1 = require("./formatChecker");
 var ajax_1 = require("./ajax");
 var qr_1 = require("./qr");
@@ -134,3 +134,4 @@ function setupLoginStatus() {
 $(document).ready(function () {
     setupLoginStatus();
 });
+//# sourceMappingURL=app.js.map

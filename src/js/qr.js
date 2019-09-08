@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 function generateInvitingQRCodeURL(username, location, timestamp, size) {
     if (size === void 0) { size = "150x150"; }
     var dataJSON = {
@@ -29,8 +29,9 @@ function setupQRScanner(video_id) {
         else {
             console.error('No cameras found.');
         }
-    })["catch"](function (e) {
+    }).catch(function (e) {
         console.error(e);
     });
 }
 exports.setupQRScanner = setupQRScanner;
+//# sourceMappingURL=qr.js.map

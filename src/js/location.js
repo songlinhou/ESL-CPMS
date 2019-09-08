@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 function showCoordinates() {
     function getLocation() {
         if (navigator.geolocation) {
@@ -16,3 +16,4 @@ function showCoordinates() {
     getLocation();
 }
 exports.showCoordinates = showCoordinates;
+//# sourceMappingURL=location.js.map

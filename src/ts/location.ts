@@ -7,7 +7,7 @@ export function showCoordinates(){
     }
     }
 
-    function showPosition(position) {
+    function showPosition(position:any) {
     console.log("Latitude: " + position.coords.latitude +
     "<br>Longitude: " + position.coords.longitude);
     }

@@ -18,18 +18,18 @@ export function generateQRCodeAddr(content:string,size:string="150x150"):string{
     return `https://api.qrserver.com/v1/create-qr-code/?size=${size}&data=${content}`;
 }
 
-export function setupQRScanner(video_id){
+export function setupQRScanner(video_id:string){
     let scanner = new Instascan.Scanner({ video: $( `#${video_id}` )[0] });
-    scanner.addListener('scan', function (content) {
+    scanner.addListener('scan', function (content:string) {
     console.log(content);
     });
-    Instascan.Camera.getCameras().then(function (cameras) {
+    Instascan.Camera.getCameras().then(function (cameras:any) {
     if (cameras.length > 0) {
         scanner.start(cameras[0]);
     } else {
         console.error('No cameras found.');
     }
-    }).catch(function (e) {
+    }).catch(function (e:any) {
     console.error(e);
     });
 }
