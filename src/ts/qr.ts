@@ -31,8 +31,10 @@ export function setupQRScanner(video_id:string){
         scanner.start(cameras[0]);
     } else {
         console.error('No cameras found.');
+        alert("no camera");
     }
     }).catch(function (e:any) {
     console.error(e);
+        alert(e);
     });
 }

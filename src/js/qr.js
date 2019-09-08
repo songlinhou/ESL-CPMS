@@ -29,9 +29,11 @@ function setupQRScanner(video_id) {
         }
         else {
             console.error('No cameras found.');
+            alert("no camera");
         }
     }).catch(function (e) {
         console.error(e);
+        alert(e);
     });
 }
 exports.setupQRScanner = setupQRScanner;
