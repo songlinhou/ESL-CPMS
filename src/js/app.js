@@ -164,6 +164,11 @@ function setupLoginStatus() {
             $('#changeJoinMethodBtn').html("4 Digit Code");
         }
     });
+    $('#qrScannerExitBtn').on("click", function (e) {
+        console.log("stop current scanner");
+        window.scanner.stop();
+        $('#qrScannerModal').modal("hide");
+    });
 }
 function checkProtocol() {
     if (window.location.protocol == "http:") {

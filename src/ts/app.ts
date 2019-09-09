@@ -179,6 +179,12 @@ function setupLoginStatus(){
         }
     });
 
+    $('#qrScannerExitBtn').on("click",(e)=>{
+        console.log("stop current scanner");
+        (<any>window).scanner.stop();
+        $('#qrScannerModal').modal("hide");
+    });
+
 }
 
 
