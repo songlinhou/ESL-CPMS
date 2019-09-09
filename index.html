@@ -413,7 +413,7 @@
       import QrScanner from "./src/js/scanner/qr-scanner.min.js";
       QrScanner.WORKER_PATH = './src/js/scanner/qr-scanner-worker.min.js';
 
-      // const video = document.getElementById('qr-video');
+      const video = document.getElementById('qr-video');
 
       function setResult(result) {
           console.log("result=",result);
@@ -425,9 +425,9 @@
 
       // QrScanner.hasCamera().then((hasCamera) => {console.log("has camera?",hasCamera)});
 
-      // const scanner = new QrScanner(video, result => console.log('decoded qr code:', result));
+      window.scanner = new QrScanner(video, result => console.log('decoded qr code:', result));
 
-      // scanner.start();
+      //scanner.start();
     
     </script>
 

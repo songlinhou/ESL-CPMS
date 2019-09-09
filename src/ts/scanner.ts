@@ -3,12 +3,12 @@ declare var QrScanner: any;
 export function setup_camera(){
 
     const video = document.getElementById('qr-video');
-    console.log("video=",video);
+    //console.log("video=",video);
 
     // ####### Web Cam Scanning #######
 
     QrScanner.hasCamera().then((hasCamera:any) => {console.log("has camera?",hasCamera)});
 
-    const scanner = new QrScanner((video:any, result:any) => {console.log("result=",result)});
-    scanner.start();
+    
+    (<any>window).scanner.start();
 }
