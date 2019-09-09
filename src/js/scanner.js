@@ -1,9 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-function setup_camera() {
+function setup_camera(onDecodedResultObtained) {
     //console.log("video=",video);
     // ####### Web Cam Scanning #######
     QrScanner.hasCamera().then(function (hasCamera) { console.log("has camera?", hasCamera); });
+    window.scanner._onDecode = function (result) { onDecodedResultObtained(result); window.scanner.stop(); };
     window.scanner.start();
 }
 exports.setup_camera = setup_camera;

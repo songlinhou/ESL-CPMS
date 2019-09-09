@@ -156,7 +156,9 @@ function setupLoginStatus(){
         console.log("try scanning");
         $('#qrScannerModal').modal("show");
         try {
-            setup_camera();
+            setup_camera((result:string)=>{
+                console.log("get the result",result);
+            });
         } catch (error) {
             console.log("camera not supported",error);
             
