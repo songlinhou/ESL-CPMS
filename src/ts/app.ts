@@ -1,6 +1,6 @@
 import { isInputValid } from "./formatChecker";
 import { sendJsonp } from "./ajax";
-import { setupQRScanner, generateInvitingQRCodeURL } from "./qr";
+import { generateInvitingQRCodeURL, onInvitingQRCodeDecoded } from "./qr";
 import { verifyConversationCode } from "./codeVerify";
 import { processCoordinates, ICoordinate } from "./location";
 import { setup_camera } from "./scanner";
@@ -139,7 +139,7 @@ function setupLoginStatus(){
         //date.getFullYear();
         processCoordinates((lat:number,long:number)=>{
             let position:ICoordinate = {latitude:lat,longitude:long};
-            let qrCodeAddr = generateInvitingQRCodeURL("Ray",position,date.getDate().toString());
+            let qrCodeAddr = generateInvitingQRCodeURL("Ray",position,date.toJSON().toString());
             $('#qrGenerateModal').find('img').attr('src',qrCodeAddr);
         });
         
@@ -158,6 +158,7 @@ function setupLoginStatus(){
         try {
             setup_camera((result:string)=>{
                 console.log("get the result",result);
+                onInvitingQRCodeDecoded(result);
             });
         } catch (error) {
             console.log("camera not supported",error);

@@ -1,5 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var location_1 = require("./location");
+;
 function generateInvitingQRCodeURL(username, location, timestamp, size) {
     if (size === void 0) { size = "150x150"; }
     var dataJSON = {
@@ -12,31 +14,69 @@ function generateInvitingQRCodeURL(username, location, timestamp, size) {
     return generateQRCodeAddr(JSON.stringify(dataJSON), size);
 }
 exports.generateInvitingQRCodeURL = generateInvitingQRCodeURL;
+function onInvitingQRCodeDecoded(result) {
+    var dataJSON = JSON.parse(result);
+    var initDate = new Date(dataJSON.timestamp);
+    var now = new Date();
+    var durationInMinutes = (now.getTime() - initDate.getTime()) / 1000 / 60;
+    if (durationInMinutes > 5) {
+        //expired
+        console.log("already expired");
+    }
+    else {
+        //check wether they are nearby
+        if (dataJSON.latitude == dataJSON.longitude && dataJSON.latitude == -1) {
+            // invalid position, skip validation
+            // form a group
+            console.log("skip position check. group formed!");
+            return;
+        }
+        location_1.processCoordinates(function (lat, long) {
+            if (lat == long && lat == -1) {
+                // invalid position, skip validation
+                // form a group
+                console.log("skip position check. group formed!");
+                return;
+            }
+            if (location_1.getDistanceBetween(lat, long, dataJSON.latitude, dataJSON.longitude, 'K') < 0.5) {
+                // within 0.5 km
+                // valid position, success
+                console.log("position check successful. group formed!");
+                return;
+            }
+            else {
+                // beyone 0.5 km
+                // valid position, fail
+                console.log("position check fail. group not formed!");
+                return;
+            }
+        });
+    }
+}
+exports.onInvitingQRCodeDecoded = onInvitingQRCodeDecoded;
 function generateQRCodeAddr(content, size) {
     if (size === void 0) { size = "150x150"; }
     //https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Example
     return "https://api.qrserver.com/v1/create-qr-code/?size=" + size + "&data=" + content;
 }
 exports.generateQRCodeAddr = generateQRCodeAddr;
-function setupQRScanner(video_id) {
-    $('#changeJoinMethodBtn').html("4 Digit Code");
-    var scanner = new Instascan.Scanner({ video: $("#" + video_id)[0] });
-    scanner.addListener('scan', function (content) {
-        console.log(content);
-        alert(content);
-    });
-    Instascan.Camera.getCameras().then(function (cameras) {
-        if (cameras.length > 0) {
-            scanner.start(cameras[0]);
-        }
-        else {
-            console.error('No cameras found.');
-            alert("no camera");
-        }
-    }).catch(function (e) {
-        console.error(e);
-        alert(e);
-    });
-}
-exports.setupQRScanner = setupQRScanner;
+// export function setupQRScanner(video_id:string){
+//     $('#changeJoinMethodBtn').html("4 Digit Code");
+//     var scanner = new Instascan.Scanner({ video: $( `#${video_id}` )[0] });
+//     scanner.addListener('scan', function (content:string) {
+//         console.log(content);
+//         alert(content);
+//     });
+//     Instascan.Camera.getCameras().then(function (cameras:any) {
+//     if (cameras.length > 0) {
+//         scanner.start(cameras[0]);
+//     } else {
+//         console.error('No cameras found.');
+//         alert("no camera");
+//     }
+//     }).catch(function (e:any) {
+//     console.error(e);
+//         alert(e);
+//     });
+// }
 //# sourceMappingURL=qr.js.map

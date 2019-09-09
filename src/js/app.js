@@ -129,7 +129,7 @@ function setupLoginStatus() {
         //date.getFullYear();
         location_1.processCoordinates(function (lat, long) {
             var position = { latitude: lat, longitude: long };
-            var qrCodeAddr = qr_1.generateInvitingQRCodeURL("Ray", position, date.getDate().toString());
+            var qrCodeAddr = qr_1.generateInvitingQRCodeURL("Ray", position, date.toJSON().toString());
             $('#qrGenerateModal').find('img').attr('src', qrCodeAddr);
         });
         $('#qrGenerateModal').modal("show");
@@ -146,6 +146,7 @@ function setupLoginStatus() {
         try {
             scanner_1.setup_camera(function (result) {
                 console.log("get the result", result);
+                qr_1.onInvitingQRCodeDecoded(result);
             });
         }
         catch (error) {
