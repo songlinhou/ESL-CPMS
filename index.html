@@ -423,7 +423,7 @@
 
         QrScanner.hasCamera().then((hasCamera) => {console.log("has camera?",hasCamera)});
 
-        const scanner = new QrScanner((video, result) => {setResult(result)});
+        const scanner = new QrScanner(video, result => console.log('decoded qr code:', result));
         scanner.start();
     }
 
