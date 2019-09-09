@@ -4,7 +4,10 @@ import { setupQRScanner, generateInvitingQRCodeURL } from "./qr";
 import { verifyConversationCode } from "./codeVerify";
 import { processCoordinates, ICoordinate } from "./location";
 
+let isHTTPS = false;
+
 function setupLoginStatus(){
+    checkProtocol();
     let login_modal = $("#loginModal");
     let login_content = $('#WPI-login-content');
     let reg_content = $('#WPI-Reg-content');
@@ -168,6 +171,19 @@ function setupLoginStatus(){
         }
     });
 
+}
+
+
+function checkProtocol(){
+    if(window.location.protocol == "http:"){
+        isHTTPS = false;
+    }
+    else if(window.location.protocol == "https:"){
+        isHTTPS = true;
+    }
+    else{
+        console.log("unknow protocol");
+    }
 }
 
 

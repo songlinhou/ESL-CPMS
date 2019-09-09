@@ -5,7 +5,9 @@ var ajax_1 = require("./ajax");
 var qr_1 = require("./qr");
 var codeVerify_1 = require("./codeVerify");
 var location_1 = require("./location");
+var isHTTPS = false;
 function setupLoginStatus() {
+    checkProtocol();
     var login_modal = $("#loginModal");
     var login_content = $('#WPI-login-content');
     var reg_content = $('#WPI-Reg-content');
@@ -155,6 +157,17 @@ function setupLoginStatus() {
             $('#changeJoinMethodBtn').html("4 Digit Code");
         }
     });
+}
+function checkProtocol() {
+    if (window.location.protocol == "http:") {
+        isHTTPS = false;
+    }
+    else if (window.location.protocol == "https:") {
+        isHTTPS = true;
+    }
+    else {
+        console.log("unknow protocol");
+    }
 }
 $(document).ready(function () {
     setupLoginStatus();

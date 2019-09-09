@@ -25,7 +25,7 @@ export function generateQRCodeAddr(content:string,size:string="150x150"):string{
 
 export function setupQRScanner(video_id:string){
     $('#changeJoinMethodBtn').html("4 Digit Code");
-    let scanner = new Instascan.Scanner({ video: $( `#${video_id}` )[0] });
+    var scanner = new Instascan.Scanner({ video: $( `#${video_id}` )[0] });
     scanner.addListener('scan', function (content:string) {
         console.log(content);
         alert(content);
