@@ -38,7 +38,9 @@ function onInvitingQRCodeDecoded(result) {
                 console.log("skip position check. group formed!");
                 return;
             }
-            if (location_1.getDistanceBetween(lat, long, dataJSON.latitude, dataJSON.longitude, 'K') < 0.5) {
+            var distanceInKM = location_1.getDistanceBetween(lat, long, dataJSON.latitude, dataJSON.longitude, 'K');
+            console.log("user distance (km)", distanceInKM);
+            if (distanceInKM < 0.5) {
                 // within 0.5 km
                 // valid position, success
                 console.log("position check successful. group formed!");
