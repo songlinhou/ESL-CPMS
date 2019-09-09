@@ -5,6 +5,7 @@ var ajax_1 = require("./ajax");
 var qr_1 = require("./qr");
 var codeVerify_1 = require("./codeVerify");
 var location_1 = require("./location");
+var scanner_1 = require("./scanner");
 var isHTTPS = false;
 function setupLoginStatus() {
     checkProtocol();
@@ -139,7 +140,8 @@ function setupLoginStatus() {
         // setup QR scanner
         $("#scannerContent").show();
         $("#inputCodeContent").hide();
-        qr_1.setupQRScanner('scanner');
+        //setupQRScanner('scanner');
+        scanner_1.setup_camera();
         console.log("try scanning");
         $('#qrScannerModal').modal("show");
     });

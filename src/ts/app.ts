@@ -3,6 +3,7 @@ import { sendJsonp } from "./ajax";
 import { setupQRScanner, generateInvitingQRCodeURL } from "./qr";
 import { verifyConversationCode } from "./codeVerify";
 import { processCoordinates, ICoordinate } from "./location";
+import { setup_camera } from "./scanner";
 
 let isHTTPS = false;
 
@@ -151,7 +152,8 @@ function setupLoginStatus(){
         // setup QR scanner
         $("#scannerContent").show();
         $("#inputCodeContent").hide();
-        setupQRScanner('scanner');
+        //setupQRScanner('scanner');
+        setup_camera();
         console.log("try scanning");
         $('#qrScannerModal').modal("show");
     });

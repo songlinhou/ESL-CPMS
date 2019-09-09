@@ -367,7 +367,7 @@
 
             <div id="scannerContent">
           <!-- qr scanner content starts style="width: 100%;height:100%;" -->
-          <video id="scanner" style="width: 100%;height:100%;" poster="images/video-tag-poster.png"></video>
+          <video id="scanner" style="width: 100%;height:100%;" poster="images/video-tag-poster.png" muted playsinline></video>
           <!-- qr scanner content ends -->
           </div>
 
@@ -423,22 +423,8 @@
         // });
 
 
-        var scanner = new Instascan.Scanner({ video: document.getElementById('scanner') });
-        scanner.addListener('scan', function (content) {
-            console.log(content);
-            alert(content);
-        });
-        Instascan.Camera.getCameras().then(function (cameras) {
-        if (cameras.length > 0) {
-            scanner.start(cameras[0]);
-        } else {
-            console.error('No cameras found.');
-            alert("no camera");
-        }
-        }).catch(function (e) {
-        console.error(e);
-            alert(e);
-        });
+        import QrScanner from "./src/js/scanner/qr-scanner.min.js";
+        QrScanner.WORKER_PATH = './src/js/scanner/qr-scanner-worker.min.js';
 
 
         //custom code
