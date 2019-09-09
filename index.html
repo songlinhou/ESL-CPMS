@@ -171,6 +171,8 @@
                 </div> -->
         </div>
 
+        <video muted playsinline id="qr-video"></video>
+
         
 
         <!-- <div class="starter-template">
@@ -411,7 +413,7 @@
       QrScanner.WORKER_PATH = './src/js/scanner/qr-scanner-worker.min.js';
 
       function setup_camera(){
-        const video = document.getElementById('scanner');
+        const video = document.getElementById('qr-video');
 
         function setResult(result) {
             console.log("result=",result);
@@ -423,7 +425,9 @@
 
         const scanner = new QrScanner((video, result) => {setResult(result)});
         scanner.start();
-}
+    }
+
+    setup_camera();
     
     </script>
 
