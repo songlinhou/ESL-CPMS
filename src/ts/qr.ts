@@ -1,12 +1,15 @@
+import { ICoordinate } from "./location";
+
 declare var Instascan:any;
 
 
 
-export function generateInvitingQRCodeURL(username:string,location:string,timestamp:string,size:string="150x150"):string{
+export function generateInvitingQRCodeURL(username:string,location:ICoordinate,timestamp:string,size:string="150x150"):string{
     let dataJSON = {
         appname:"ESL-CPMS",
         username:username,
-        location:location,
+        latitude:location.latitude,
+        longitude:location.longitude,
         timestamp:timestamp
     };
     return generateQRCodeAddr(JSON.stringify(dataJSON),size);
@@ -21,6 +24,7 @@ export function generateQRCodeAddr(content:string,size:string="150x150"):string{
 
 
 export function setupQRScanner(video_id:string){
+    $('#changeJoinMethodBtn').html("4 Digit Code");
     let scanner = new Instascan.Scanner({ video: $( `#${video_id}` )[0] });
     scanner.addListener('scan', function (content:string) {
         console.log(content);

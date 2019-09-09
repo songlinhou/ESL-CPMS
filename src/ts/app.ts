@@ -1,7 +1,8 @@
 import { isInputValid } from "./formatChecker";
 import { sendJsonp } from "./ajax";
 import { setupQRScanner, generateInvitingQRCodeURL } from "./qr";
-import { showCoordinates } from "./location";
+import { verifyConversationCode } from "./codeVerify";
+import { processCoordinates, ICoordinate } from "./location";
 
 function setupLoginStatus(){
     let login_modal = $("#loginModal");
@@ -132,22 +133,40 @@ function setupLoginStatus(){
         e.preventDefault();
         let date = new Date();
         //date.getFullYear();
+        processCoordinates((lat:number,long:number)=>{
+            let position:ICoordinate = {latitude:lat,longitude:long};
+            let qrCodeAddr = generateInvitingQRCodeURL("Ray",position,date.getDate().toString());
+            $('#qrGenerateModal').find('img').attr('src',qrCodeAddr);
+        });
         
-        let qrCodeAddr = generateInvitingQRCodeURL("Ray","WPI",date.getDate().toString());
-        $('#qrGenerateModal').find('img').attr('src',qrCodeAddr);
         $('#qrGenerateModal').modal("show");
-        showCoordinates();
+        //showCoordinates();
     });
 
     $('#joinConversationBtn').on("click",(e)=>{
         e.preventDefault();
         // setup QR scanner
+        $("#scannerContent").show();
+        $("#inputCodeContent").hide();
         setupQRScanner('scanner');
         console.log("try scanning");
         $('#qrScannerModal').modal("show");
     });
 
-    
+    $('#changeJoinMethodBtn').on("click",(e)=>{
+        e.preventDefault();
+        // change the method view
+        if($("#scannerContent").is(":visible")){
+            // change to 4 digit code
+            verifyConversationCode();
+        }
+        else{
+            // change to camera
+            $("#inputCodeContent").hide();
+            $("#scannerContent").fadeIn("slow");
+            $('#changeJoinMethodBtn').html("4 Digit Code");
+        }
+    });
 
 }
 

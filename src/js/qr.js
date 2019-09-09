@@ -5,7 +5,8 @@ function generateInvitingQRCodeURL(username, location, timestamp, size) {
     var dataJSON = {
         appname: "ESL-CPMS",
         username: username,
-        location: location,
+        latitude: location.latitude,
+        longitude: location.longitude,
         timestamp: timestamp
     };
     return generateQRCodeAddr(JSON.stringify(dataJSON), size);
@@ -18,6 +19,7 @@ function generateQRCodeAddr(content, size) {
 }
 exports.generateQRCodeAddr = generateQRCodeAddr;
 function setupQRScanner(video_id) {
+    $('#changeJoinMethodBtn').html("4 Digit Code");
     var scanner = new Instascan.Scanner({ video: $("#" + video_id)[0] });
     scanner.addListener('scan', function (content) {
         console.log(content);

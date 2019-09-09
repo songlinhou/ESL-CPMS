@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var formatChecker_1 = require("./formatChecker");
 var ajax_1 = require("./ajax");
 var qr_1 = require("./qr");
+var codeVerify_1 = require("./codeVerify");
 var location_1 = require("./location");
 function setupLoginStatus() {
     var login_modal = $("#loginModal");
@@ -123,17 +124,36 @@ function setupLoginStatus() {
         e.preventDefault();
         var date = new Date();
         //date.getFullYear();
-        var qrCodeAddr = qr_1.generateInvitingQRCodeURL("Ray", "WPI", date.getDate().toString());
-        $('#qrGenerateModal').find('img').attr('src', qrCodeAddr);
+        location_1.processCoordinates(function (lat, long) {
+            var position = { latitude: lat, longitude: long };
+            var qrCodeAddr = qr_1.generateInvitingQRCodeURL("Ray", position, date.getDate().toString());
+            $('#qrGenerateModal').find('img').attr('src', qrCodeAddr);
+        });
         $('#qrGenerateModal').modal("show");
-        location_1.showCoordinates();
+        //showCoordinates();
     });
     $('#joinConversationBtn').on("click", function (e) {
         e.preventDefault();
         // setup QR scanner
+        $("#scannerContent").show();
+        $("#inputCodeContent").hide();
         qr_1.setupQRScanner('scanner');
         console.log("try scanning");
         $('#qrScannerModal').modal("show");
+    });
+    $('#changeJoinMethodBtn').on("click", function (e) {
+        e.preventDefault();
+        // change the method view
+        if ($("#scannerContent").is(":visible")) {
+            // change to 4 digit code
+            codeVerify_1.verifyConversationCode();
+        }
+        else {
+            // change to camera
+            $("#inputCodeContent").hide();
+            $("#scannerContent").fadeIn("slow");
+            $('#changeJoinMethodBtn').html("4 Digit Code");
+        }
     });
 }
 $(document).ready(function () {
