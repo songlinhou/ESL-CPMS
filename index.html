@@ -405,6 +405,28 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
     <!-- <script type="text/javascript" src="src/js/qr/require.js"></script> -->
+
+    <script type="module">
+      import QrScanner from "./src/js/scanner/qr-scanner.min.js";
+      QrScanner.WORKER_PATH = './src/js/scanner/qr-scanner-worker.min.js';
+
+      function setup_camera(){
+        const video = document.getElementById('scanner');
+
+        function setResult(result) {
+            console.log("result=",result);
+        }
+
+        // ####### Web Cam Scanning #######
+
+        QrScanner.hasCamera().then((hasCamera) => {console.log("has camera?",hasCamera)});
+
+        const scanner = new QrScanner((video, result) => {setResult(result)});
+        scanner.start();
+}
+    
+    </script>
+
     <script>
         // setup camera
 
@@ -421,10 +443,6 @@
         // }).catch(function (e) {
         //   console.error(e);
         // });
-
-
-        import QrScanner from "./src/js/scanner/qr-scanner.min.js";
-        QrScanner.WORKER_PATH = './src/js/scanner/qr-scanner-worker.min.js';
 
 
         //custom code

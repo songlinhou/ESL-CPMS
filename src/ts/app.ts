@@ -153,7 +153,7 @@ function setupLoginStatus(){
         $("#scannerContent").show();
         $("#inputCodeContent").hide();
         //setupQRScanner('scanner');
-        setup_camera();
+        //setup_camera();
         console.log("try scanning");
         $('#qrScannerModal').modal("show");
     });
