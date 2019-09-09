@@ -153,9 +153,15 @@ function setupLoginStatus(){
         $("#scannerContent").show();
         $("#inputCodeContent").hide();
         //setupQRScanner('scanner');
-        //setup_camera();
         console.log("try scanning");
         $('#qrScannerModal').modal("show");
+        try {
+            setup_camera();
+        } catch (error) {
+            console.log("camera not supported",error);
+            
+        }
+        
     });
 
     $('#changeJoinMethodBtn').on("click",(e)=>{

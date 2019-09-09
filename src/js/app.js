@@ -5,6 +5,7 @@ var ajax_1 = require("./ajax");
 var qr_1 = require("./qr");
 var codeVerify_1 = require("./codeVerify");
 var location_1 = require("./location");
+var scanner_1 = require("./scanner");
 var isHTTPS = false;
 function setupLoginStatus() {
     checkProtocol();
@@ -140,9 +141,14 @@ function setupLoginStatus() {
         $("#scannerContent").show();
         $("#inputCodeContent").hide();
         //setupQRScanner('scanner');
-        //setup_camera();
         console.log("try scanning");
         $('#qrScannerModal').modal("show");
+        try {
+            scanner_1.setup_camera();
+        }
+        catch (error) {
+            console.log("camera not supported", error);
+        }
     });
     $('#changeJoinMethodBtn').on("click", function (e) {
         e.preventDefault();
