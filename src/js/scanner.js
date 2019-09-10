@@ -7,6 +7,7 @@ function setup_camera(onDecodedResultObtained) {
     window.scanner._onDecode = function (result) { onDecodedResultObtained(result); window.scanner.stop(); };
     window.scanner.start();
     $('#qr-video').css("object-fit", "fill");
+    $('#qr-video').attr("height", "300");
 }
 exports.setup_camera = setup_camera;
 //# sourceMappingURL=scanner.js.map

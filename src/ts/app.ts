@@ -181,6 +181,7 @@ function setupLoginStatus(){
             $('#changeJoinMethodBtn').html("4 Digit Code");
             (<any>window).scanner.start();
             $('#qr-video').css("object-fit","fill");
+            $('#qr-video').attr("height","300");
         }
     });
 
