@@ -4,11 +4,13 @@ import { generateInvitingQRCodeURL, onInvitingQRCodeDecoded } from "./qr";
 import { verifyConversationCode } from "./codeVerify";
 import { processCoordinates, ICoordinate } from "./location";
 import { setup_camera } from "./scanner";
+import { getPlatform } from "./platform";
 
 let isHTTPS = false;
 
 function setupLoginStatus(){
     checkProtocol();
+    getPlatform();
     let login_modal = $("#loginModal");
     let login_content = $('#WPI-login-content');
     let reg_content = $('#WPI-Reg-content');

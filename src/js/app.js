@@ -6,9 +6,11 @@ var qr_1 = require("./qr");
 var codeVerify_1 = require("./codeVerify");
 var location_1 = require("./location");
 var scanner_1 = require("./scanner");
+var platform_1 = require("./platform");
 var isHTTPS = false;
 function setupLoginStatus() {
     checkProtocol();
+    platform_1.getPlatform();
     var login_modal = $("#loginModal");
     var login_content = $('#WPI-login-content');
     var reg_content = $('#WPI-Reg-content');
