@@ -158,10 +158,10 @@ function setupLoginStatus(){
         console.log("try scanning");
         $('#qrScannerModal').modal("show");
         try {
-            setup_camera((result:string)=>{
-                console.log("get the result",result);
-                onInvitingQRCodeDecoded(result);
-            });
+            // setup_camera((result:string)=>{
+            //     console.log("get the result",result);
+            //     onInvitingQRCodeDecoded(result);
+            // });
         } catch (error) {
             console.log("camera not supported",error);
             
@@ -181,7 +181,7 @@ function setupLoginStatus(){
             $("#inputCodeContent").hide();
             $("#scannerContent").fadeIn("slow");
             $('#changeJoinMethodBtn').html("4 Digit Code");
-            (<any>window).scanner.start();
+            // (<any>window).scanner.start();
             $('#qr-video').css("object-fit","fill");
             $('#qr-video').attr("height","300");
         }
@@ -189,7 +189,7 @@ function setupLoginStatus(){
 
     $('#qrScannerExitBtn').on("click",(e)=>{
         console.log("stop current scanner");
-        (<any>window).scanner.stop();
+        // (<any>window).scanner.stop();
         $('#qrScannerModal').modal("hide");
     });
 

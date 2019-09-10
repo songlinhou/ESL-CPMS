@@ -14,3 +14,5 @@ export function setup_camera(onDecodedResultObtained:(result:string) => void){
     $('#qr-video').css("object-fit","fill");
     $('#qr-video').attr("height","300");
 }
+
+

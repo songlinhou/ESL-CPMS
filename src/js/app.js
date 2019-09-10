@@ -5,7 +5,6 @@ var ajax_1 = require("./ajax");
 var qr_1 = require("./qr");
 var codeVerify_1 = require("./codeVerify");
 var location_1 = require("./location");
-var scanner_1 = require("./scanner");
 var platform_1 = require("./platform");
 var isHTTPS = false;
 function setupLoginStatus() {
@@ -146,10 +145,10 @@ function setupLoginStatus() {
         console.log("try scanning");
         $('#qrScannerModal').modal("show");
         try {
-            scanner_1.setup_camera(function (result) {
-                console.log("get the result", result);
-                qr_1.onInvitingQRCodeDecoded(result);
-            });
+            // setup_camera((result:string)=>{
+            //     console.log("get the result",result);
+            //     onInvitingQRCodeDecoded(result);
+            // });
         }
         catch (error) {
             console.log("camera not supported", error);
@@ -167,14 +166,14 @@ function setupLoginStatus() {
             $("#inputCodeContent").hide();
             $("#scannerContent").fadeIn("slow");
             $('#changeJoinMethodBtn').html("4 Digit Code");
-            window.scanner.start();
+            // (<any>window).scanner.start();
             $('#qr-video').css("object-fit", "fill");
             $('#qr-video').attr("height", "300");
         }
     });
     $('#qrScannerExitBtn').on("click", function (e) {
         console.log("stop current scanner");
-        window.scanner.stop();
+        // (<any>window).scanner.stop();
         $('#qrScannerModal').modal("hide");
     });
 }
