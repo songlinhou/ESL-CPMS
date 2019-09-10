@@ -6,6 +6,7 @@ function setup_camera(onDecodedResultObtained) {
     QrScanner.hasCamera().then(function (hasCamera) { console.log("has camera?", hasCamera); });
     window.scanner._onDecode = function (result) { onDecodedResultObtained(result); window.scanner.stop(); };
     window.scanner.start();
+    $('#qr-video').css("object-fit", "fill");
 }
 exports.setup_camera = setup_camera;
 //# sourceMappingURL=scanner.js.map

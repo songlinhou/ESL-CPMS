@@ -180,6 +180,7 @@ function setupLoginStatus(){
             $("#scannerContent").fadeIn("slow");
             $('#changeJoinMethodBtn').html("4 Digit Code");
             (<any>window).scanner.start();
+            $('#qr-video').css("object-fit","fill");
         }
     });
 
