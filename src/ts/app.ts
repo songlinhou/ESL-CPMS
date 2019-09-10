@@ -179,6 +179,7 @@ function setupLoginStatus(){
             $("#inputCodeContent").hide();
             $("#scannerContent").fadeIn("slow");
             $('#changeJoinMethodBtn').html("4 Digit Code");
+            (<any>window).scanner.start();
         }
     });
 
