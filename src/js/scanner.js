@@ -5,7 +5,7 @@ function setupIOSCamera(onDecodedResultObtained) {
     //console.log("video=",video);
     // ####### Web Cam Scanning #######
     QrScanner.hasCamera().then(function (hasCamera) { console.log("has camera?", hasCamera); });
-    window.scanner._onDecode = function (result) { onDecodedResultObtained(result); window.scanner.stop(); };
+    // (<any>window).scanner._onDecode =  (result:string) => {onDecodedResultObtained(result);(<any>window).scanner.stop()};   
     window.scanner.start();
     $('#qr-video').css("object-fit", "fill");
     $('#qr-video').attr("height", "280");

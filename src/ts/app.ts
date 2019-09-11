@@ -23,6 +23,7 @@ function platformInit(){
         (<any>window).scanner.stop();
         // height="280"
         $('#qr-video').attr("height",280);
+        
     }
         
 }

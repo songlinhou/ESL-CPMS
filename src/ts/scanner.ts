@@ -9,7 +9,7 @@ export function setupIOSCamera(onDecodedResultObtained:(result:string) => void){
 
     QrScanner.hasCamera().then((hasCamera:any) => {console.log("has camera?",hasCamera)});
 
-    (<any>window).scanner._onDecode =  (result:string) => {onDecodedResultObtained(result);(<any>window).scanner.stop()};   
+    // (<any>window).scanner._onDecode =  (result:string) => {onDecodedResultObtained(result);(<any>window).scanner.stop()};   
     (<any>window).scanner.start();
     $('#qr-video').css("object-fit","fill");
     $('#qr-video').attr("height","280");
