@@ -161,7 +161,7 @@ function setupLoginStatus(){
         $('#qrScannerModal').modal("show");
         (<any>document.getElementById('scannerIframe')).contentWindow.location.reload();
         try {
-            localStorage.setItem("qr-result",null);
+            localStorage.setItem("qr-result","");
             waitForScanned((result)=>{
                 console.log("captured result",result);
                 onInvitingQRCodeDecoded(result);
@@ -189,7 +189,7 @@ function setupLoginStatus(){
             // (<any>window).scanner.start();
             $('#qr-video').css("object-fit","fill");
             $('#qr-video').attr("height","300");
-            localStorage.setItem("qr-result",null);
+            localStorage.setItem("qr-result","");
             waitForScanned((result)=>{
                 console.log("captured result",result);
                 onInvitingQRCodeDecoded(result);

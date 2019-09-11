@@ -31,13 +31,13 @@ function waitForScanned(onScanned) {
             }
             catch (e) {
                 console.log("bad format for qr-result. Incorrect QR code.");
-                localStorage.setItem("qr-result", null);
+                localStorage.setItem("qr-result", "");
                 return;
             }
             clearInterval(intervalHandler);
             console.log("scanned detected");
             onScanned(qrResult);
-            localStorage.setItem("qr-result", null);
+            localStorage.setItem("qr-result", "");
         }
     }, 500);
 }
@@ -46,7 +46,7 @@ function cancelScannedWaiting() {
     // conversatonResultModal
     if (intervalHandler)
         clearInterval(intervalHandler);
-    localStorage.setItem("qr-result", null);
+    localStorage.setItem("qr-result", "");
 }
 exports.cancelScannedWaiting = cancelScannedWaiting;
 //# sourceMappingURL=scanner.js.map

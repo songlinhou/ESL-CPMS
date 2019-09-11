@@ -35,13 +35,13 @@ export function waitForScanned(onScanned:(scannedResult:any)=>void){
             }
             catch(e){
                 console.log("bad format for qr-result. Incorrect QR code.");
-                localStorage.setItem("qr-result",null);
+                localStorage.setItem("qr-result","");
                 return;
             }
             clearInterval(intervalHandler);
             console.log("scanned detected");
             onScanned(qrResult);
-            localStorage.setItem("qr-result",null);
+            localStorage.setItem("qr-result","");
         }
     },500)
 }
@@ -50,7 +50,7 @@ export function cancelScannedWaiting(){
     // conversatonResultModal
     if(intervalHandler)
         clearInterval(intervalHandler);
-    localStorage.setItem("qr-result",null);
+    localStorage.setItem("qr-result","");
 }
 
 
