@@ -475,7 +475,7 @@
     <script type="module">
       import QrScanner from "./src/js/scanner/qr-scanner.min.js";
       QrScanner.WORKER_PATH = './src/js/scanner/qr-scanner-worker.min.js';
-      localStorage.setItem("isIOS", "n");
+      localStorage.setItem("isIOS", "y");
       if(localStorage.getItem("isIOS") == "y"){
         console.log("simulate in ios");
       }
