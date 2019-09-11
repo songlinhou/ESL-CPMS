@@ -8,7 +8,7 @@ function setupIOSCamera(onDecodedResultObtained) {
     window.scanner._onDecode = function (result) { onDecodedResultObtained(result); window.scanner.stop(); };
     window.scanner.start();
     $('#qr-video').css("object-fit", "fill");
-    $('#qr-video').attr("height", "300");
+    $('#qr-video').attr("height", "280");
 }
 exports.setupIOSCamera = setupIOSCamera;
 function waitForScanned(onScanned) {

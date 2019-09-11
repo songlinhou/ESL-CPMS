@@ -12,7 +12,7 @@ export function setupIOSCamera(onDecodedResultObtained:(result:string) => void){
     (<any>window).scanner._onDecode =  (result:string) => {onDecodedResultObtained(result);(<any>window).scanner.stop()};   
     (<any>window).scanner.start();
     $('#qr-video').css("object-fit","fill");
-    $('#qr-video').attr("height","300");
+    $('#qr-video').attr("height","280");
 }
 
 export function waitForScanned(onScanned:(scannedResult:any)=>void){
