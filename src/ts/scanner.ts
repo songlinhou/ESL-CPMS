@@ -49,8 +49,8 @@ export function setupScannerCamera(){
     
     
     
-    // Use facingMode: environment to attemt to get the front camera on phones
-    navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then(function(stream) {
+    // Use facingMode: environment to attemt to get the front camera on phones, user
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } }).then(function(stream) {
         video.srcObject = stream;
         video.setAttribute("playsinline", true); // required to tell iOS safari we don't want fullscreen
         video.play();
@@ -83,19 +83,16 @@ export function setupScannerCamera(){
             //   outputData.parentElement.hidden = false;
             //   outputData.innerText = code.data;
                 console.log("data=",code.data);
-                finished = true;
+                //finished = true;
             } else {
             //   outputMessage.hidden = false;
             //   outputData.parentElement.hidden = true;
-                finished = false;
+                // finished = false;
             }
             }
             else{
                 //finished
-                if(tickID){
-                    cancelAnimationFrame(tickID);
-                    return;
-                }
+                
             }
             tickID = requestAnimationFrame(tick);
         }
