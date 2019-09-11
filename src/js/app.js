@@ -20,7 +20,6 @@ function setupLoginStatus() {
     reg_content.hide();
     verify_content.hide();
     password_content.hide();
-    scanner_1.setupScannerHandler();
     $('#login-reg-confirm').html("Login");
     // set up event triggers
     $('#login-reg-confirm').on("click", function () {
@@ -153,9 +152,13 @@ function setupLoginStatus() {
             //     onInvitingQRCodeDecoded(result);
             // });
             //start_scanner();
+            scanner_1.waitForScanned(function (result) {
+                console.log("captured result", result);
+            });
         }
         catch (error) {
             console.log("camera not supported", error);
+            scanner_1.cancelScannedWaiting();
         }
     });
     $('#changeJoinMethodBtn').on("click", function (e) {
@@ -164,6 +167,7 @@ function setupLoginStatus() {
         if ($("#scannerContent").is(":visible")) {
             // change to 4 digit code
             codeVerify_1.verifyConversationCode();
+            scanner_1.cancelScannedWaiting();
         }
         else {
             // change to camera
@@ -173,10 +177,14 @@ function setupLoginStatus() {
             // (<any>window).scanner.start();
             $('#qr-video').css("object-fit", "fill");
             $('#qr-video').attr("height", "300");
+            scanner_1.waitForScanned(function (result) {
+                console.log("captured result", result);
+            });
         }
     });
     $('#qrScannerExitBtn').on("click", function (e) {
         console.log("stop current scanner");
+        scanner_1.cancelScannedWaiting();
         // (<any>window).scanner.stop();
         $('#qrScannerModal').modal("hide");
     });

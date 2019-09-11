@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var intervalHandler;
 function setup_camera(onDecodedResultObtained) {
     //console.log("video=",video);
     // ####### Web Cam Scanning #######
@@ -20,10 +21,22 @@ function start_scanner() {
     $('#video', iframe.contents())[0].play();
 }
 exports.start_scanner = start_scanner;
-function setupScannerHandler() {
-    window.onQRCodeScanned = function (information) {
-        console.log("info get", information);
-    };
+function waitForScanned(onScanned) {
+    // conversatonResultModal
+    intervalHandler = setInterval(function () {
+        var qrResult = JSON.parse(localStorage.getItem("qr-result"));
+        if (qrResult) {
+            clearInterval(intervalHandler);
+            console.log("scanned detected");
+            onScanned(qrResult);
+        }
+    }, 500);
 }
-exports.setupScannerHandler = setupScannerHandler;
+exports.waitForScanned = waitForScanned;
+function cancelScannedWaiting() {
+    // conversatonResultModal
+    if (intervalHandler)
+        clearInterval(intervalHandler);
+}
+exports.cancelScannedWaiting = cancelScannedWaiting;
 //# sourceMappingURL=scanner.js.map

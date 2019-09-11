@@ -3,7 +3,7 @@ import { sendJsonp } from "./ajax";
 import { generateInvitingQRCodeURL, onInvitingQRCodeDecoded } from "./qr";
 import { verifyConversationCode } from "./codeVerify";
 import { processCoordinates, ICoordinate } from "./location";
-import { setup_camera, pause_scanner, start_scanner, setupScannerHandler } from "./scanner";
+import { setup_camera, pause_scanner, start_scanner, waitForScanned, cancelScannedWaiting } from "./scanner";
 import { getPlatform } from "./platform";
 
 let isHTTPS = false;
@@ -21,7 +21,6 @@ function setupLoginStatus(){
     reg_content.hide();
     verify_content.hide();
     password_content.hide();
-    setupScannerHandler();
     $('#login-reg-confirm').html("Login");
 
     // set up event triggers
@@ -167,10 +166,12 @@ function setupLoginStatus(){
             //     onInvitingQRCodeDecoded(result);
             // });
             //start_scanner();
-            
+            waitForScanned((result)=>{
+                console.log("captured result",result);
+            });
         } catch (error) {
             console.log("camera not supported",error);
-            
+            cancelScannedWaiting();
         }
         
     });
@@ -181,6 +182,7 @@ function setupLoginStatus(){
         if($("#scannerContent").is(":visible")){
             // change to 4 digit code
             verifyConversationCode();
+            cancelScannedWaiting();
         }
         else{
             // change to camera
@@ -190,11 +192,15 @@ function setupLoginStatus(){
             // (<any>window).scanner.start();
             $('#qr-video').css("object-fit","fill");
             $('#qr-video').attr("height","300");
+            waitForScanned((result)=>{
+                console.log("captured result",result);
+            });
         }
     });
 
     $('#qrScannerExitBtn').on("click",(e)=>{
         console.log("stop current scanner");
+        cancelScannedWaiting();
         // (<any>window).scanner.stop();
         $('#qrScannerModal').modal("hide");
     });

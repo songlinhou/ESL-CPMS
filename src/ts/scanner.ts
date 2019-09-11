@@ -1,6 +1,6 @@
 declare var QrScanner: any;
 declare var jsQR: any;
-
+let intervalHandler:any;
 
 export function setup_camera(onDecodedResultObtained:(result:string) => void){
 
@@ -25,10 +25,22 @@ export function start_scanner(){
     (<any>$('#video', iframe.contents())[0]).play();
 }
 
-export function setupScannerHandler(){
-    (<any>window).onQRCodeScanned = (information:string) => {
-        console.log("info get",information);
-    }
+export function waitForScanned(onScanned:(scannedResult:any)=>void){
+    // conversatonResultModal
+    intervalHandler = setInterval(()=>{
+        let qrResult = JSON.parse(localStorage.getItem("qr-result"));
+        if(qrResult){
+            clearInterval(intervalHandler);
+            console.log("scanned detected");
+            onScanned(qrResult);
+        }
+    },500)
+}
+
+export function cancelScannedWaiting(){
+    // conversatonResultModal
+    if(intervalHandler)
+        clearInterval(intervalHandler);
 }
 
 

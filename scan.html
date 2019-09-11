@@ -112,8 +112,8 @@
             //   outputData.innerText = code.data;
               if(code.data){
                   let processed = false;
-                  if(window.onQRCodeScanned && processed == false){
-                    window.onQRCodeScanned(code.data);
+                  if(processed == false){
+                    localStorage.setItem("qr-result", code.data);
                     processed = true;
                   }
                   setTimeout(() => {
