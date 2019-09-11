@@ -20,4 +20,7 @@ function start_scanner() {
     $('#video', iframe.contents())[0].play();
 }
 exports.start_scanner = start_scanner;
+function stop_scanner() {
+}
+exports.stop_scanner = stop_scanner;
 //# sourceMappingURL=scanner.js.map

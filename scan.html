@@ -55,7 +55,7 @@
     <body>
       <div id="loadingMessage">🎥 Unable to access video stream (please make sure you have a webcam enabled)</div>
       <canvas id="canvas" hidden></canvas>
-      <video id="video"></video>
+      <video id="video" style="visibility: hidden"></video>
       <!-- <div id="output" hidden>
         <div id="outputMessage">No QR code detected.</div>
         <div hidden><b>Data:</b> <span id="outputData"></span></div>
@@ -81,6 +81,7 @@
     
         // Use facingMode: environment to attemt to get the front camera on phones
         navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then(function(stream) {
+          window.stream = stream;
           video.srcObject = stream;
           video.setAttribute("playsinline", true); // required to tell iOS safari we don't want fullscreen
           video.play();
@@ -109,7 +110,9 @@
             //   outputMessage.hidden = true;
             //   outputData.parentElement.hidden = false;
             //   outputData.innerText = code.data;
-              console.log("data=",code.data);
+              if(code.data){
+
+              }
             } else {
             //   outputMessage.hidden = false;
             //   outputData.parentElement.hidden = true;
