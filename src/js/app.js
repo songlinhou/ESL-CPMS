@@ -9,7 +9,7 @@ var scanner_1 = require("./scanner");
 var isHTTPS = false;
 var isIOS = (localStorage.getItem("isIOS") == "y");
 function debugVersion() {
-    console.log("wed 12:05");
+    console.log("wed 4:05");
 }
 function platformInit() {
     if (isIOS) {
@@ -17,6 +17,10 @@ function platformInit() {
         window.scanner.stop();
         // height="280"
         $('#qr-video').attr("height", 280);
+        window.scanner._onDecode = function (result) {
+            console.log("captured result", result);
+            qr_1.onInvitingQRCodeDecoded(result);
+        };
     }
 }
 function setupLoginStatus() {

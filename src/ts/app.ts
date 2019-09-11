@@ -14,7 +14,7 @@ let isIOS = (localStorage.getItem("isIOS") == "y");
 
 
 function debugVersion(){
-    console.log("wed 12:05");
+    console.log("wed 4:05");
 }
 
 function platformInit(){
@@ -23,7 +23,10 @@ function platformInit(){
         (<any>window).scanner.stop();
         // height="280"
         $('#qr-video').attr("height",280);
-        
+        (<any>window).scanner._onDecode = (result:any)=>{
+            console.log("captured result",result);
+            onInvitingQRCodeDecoded(result);
+        }
     }
         
 }
