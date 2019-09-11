@@ -14,7 +14,7 @@ let isIOS = (localStorage.getItem("isIOS") == "y");
 
 
 function debugVersion(){
-    console.log("wed 12:00");
+    console.log("wed 12:05");
 }
 
 function platformInit(){
