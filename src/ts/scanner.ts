@@ -25,8 +25,11 @@ export function start_scanner(){
     (<any>$('#video', iframe.contents())[0]).play();
 }
 
-export function stop_scanner(){
-    
+export function setupScannerHandler(){
+    (<any>window).onQRCodeScanned = (information:string) => {
+        console.log("info get",information);
+    }
 }
+
 
 

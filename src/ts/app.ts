@@ -3,7 +3,7 @@ import { sendJsonp } from "./ajax";
 import { generateInvitingQRCodeURL, onInvitingQRCodeDecoded } from "./qr";
 import { verifyConversationCode } from "./codeVerify";
 import { processCoordinates, ICoordinate } from "./location";
-import { setup_camera, pause_scanner, start_scanner } from "./scanner";
+import { setup_camera, pause_scanner, start_scanner, setupScannerHandler } from "./scanner";
 import { getPlatform } from "./platform";
 
 let isHTTPS = false;
@@ -21,6 +21,7 @@ function setupLoginStatus(){
     reg_content.hide();
     verify_content.hide();
     password_content.hide();
+    setupScannerHandler();
     $('#login-reg-confirm').html("Login");
 
     // set up event triggers

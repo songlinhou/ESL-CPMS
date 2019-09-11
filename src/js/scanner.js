@@ -20,7 +20,10 @@ function start_scanner() {
     $('#video', iframe.contents())[0].play();
 }
 exports.start_scanner = start_scanner;
-function stop_scanner() {
+function setupScannerHandler() {
+    window.onQRCodeScanned = function (information) {
+        console.log("info get", information);
+    };
 }
-exports.stop_scanner = stop_scanner;
+exports.setupScannerHandler = setupScannerHandler;
 //# sourceMappingURL=scanner.js.map

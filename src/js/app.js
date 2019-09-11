@@ -20,6 +20,7 @@ function setupLoginStatus() {
     reg_content.hide();
     verify_content.hide();
     password_content.hide();
+    scanner_1.setupScannerHandler();
     $('#login-reg-confirm').html("Login");
     // set up event triggers
     $('#login-reg-confirm').on("click", function () {

@@ -111,6 +111,11 @@
             //   outputData.parentElement.hidden = false;
             //   outputData.innerText = code.data;
               if(code.data){
+                  let processed = false;
+                  if(window.onQRCodeScanned && processed == false){
+                    window.onQRCodeScanned(code.data);
+                    processed = true;
+                  }
                   setTimeout(() => {
                     console.log("stop camera");
                     let track = window.stream.getTracks()[0];
