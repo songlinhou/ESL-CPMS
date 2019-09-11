@@ -40,3 +40,8 @@
     clear:both;
     padding-top:20px;
   } 
+
+.avatar-icon {
+    height:40px;
+    border-radius: 50%;
+}

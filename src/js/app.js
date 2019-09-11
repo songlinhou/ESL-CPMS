@@ -187,6 +187,13 @@ function setupLoginStatus() {
         // (<any>window).scanner.stop();
         $('#qrScannerModal').modal("hide");
     });
+    $('#checkRecordBtn').on("click", function (e) {
+        $('#conversatonResultModal').modal("show");
+    });
+    $('#conversatonResultExitBtn').on("click", function (e) {
+        //do some cleaning
+        $('#conversatonResultModal').modal("hide");
+    });
 }
 function checkProtocol() {
     if (window.location.protocol == "http:") {

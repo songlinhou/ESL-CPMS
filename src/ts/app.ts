@@ -204,6 +204,15 @@ function setupLoginStatus(){
         $('#qrScannerModal').modal("hide");
     });
 
+    $('#checkRecordBtn').on("click",(e)=>{
+        $('#conversatonResultModal').modal("show");
+    })
+
+    $('#conversatonResultExitBtn').on("click",(e)=>{
+        //do some cleaning
+        $('#conversatonResultModal').modal("hide");
+    });
+
 }
 
 

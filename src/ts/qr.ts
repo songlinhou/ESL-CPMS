@@ -54,17 +54,22 @@ export function onInvitingQRCodeDecoded(result:string){
                 // within 0.5 km
                 // valid position, success
                 console.log("position check successful. group formed!");
+                $('#qrScannerModal').modal("hide");
+                $('#conversatonResultModal').modal("show");
                 return;
             }
             else{
                 // beyone 0.5 km
                 // valid position, fail
                 console.log("position check fail. group not formed!");
+                $('#qrScannerModal').modal("hide");
+                $('#conversatonResultModal').modal("show");
                 return;
             }
         });
     }
 }
+
 
 
 export function generateQRCodeAddr(content:string,size:string="150x150"):string{

@@ -123,7 +123,7 @@
                                     <div class="card-body">
                                       <h5 class="card-title"><i class="far fa-clipboard" style="margin-right: 10px;"></i>Records</h5>
                                       <p class="card-text">The history records of conversation initialized before. </p>
-                                      <a href="#" class="btn btn-primary btn-block" style="font-size:14px;">Check Records</a>
+                                      <a href="#" class="btn btn-primary btn-block" style="font-size:14px;" id="checkRecordBtn">Check Records</a>
                                     </div>
                                   </div>
                     </div>
@@ -401,7 +401,7 @@
 
 
 
-    <!-- qr scanner model starts here -->
+    <!-- conversatonResultModal model starts here -->
     <div class="modal fade" id="conversatonResultModal" tabindex="-1" role="dialog" aria-labelledby="conversatonResultLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -416,7 +416,26 @@
 
             <div id="conversatonResultContent" style="height:100%">
           <!-- qr scanner content starts style="width: 100%;height:100%;" -->
-              <p>Conversation recorded. Let's start conversation!</p>
+          <p style="font-weight:bold">Members</p>
+
+              <ul class="list-unstyled">
+                <li class="media">
+                  <img src="images/boy.png" class="mr-3 avatar-icon" alt="...">
+                  <div class="media-body">
+                    <h5 class="mt-0 mb-1">Ray</h5>
+                    Challenge everything.
+                    <p style="color: #888888;font-size:14px">shou@wpi.edu</p>
+                  </div>
+                </li>
+                <li class="media">
+                  <img src="images/girl.png" class="mr-3 avatar-icon" alt="...">
+                  <div class="media-body">
+                    <h5 class="mt-0 mb-1">Mike</h5>
+                    Nice to meet ya.
+                    <p style="color: #888888;font-size:14px">mike@wpi.edu</p>
+                  </div>
+                </li>
+              </ul>
           
           
           <!-- qr scanner content ends -->
@@ -435,7 +454,7 @@
         </div>
       </div>
     </div>
-    <!-- qr scanner model ends here -->
+    <!-- conversatonResultModal model ends here -->
 
 
 
