@@ -182,17 +182,24 @@ function setupLoginStatus() {
         }
     });
     $('#qrScannerExitBtn').on("click", function (e) {
+        e.preventDefault();
         console.log("stop current scanner");
         scanner_1.cancelScannedWaiting();
         // (<any>window).scanner.stop();
         $('#qrScannerModal').modal("hide");
     });
     $('#checkRecordBtn').on("click", function (e) {
+        e.preventDefault();
         $('#conversatonResultModal').modal("show");
     });
     $('#conversatonResultExitBtn').on("click", function (e) {
         //do some cleaning
+        e.preventDefault();
         $('#conversatonResultModal').modal("hide");
+    });
+    $('#startConversationProcessBtn').on('click', function (e) {
+        e.preventDefault();
+        console.log("start conversation now!!!");
     });
 }
 function checkProtocol() {

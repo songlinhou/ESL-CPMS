@@ -198,6 +198,7 @@ function setupLoginStatus(){
     });
 
     $('#qrScannerExitBtn').on("click",(e)=>{
+        e.preventDefault();
         console.log("stop current scanner");
         cancelScannedWaiting();
         // (<any>window).scanner.stop();
@@ -205,12 +206,19 @@ function setupLoginStatus(){
     });
 
     $('#checkRecordBtn').on("click",(e)=>{
+        e.preventDefault();
         $('#conversatonResultModal').modal("show");
     })
 
     $('#conversatonResultExitBtn').on("click",(e)=>{
         //do some cleaning
+        e.preventDefault();
         $('#conversatonResultModal').modal("hide");
+    });
+
+    $('#startConversationProcessBtn').on('click',(e)=>{
+        e.preventDefault();
+        console.log("start conversation now!!!");
     });
 
 }
