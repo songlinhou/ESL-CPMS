@@ -8,7 +8,7 @@ var location_1 = require("./location");
 var scanner_1 = require("./scanner");
 var isHTTPS = false;
 function debugVersion() {
-    console.log("wed 12:27");
+    console.log("wed 12:31");
 }
 function setupLoginStatus() {
     checkProtocol();
@@ -149,6 +149,7 @@ function setupLoginStatus() {
         console.log("try scanning");
         $('#qrScannerModal').modal("show");
         $('#scannerIframe').attr('src', 'scan.html');
+        localStorage.setItem("scanning", "y");
         document.getElementById('scannerIframe').contentWindow.location.reload();
         try {
             localStorage.setItem("qr-result", "");

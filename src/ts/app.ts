@@ -9,7 +9,7 @@ import { getPlatform } from "./platform";
 let isHTTPS = false;
 
 function debugVersion(){
-    console.log("wed 12:27");
+    console.log("wed 12:31");
 }
 
 
@@ -165,6 +165,7 @@ function setupLoginStatus(){
         console.log("try scanning");
         $('#qrScannerModal').modal("show");
         $('#scannerIframe').attr('src','scan.html');
+        localStorage.setItem("scanning", "y");
         (<any>document.getElementById('scannerIframe')).contentWindow.location.reload();
         try {
             localStorage.setItem("qr-result","");
