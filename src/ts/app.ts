@@ -153,11 +153,13 @@ function setupLoginStatus(){
     $('#joinConversationBtn').on("click",(e)=>{
         e.preventDefault();
         // setup QR scanner
+        
         $("#scannerContent").show();
         $("#inputCodeContent").hide();
         //setupQRScanner('scanner');
         console.log("try scanning");
         $('#qrScannerModal').modal("show");
+        (<any>document.getElementById('scannerIframe')).contentWindow.location.reload();
         try {
             // setup_camera((result:string)=>{
             //     console.log("get the result",result);

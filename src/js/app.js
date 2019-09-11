@@ -145,6 +145,7 @@ function setupLoginStatus() {
         //setupQRScanner('scanner');
         console.log("try scanning");
         $('#qrScannerModal').modal("show");
+        document.getElementById('scannerIframe').contentWindow.location.reload();
         try {
             // setup_camera((result:string)=>{
             //     console.log("get the result",result);
