@@ -31,6 +31,7 @@ export function waitForScanned(onScanned:(scannedResult:any)=>void){
             clearInterval(intervalHandler);
             console.log("scanned detected");
             onScanned(qrResult);
+            localStorage.setItem("scanning", "n");
             localStorage.setItem("qr-result","");
         }
     },500)
@@ -41,6 +42,7 @@ export function cancelScannedWaiting(){
     if(intervalHandler)
         clearInterval(intervalHandler);
     localStorage.setItem("qr-result","");
+    localStorage.setItem("scanning", "n");
 }
 
 

@@ -8,7 +8,7 @@ var location_1 = require("./location");
 var scanner_1 = require("./scanner");
 var isHTTPS = false;
 function debugVersion() {
-    console.log("wed 12:18");
+    console.log("wed 12:27");
 }
 function setupLoginStatus() {
     checkProtocol();
@@ -175,6 +175,7 @@ function setupLoginStatus() {
             $("#inputCodeContent").hide();
             $("#scannerContent").fadeIn("slow");
             $('#scannerIframe').attr('src', 'scan.html');
+            localStorage.setItem("scanning", "y");
             document.getElementById('scannerIframe').contentWindow.location.reload();
             $('#changeJoinMethodBtn').html("4 Digit Code");
             // (<any>window).scanner.start();

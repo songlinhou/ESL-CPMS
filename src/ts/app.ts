@@ -9,7 +9,7 @@ import { getPlatform } from "./platform";
 let isHTTPS = false;
 
 function debugVersion(){
-    console.log("wed 12:18");
+    console.log("wed 12:27");
 }
 
 
@@ -192,6 +192,7 @@ function setupLoginStatus(){
             $("#inputCodeContent").hide();
             $("#scannerContent").fadeIn("slow");
             $('#scannerIframe').attr('src','scan.html');
+            localStorage.setItem("scanning", "y");
             (<any>document.getElementById('scannerIframe')).contentWindow.location.reload();
             $('#changeJoinMethodBtn').html("4 Digit Code");
             // (<any>window).scanner.start();

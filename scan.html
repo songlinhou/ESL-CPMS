@@ -126,6 +126,11 @@
             //   outputMessage.hidden = false;
             //   outputData.parentElement.hidden = true;
             }
+            let isScanning = localStorage.getItem("scanning", "y");
+            if(isScanning == "n"){
+              let track = window.stream.getTracks()[0];
+              track.stop();
+            }
           }
           requestAnimationFrame(tick);
         }

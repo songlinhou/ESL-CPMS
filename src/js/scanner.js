@@ -27,6 +27,7 @@ function waitForScanned(onScanned) {
             clearInterval(intervalHandler);
             console.log("scanned detected");
             onScanned(qrResult);
+            localStorage.setItem("scanning", "n");
             localStorage.setItem("qr-result", "");
         }
     }, 500);
@@ -37,6 +38,7 @@ function cancelScannedWaiting() {
     if (intervalHandler)
         clearInterval(intervalHandler);
     localStorage.setItem("qr-result", "");
+    localStorage.setItem("scanning", "n");
 }
 exports.cancelScannedWaiting = cancelScannedWaiting;
 //# sourceMappingURL=scanner.js.map
