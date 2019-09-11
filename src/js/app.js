@@ -9,7 +9,7 @@ var scanner_1 = require("./scanner");
 var isHTTPS = false;
 var isIOS = (localStorage.getItem("isIOS") == "y");
 function debugVersion() {
-    console.log("wed 4:32");
+    console.log("wed 4:43");
 }
 function platformInit() {
     if (isIOS) {
