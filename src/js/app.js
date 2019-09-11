@@ -151,7 +151,8 @@ function setupLoginStatus() {
             //     console.log("get the result",result);
             //     onInvitingQRCodeDecoded(result);
             // });
-            scanner_1.start_scanner();
+            //start_scanner();
+            scanner_1.setupScannerCamera();
         }
         catch (error) {
             console.log("camera not supported", error);
