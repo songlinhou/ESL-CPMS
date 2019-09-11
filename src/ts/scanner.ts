@@ -57,7 +57,7 @@ export function setupScannerCamera(){
         requestAnimationFrame(tick);
     });
 
-    let tickID;
+    let tickID:any;
     
     function tick() {
         loadingMessage.innerText = "⌛ Loading video..."
@@ -87,9 +87,17 @@ export function setupScannerCamera(){
             } else {
             //   outputMessage.hidden = false;
             //   outputData.parentElement.hidden = true;
-                tickID = requestAnimationFrame(tick);
+                finished = false;
             }
             }
+            else{
+                //finished
+                if(tickID){
+                    cancelAnimationFrame(tickID);
+                    return;
+                }
+            }
+            tickID = requestAnimationFrame(tick);
         }
         
         

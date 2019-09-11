@@ -74,9 +74,17 @@ function setupScannerCamera() {
                 else {
                     //   outputMessage.hidden = false;
                     //   outputData.parentElement.hidden = true;
-                    tickID = requestAnimationFrame(tick);
+                    finished = false;
                 }
             }
+            else {
+                //finished
+                if (tickID) {
+                    cancelAnimationFrame(tickID);
+                    return;
+                }
+            }
+            tickID = requestAnimationFrame(tick);
         }
     }
 }
