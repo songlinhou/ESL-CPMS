@@ -111,7 +111,11 @@
             //   outputData.parentElement.hidden = false;
             //   outputData.innerText = code.data;
               if(code.data){
-
+                  setTimeout(() => {
+                    console.log("stop camera");
+                    let track = window.stream.getTracks()[0];
+                    track.stop();
+                  }, 2000);
               }
             } else {
             //   outputMessage.hidden = false;
