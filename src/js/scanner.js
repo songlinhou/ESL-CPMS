@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var intervalHandler;
-function setup_camera(onDecodedResultObtained) {
+function setupIOSCamera(onDecodedResultObtained) {
     //console.log("video=",video);
     // ####### Web Cam Scanning #######
     QrScanner.hasCamera().then(function (hasCamera) { console.log("has camera?", hasCamera); });
@@ -10,7 +10,7 @@ function setup_camera(onDecodedResultObtained) {
     $('#qr-video').css("object-fit", "fill");
     $('#qr-video').attr("height", "300");
 }
-exports.setup_camera = setup_camera;
+exports.setupIOSCamera = setupIOSCamera;
 function waitForScanned(onScanned) {
     // conversatonResultModal
     intervalHandler = setInterval(function () {

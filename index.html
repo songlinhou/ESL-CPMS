@@ -366,11 +366,11 @@
             </button>
           </div>
           
-          <div class="modal-body" style="height: 250px;">
+          <div class="modal-body" style="height: 250px;" id="scannerHeight">
 
             <div id="scannerContent" style="height:100%">
           <!-- qr scanner content starts style="width: 100%;height:100%;" -->
-          <!-- <video id="qr-video" style="width: 100%;" poster="images/video-tag-poster.png" muted playsinline></video> -->
+          <video id="qr-video" style="width: 100%;" poster="images/video-tag-poster.png" muted playsinline></video>
 
           <!-- src="scan.html" -->
           <iframe  id="scannerIframe" frameBorder="0" style="width: 100%;height: 100%" scrolling="no"></iframe>
@@ -475,6 +475,13 @@
     <script type="module">
       import QrScanner from "./src/js/scanner/qr-scanner.min.js";
       QrScanner.WORKER_PATH = './src/js/scanner/qr-scanner-worker.min.js';
+      localStorage.setItem("isIOS", "y");
+      if(localStorage.getItem("isIOS") == "y"){
+        console.log("simulate in ios");
+      }
+      else{
+        console.log("simulate in android");
+      }
 
       const video = document.getElementById('qr-video');
 
@@ -484,13 +491,24 @@
 
       // ####### Web Cam Scanning #######
 
-      window.QrScanner = QrScanner;
+      if(localStorage.getItem("isIOS", "n") == "y"){
+        //IOS
+        //scannerIframe
+        $('#scannerIframe').remove();
+        window.QrScanner = QrScanner;
 
-      // QrScanner.hasCamera().then((hasCamera) => {console.log("has camera?",hasCamera)});
+        QrScanner.hasCamera().then((hasCamera) => {console.log("has camera?",hasCamera)});
 
-      window.scanner = new QrScanner(video, result => console.log('decoded qr code:', result));
+        window.scanner = new QrScanner(video, result => console.log('decoded qr code:', result));
 
-      //scanner.start();
+        scanner.start();
+
+      }
+      else{
+        //non-IOS
+        $('#qr-video').remove();
+      }
+      
     
     </script>
 

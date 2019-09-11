@@ -3,18 +3,32 @@ import { sendJsonp } from "./ajax";
 import { generateInvitingQRCodeURL, onInvitingQRCodeDecoded } from "./qr";
 import { verifyConversationCode } from "./codeVerify";
 import { processCoordinates, ICoordinate } from "./location";
-import { setup_camera, waitForScanned, cancelScannedWaiting } from "./scanner";
+import { waitForScanned, cancelScannedWaiting, setupIOSCamera } from "./scanner";
 import { getPlatform } from "./platform";
 
 let isHTTPS = false;
+let isIOS = (localStorage.getItem("isIOS") == "y");
+
+
+
+
 
 function debugVersion(){
-    console.log("wed 12:31");
+    console.log("wed 11:39");
+}
+
+function viewAjustment(){
+    if(isIOS){
+        $('#scannerHeight').css("height","300px");
+    }
+        
 }
 
 
 function setupLoginStatus(){
+
     checkProtocol();
+    viewAjustment();
     // getPlatform();
     debugVersion();
     let login_modal = $("#loginModal");
@@ -161,21 +175,32 @@ function setupLoginStatus(){
         
         $("#scannerContent").show();
         $("#inputCodeContent").hide();
-        //setupQRScanner('scanner');
+       
         console.log("try scanning");
         $('#qrScannerModal').modal("show");
-        $('#scannerIframe').attr('src','scan.html');
-        localStorage.setItem("scanning", "y");
-        (<any>document.getElementById('scannerIframe')).contentWindow.location.reload();
-        try {
-            localStorage.setItem("qr-result","");
-            waitForScanned((result)=>{
+
+        if(!isIOS){
+            $('#scannerIframe').attr('src','scan.html');
+            localStorage.setItem("scanning", "y");
+            (<any>document.getElementById('scannerIframe')).contentWindow.location.reload();
+            try {
+                localStorage.setItem("qr-result","");
+                waitForScanned((result)=>{
+                    console.log("captured result",result);
+                    onInvitingQRCodeDecoded(result);
+                });
+            } catch (error) {
+                console.log("camera not supported",error);
+                cancelScannedWaiting();
+            }
+        }
+        else{
+            //IOS
+            console.log('setup ios camera now');
+            setupIOSCamera((result)=>{
                 console.log("captured result",result);
                 onInvitingQRCodeDecoded(result);
             });
-        } catch (error) {
-            console.log("camera not supported",error);
-            cancelScannedWaiting();
         }
         
     });
@@ -192,27 +217,40 @@ function setupLoginStatus(){
             // change to camera
             $("#inputCodeContent").hide();
             $("#scannerContent").fadeIn("slow");
-            $('#scannerIframe').attr('src','scan.html');
-            localStorage.setItem("scanning", "y");
-            (<any>document.getElementById('scannerIframe')).contentWindow.location.reload();
             $('#changeJoinMethodBtn').html("4 Digit Code");
-            // (<any>window).scanner.start();
-            $('#qr-video').css("object-fit","fill");
-            $('#qr-video').attr("height","300");
-            localStorage.setItem("qr-result","");
-            waitForScanned((result)=>{
-                console.log("captured result",result);
-                onInvitingQRCodeDecoded(result);
+            if(!isIOS){
+                $('#scannerIframe').attr('src','scan.html');
+                localStorage.setItem("scanning", "y");
+                (<any>document.getElementById('scannerIframe')).contentWindow.location.reload();
+                localStorage.setItem("qr-result","");
+                waitForScanned((result)=>{
+                    console.log("captured result",result);
+                    onInvitingQRCodeDecoded(result);
+                });
+            }
+            else{
+                $('#qr-video').css("object-fit","fill");
+                $('#qr-video').attr("height","300");
+                console.log('setup ios camera now');
+                setupIOSCamera((result)=>{
+                    console.log("captured result",result);
+                    onInvitingQRCodeDecoded(result);
             });
+            }
         }
     });
 
     $('#qrScannerExitBtn').on("click",(e)=>{
         e.preventDefault();
         console.log("stop current scanner");
-        cancelScannedWaiting();
-        // (<any>window).scanner.stop();
+        
         $('#qrScannerModal').modal("hide");
+        if(!isIOS){
+            cancelScannedWaiting();
+        }
+        else{
+            (<any>window).scanner.stop();
+        }
     });
 
     $('#checkRecordBtn').on("click",(e)=>{

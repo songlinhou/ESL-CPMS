@@ -70,24 +70,35 @@
 
     QrScanner.hasCamera().then(hasCamera => camHasCamera.textContent = hasCamera);
 
-    const scanner = new QrScanner(video, result => setResult(camQrResult, result));
-    scanner.start();
+    window.scanner = new QrScanner(video, result => setResult(camQrResult, result));
 
-    document.getElementById('inversion-mode-select').addEventListener('change', event => {
-        scanner.setInversionMode(event.target.value);
-    });
+    // detect if scanner needs to be stopped
+
+    setInterval(() => {
+        let isScanning = localStorage.getItem("scanning", "y");
+        if(isScanning == "n"){
+            //stop now
+            window.scanner.stop();
+        }
+    }, 500);
+
+    // scanner.start();
+
+    // document.getElementById('inversion-mode-select').addEventListener('change', event => {
+    //     scanner.setInversionMode(event.target.value);
+    // });
 
     // ####### File Scanning #######
 
-    fileSelector.addEventListener('change', event => {
-        const file = fileSelector.files[0];
-        if (!file) {
-            return;
-        }
-        QrScanner.scanImage(file)
-            .then(result => setResult(fileQrResult, result))
-            .catch(e => setResult(fileQrResult, e || 'No QR code found.'));
-    });
+    // fileSelector.addEventListener('change', event => {
+    //     const file = fileSelector.files[0];
+    //     if (!file) {
+    //         return;
+    //     }
+    //     QrScanner.scanImage(file)
+    //         .then(result => setResult(fileQrResult, result))
+    //         .catch(e => setResult(fileQrResult, e || 'No QR code found.'));
+    // });
 
 </script>
 </body>

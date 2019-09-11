@@ -7,11 +7,18 @@ var codeVerify_1 = require("./codeVerify");
 var location_1 = require("./location");
 var scanner_1 = require("./scanner");
 var isHTTPS = false;
+var isIOS = (localStorage.getItem("isIOS") == "y");
 function debugVersion() {
-    console.log("wed 12:31");
+    console.log("wed 11:39");
+}
+function viewAjustment() {
+    if (isIOS) {
+        $('#scannerHeight').css("height", "300px");
+    }
 }
 function setupLoginStatus() {
     checkProtocol();
+    viewAjustment();
     // getPlatform();
     debugVersion();
     var login_modal = $("#loginModal");
@@ -145,22 +152,31 @@ function setupLoginStatus() {
         // setup QR scanner
         $("#scannerContent").show();
         $("#inputCodeContent").hide();
-        //setupQRScanner('scanner');
         console.log("try scanning");
         $('#qrScannerModal').modal("show");
-        $('#scannerIframe').attr('src', 'scan.html');
-        localStorage.setItem("scanning", "y");
-        document.getElementById('scannerIframe').contentWindow.location.reload();
-        try {
-            localStorage.setItem("qr-result", "");
-            scanner_1.waitForScanned(function (result) {
+        if (!isIOS) {
+            $('#scannerIframe').attr('src', 'scan.html');
+            localStorage.setItem("scanning", "y");
+            document.getElementById('scannerIframe').contentWindow.location.reload();
+            try {
+                localStorage.setItem("qr-result", "");
+                scanner_1.waitForScanned(function (result) {
+                    console.log("captured result", result);
+                    qr_1.onInvitingQRCodeDecoded(result);
+                });
+            }
+            catch (error) {
+                console.log("camera not supported", error);
+                scanner_1.cancelScannedWaiting();
+            }
+        }
+        else {
+            //IOS
+            console.log('setup ios camera now');
+            scanner_1.setupIOSCamera(function (result) {
                 console.log("captured result", result);
                 qr_1.onInvitingQRCodeDecoded(result);
             });
-        }
-        catch (error) {
-            console.log("camera not supported", error);
-            scanner_1.cancelScannedWaiting();
         }
     });
     $('#changeJoinMethodBtn').on("click", function (e) {
@@ -175,26 +191,38 @@ function setupLoginStatus() {
             // change to camera
             $("#inputCodeContent").hide();
             $("#scannerContent").fadeIn("slow");
-            $('#scannerIframe').attr('src', 'scan.html');
-            localStorage.setItem("scanning", "y");
-            document.getElementById('scannerIframe').contentWindow.location.reload();
             $('#changeJoinMethodBtn').html("4 Digit Code");
-            // (<any>window).scanner.start();
-            $('#qr-video').css("object-fit", "fill");
-            $('#qr-video').attr("height", "300");
-            localStorage.setItem("qr-result", "");
-            scanner_1.waitForScanned(function (result) {
-                console.log("captured result", result);
-                qr_1.onInvitingQRCodeDecoded(result);
-            });
+            if (!isIOS) {
+                $('#scannerIframe').attr('src', 'scan.html');
+                localStorage.setItem("scanning", "y");
+                document.getElementById('scannerIframe').contentWindow.location.reload();
+                localStorage.setItem("qr-result", "");
+                scanner_1.waitForScanned(function (result) {
+                    console.log("captured result", result);
+                    qr_1.onInvitingQRCodeDecoded(result);
+                });
+            }
+            else {
+                $('#qr-video').css("object-fit", "fill");
+                $('#qr-video').attr("height", "300");
+                console.log('setup ios camera now');
+                scanner_1.setupIOSCamera(function (result) {
+                    console.log("captured result", result);
+                    qr_1.onInvitingQRCodeDecoded(result);
+                });
+            }
         }
     });
     $('#qrScannerExitBtn').on("click", function (e) {
         e.preventDefault();
         console.log("stop current scanner");
-        scanner_1.cancelScannedWaiting();
-        // (<any>window).scanner.stop();
         $('#qrScannerModal').modal("hide");
+        if (!isIOS) {
+            scanner_1.cancelScannedWaiting();
+        }
+        else {
+            window.scanner.stop();
+        }
     });
     $('#checkRecordBtn').on("click", function (e) {
         e.preventDefault();

@@ -2,7 +2,7 @@ declare var QrScanner: any;
 declare var jsQR: any;
 let intervalHandler:any;
 
-export function setup_camera(onDecodedResultObtained:(result:string) => void){
+export function setupIOSCamera(onDecodedResultObtained:(result:string) => void){
 
     //console.log("video=",video);
     // ####### Web Cam Scanning #######
