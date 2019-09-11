@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var global_base_url = 'http://34.66.91.169:8888';
+var global_base_url = 'https://34.66.91.169:8888';
 function sendJsonp(url, data, method, callback) {
     return $.ajax({
         url: global_base_url + url,

@@ -1,4 +1,4 @@
-let global_base_url = 'http://34.66.91.169:8888';
+let global_base_url = 'https://34.66.91.169:8888';
 
 export function sendJsonp(url:string,data:any,method:string,callback:string){
     return $.ajax({
