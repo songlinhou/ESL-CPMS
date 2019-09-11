@@ -17,9 +17,10 @@ function debugVersion(){
     console.log("wed 11:39");
 }
 
-function viewAjustment(){
+function platformInit(){
     if(isIOS){
         $('#scannerHeight').css("height","300px");
+        (<any>window).scanner.stop();
     }
         
 }
@@ -28,7 +29,7 @@ function viewAjustment(){
 function setupLoginStatus(){
 
     checkProtocol();
-    viewAjustment();
+    platformInit();
     // getPlatform();
     debugVersion();
     let login_modal = $("#loginModal");
@@ -211,7 +212,12 @@ function setupLoginStatus(){
         if($("#scannerContent").is(":visible")){
             // change to 4 digit code
             verifyConversationCode();
-            cancelScannedWaiting();
+            if(!isIOS){
+                cancelScannedWaiting();
+            }
+            else{
+                (<any>window).scanner.stop();
+            }
         }
         else{
             // change to camera

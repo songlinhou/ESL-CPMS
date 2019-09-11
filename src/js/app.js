@@ -11,14 +11,15 @@ var isIOS = (localStorage.getItem("isIOS") == "y");
 function debugVersion() {
     console.log("wed 11:39");
 }
-function viewAjustment() {
+function platformInit() {
     if (isIOS) {
         $('#scannerHeight').css("height", "300px");
+        window.scanner.stop();
     }
 }
 function setupLoginStatus() {
     checkProtocol();
-    viewAjustment();
+    platformInit();
     // getPlatform();
     debugVersion();
     var login_modal = $("#loginModal");
@@ -185,7 +186,12 @@ function setupLoginStatus() {
         if ($("#scannerContent").is(":visible")) {
             // change to 4 digit code
             codeVerify_1.verifyConversationCode();
-            scanner_1.cancelScannedWaiting();
+            if (!isIOS) {
+                scanner_1.cancelScannedWaiting();
+            }
+            else {
+                window.scanner.stop();
+            }
         }
         else {
             // change to camera
