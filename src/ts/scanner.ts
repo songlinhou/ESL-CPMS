@@ -15,16 +15,6 @@ export function setup_camera(onDecodedResultObtained:(result:string) => void){
     $('#qr-video').attr("height","300");
 }
 
-export function pause_scanner(){
-    let iframe = $('#scannerIframe'); // or some other selector to get the iframe
-    (<any>$('#video', iframe.contents())[0]).pause();
-}
-
-export function start_scanner(){
-    let iframe = $('#scannerIframe'); // or some other selector to get the iframe
-    (<any>$('#video', iframe.contents())[0]).play();
-}
-
 export function waitForScanned(onScanned:(scannedResult:any)=>void){
     // conversatonResultModal
     intervalHandler = setInterval(()=>{

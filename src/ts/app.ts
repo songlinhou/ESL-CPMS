@@ -3,13 +3,13 @@ import { sendJsonp } from "./ajax";
 import { generateInvitingQRCodeURL, onInvitingQRCodeDecoded } from "./qr";
 import { verifyConversationCode } from "./codeVerify";
 import { processCoordinates, ICoordinate } from "./location";
-import { setup_camera, pause_scanner, start_scanner, waitForScanned, cancelScannedWaiting } from "./scanner";
+import { setup_camera, waitForScanned, cancelScannedWaiting } from "./scanner";
 import { getPlatform } from "./platform";
 
 let isHTTPS = false;
 
 function debugVersion(){
-    console.log("wed 12:14");
+    console.log("wed 12:18");
 }
 
 
@@ -17,7 +17,6 @@ function setupLoginStatus(){
     checkProtocol();
     // getPlatform();
     debugVersion();
-    pause_scanner();
     let login_modal = $("#loginModal");
     let login_content = $('#WPI-login-content');
     let reg_content = $('#WPI-Reg-content');
