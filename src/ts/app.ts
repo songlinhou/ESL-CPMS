@@ -8,9 +8,15 @@ import { getPlatform } from "./platform";
 
 let isHTTPS = false;
 
+function debugVersion(){
+    console.log("wed 12:11");
+}
+
+
 function setupLoginStatus(){
     checkProtocol();
     // getPlatform();
+    debugVersion();
     pause_scanner();
     let login_modal = $("#loginModal");
     let login_content = $('#WPI-login-content');

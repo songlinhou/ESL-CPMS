@@ -7,9 +7,13 @@ var codeVerify_1 = require("./codeVerify");
 var location_1 = require("./location");
 var scanner_1 = require("./scanner");
 var isHTTPS = false;
+function debugVersion() {
+    console.log("wed 12:11");
+}
 function setupLoginStatus() {
     checkProtocol();
     // getPlatform();
+    debugVersion();
     scanner_1.pause_scanner();
     var login_modal = $("#loginModal");
     var login_content = $('#WPI-login-content');
