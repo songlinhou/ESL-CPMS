@@ -14,7 +14,7 @@ let isIOS = (localStorage.getItem("isIOS") == "y");
 
 
 function debugVersion(){
-    console.log("wed 4:25");
+    console.log("wed 4:32");
 }
 
 function platformInit(){
@@ -26,6 +26,7 @@ function platformInit(){
         (<any>window).scanner._onDecode = (result:any)=>{
             console.log("captured result",result);
             onInvitingQRCodeDecoded(result);
+            (<any>window).scanner.stop();
         }
     }
         

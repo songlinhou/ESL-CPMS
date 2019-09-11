@@ -9,7 +9,7 @@ var scanner_1 = require("./scanner");
 var isHTTPS = false;
 var isIOS = (localStorage.getItem("isIOS") == "y");
 function debugVersion() {
-    console.log("wed 4:25");
+    console.log("wed 4:32");
 }
 function platformInit() {
     if (isIOS) {
@@ -20,6 +20,7 @@ function platformInit() {
         window.scanner._onDecode = function (result) {
             console.log("captured result", result);
             qr_1.onInvitingQRCodeDecoded(result);
+            window.scanner.stop();
         };
     }
 }
