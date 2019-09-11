@@ -9,12 +9,14 @@ var scanner_1 = require("./scanner");
 var isHTTPS = false;
 var isIOS = (localStorage.getItem("isIOS") == "y");
 function debugVersion() {
-    console.log("wed 11:39");
+    console.log("wed 11:56");
 }
 function platformInit() {
     if (isIOS) {
         $('#scannerHeight').css("height", "300px");
         window.scanner.stop();
+        // height="280"
+        $('#qr-video').attr("height", 280);
     }
 }
 function setupLoginStatus() {
