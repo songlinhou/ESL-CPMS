@@ -21,6 +21,9 @@ function onInvitingQRCodeDecoded(result) {
     var durationInMinutes = (now.getTime() - initDate.getTime()) / 1000 / 60;
     if (durationInMinutes > 5) {
         //expired
+        $('#debugGroupInfo').html("expried already");
+        $('#qrScannerModal').modal("hide");
+        $('#conversatonResultModal').modal("show");
         console.log("already expired");
     }
     else {
@@ -29,6 +32,9 @@ function onInvitingQRCodeDecoded(result) {
             // invalid position, skip validation
             // form a group
             console.log("skip position check. group formed!");
+            $('#debugGroupInfo').html("positions from both devices are not enabled;");
+            $('#qrScannerModal').modal("hide");
+            $('#conversatonResultModal').modal("show");
             return;
         }
         location_1.processCoordinates(function (lat, long) {
@@ -36,6 +42,9 @@ function onInvitingQRCodeDecoded(result) {
                 // invalid position, skip validation
                 // form a group
                 console.log("skip position check. group formed!");
+                $('#debugGroupInfo').html("positions from one device is not enabled;");
+                $('#qrScannerModal').modal("hide");
+                $('#conversatonResultModal').modal("show");
                 return;
             }
             var distanceInKM = location_1.getDistanceBetween(lat, long, dataJSON.latitude, dataJSON.longitude, 'K');
@@ -44,6 +53,7 @@ function onInvitingQRCodeDecoded(result) {
                 // within 0.5 km
                 // valid position, success
                 console.log("position check successful. group formed!");
+                $('#debugGroupInfo').html("positions check successful;");
                 $('#qrScannerModal').modal("hide");
                 $('#conversatonResultModal').modal("show");
                 return;
@@ -52,6 +62,7 @@ function onInvitingQRCodeDecoded(result) {
                 // beyone 0.5 km
                 // valid position, fail
                 console.log("position check fail. group not formed!");
+                $('#debugGroupInfo').html("positions check failed!!");
                 $('#qrScannerModal').modal("hide");
                 $('#conversatonResultModal').modal("show");
                 return;
