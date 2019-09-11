@@ -37,12 +37,12 @@ function drawLine(canvas:any,begin:any, end:any, color:any) {
 
 export function setupScannerCamera(){
     let iframe = $('#scannerIframe'); // or some other selector to get the iframe
-    
 
     let video:any = <any>$('#video', iframe.contents())[0];
     let canvasElement:any = <any>$('#canvas', iframe.contents())[0];
     let canvas = canvasElement.getContext("2d");
     let loadingMessage = <any>$('#loadingMessage', iframe.contents())[0];
+    let finished = false;
         // var outputContainer = document.getElementById("output");
         // var outputMessage = document.getElementById("outputMessage");
         // var outputData = document.getElementById("outputData");
@@ -56,6 +56,8 @@ export function setupScannerCamera(){
         video.play();
         requestAnimationFrame(tick);
     });
+
+    let tickID;
     
     function tick() {
         loadingMessage.innerText = "⌛ Loading video..."
@@ -68,24 +70,29 @@ export function setupScannerCamera(){
         canvasElement.width = video.videoWidth;
         canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
         let imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
-        let code = jsQR(imageData.data, imageData.width, imageData.height, {
-            inversionAttempts: "dontInvert",
-        });
-        if (code) {
-            drawLine(canvas,code.location.topLeftCorner, code.location.topRightCorner, "#FF3B58");
-            drawLine(canvas,code.location.topRightCorner, code.location.bottomRightCorner, "#FF3B58");
-            drawLine(canvas,code.location.bottomRightCorner, code.location.bottomLeftCorner, "#FF3B58");
-            drawLine(canvas,code.location.bottomLeftCorner, code.location.topLeftCorner, "#FF3B58");
-        //   outputMessage.hidden = true;
-        //   outputData.parentElement.hidden = false;
-        //   outputData.innerText = code.data;
-            console.log("data=",code.data);
-        } else {
-        //   outputMessage.hidden = false;
-        //   outputData.parentElement.hidden = true;
+        if(!finished){
+            let code = jsQR(imageData.data, imageData.width, imageData.height, {
+                inversionAttempts: "dontInvert",
+            });
+            if (code) {
+                drawLine(canvas,code.location.topLeftCorner, code.location.topRightCorner, "#FF3B58");
+                drawLine(canvas,code.location.topRightCorner, code.location.bottomRightCorner, "#FF3B58");
+                drawLine(canvas,code.location.bottomRightCorner, code.location.bottomLeftCorner, "#FF3B58");
+                drawLine(canvas,code.location.bottomLeftCorner, code.location.topLeftCorner, "#FF3B58");
+            //   outputMessage.hidden = true;
+            //   outputData.parentElement.hidden = false;
+            //   outputData.innerText = code.data;
+                console.log("data=",code.data);
+                finished = true;
+            } else {
+            //   outputMessage.hidden = false;
+            //   outputData.parentElement.hidden = true;
+                tickID = requestAnimationFrame(tick);
+            }
+            }
         }
-        }
-        requestAnimationFrame(tick);
+        
+        
     }
 }
 

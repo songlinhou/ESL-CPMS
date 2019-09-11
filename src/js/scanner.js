@@ -34,6 +34,7 @@ function setupScannerCamera() {
     var canvasElement = $('#canvas', iframe.contents())[0];
     var canvas = canvasElement.getContext("2d");
     var loadingMessage = $('#loadingMessage', iframe.contents())[0];
+    var finished = false;
     // var outputContainer = document.getElementById("output");
     // var outputMessage = document.getElementById("outputMessage");
     // var outputData = document.getElementById("outputData");
@@ -44,6 +45,7 @@ function setupScannerCamera() {
         video.play();
         requestAnimationFrame(tick);
     });
+    var tickID;
     function tick() {
         loadingMessage.innerText = "⌛ Loading video...";
         if (video.readyState === video.HAVE_ENOUGH_DATA) {
@@ -54,25 +56,28 @@ function setupScannerCamera() {
             canvasElement.width = video.videoWidth;
             canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
             var imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
-            var code = jsQR(imageData.data, imageData.width, imageData.height, {
-                inversionAttempts: "dontInvert",
-            });
-            if (code) {
-                drawLine(canvas, code.location.topLeftCorner, code.location.topRightCorner, "#FF3B58");
-                drawLine(canvas, code.location.topRightCorner, code.location.bottomRightCorner, "#FF3B58");
-                drawLine(canvas, code.location.bottomRightCorner, code.location.bottomLeftCorner, "#FF3B58");
-                drawLine(canvas, code.location.bottomLeftCorner, code.location.topLeftCorner, "#FF3B58");
-                //   outputMessage.hidden = true;
-                //   outputData.parentElement.hidden = false;
-                //   outputData.innerText = code.data;
-                console.log("data=", code.data);
-            }
-            else {
-                //   outputMessage.hidden = false;
-                //   outputData.parentElement.hidden = true;
+            if (!finished) {
+                var code = jsQR(imageData.data, imageData.width, imageData.height, {
+                    inversionAttempts: "dontInvert",
+                });
+                if (code) {
+                    drawLine(canvas, code.location.topLeftCorner, code.location.topRightCorner, "#FF3B58");
+                    drawLine(canvas, code.location.topRightCorner, code.location.bottomRightCorner, "#FF3B58");
+                    drawLine(canvas, code.location.bottomRightCorner, code.location.bottomLeftCorner, "#FF3B58");
+                    drawLine(canvas, code.location.bottomLeftCorner, code.location.topLeftCorner, "#FF3B58");
+                    //   outputMessage.hidden = true;
+                    //   outputData.parentElement.hidden = false;
+                    //   outputData.innerText = code.data;
+                    console.log("data=", code.data);
+                    finished = true;
+                }
+                else {
+                    //   outputMessage.hidden = false;
+                    //   outputData.parentElement.hidden = true;
+                    tickID = requestAnimationFrame(tick);
+                }
             }
         }
-        requestAnimationFrame(tick);
     }
 }
 exports.setupScannerCamera = setupScannerCamera;
