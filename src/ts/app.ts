@@ -10,7 +10,7 @@ let isHTTPS = false;
 
 function setupLoginStatus(){
     checkProtocol();
-    getPlatform();
+    // getPlatform();
     pause_scanner();
     let login_modal = $("#loginModal");
     let login_content = $('#WPI-login-content');
