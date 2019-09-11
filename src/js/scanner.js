@@ -24,11 +24,20 @@ exports.start_scanner = start_scanner;
 function waitForScanned(onScanned) {
     // conversatonResultModal
     intervalHandler = setInterval(function () {
-        var qrResult = JSON.parse(localStorage.getItem("qr-result"));
+        var qrResult = localStorage.getItem("qr-result");
         if (qrResult) {
+            try {
+                JSON.parse(qrResult);
+            }
+            catch (e) {
+                console.log("bad format for qr-result. Incorrect QR code.");
+                localStorage.setItem("qr-result", null);
+                return;
+            }
             clearInterval(intervalHandler);
             console.log("scanned detected");
             onScanned(qrResult);
+            localStorage.setItem("qr-result", null);
         }
     }, 500);
 }
@@ -37,6 +46,7 @@ function cancelScannedWaiting() {
     // conversatonResultModal
     if (intervalHandler)
         clearInterval(intervalHandler);
+    localStorage.setItem("qr-result", null);
 }
 exports.cancelScannedWaiting = cancelScannedWaiting;
 //# sourceMappingURL=scanner.js.map

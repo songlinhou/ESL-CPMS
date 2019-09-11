@@ -147,13 +147,9 @@ function setupLoginStatus() {
         $('#qrScannerModal').modal("show");
         document.getElementById('scannerIframe').contentWindow.location.reload();
         try {
-            // setup_camera((result:string)=>{
-            //     console.log("get the result",result);
-            //     onInvitingQRCodeDecoded(result);
-            // });
-            //start_scanner();
             scanner_1.waitForScanned(function (result) {
                 console.log("captured result", result);
+                qr_1.onInvitingQRCodeDecoded(result);
             });
         }
         catch (error) {
@@ -179,6 +175,7 @@ function setupLoginStatus() {
             $('#qr-video').attr("height", "300");
             scanner_1.waitForScanned(function (result) {
                 console.log("captured result", result);
+                qr_1.onInvitingQRCodeDecoded(result);
             });
         }
     });

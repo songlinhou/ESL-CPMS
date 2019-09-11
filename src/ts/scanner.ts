@@ -28,11 +28,20 @@ export function start_scanner(){
 export function waitForScanned(onScanned:(scannedResult:any)=>void){
     // conversatonResultModal
     intervalHandler = setInterval(()=>{
-        let qrResult = JSON.parse(localStorage.getItem("qr-result"));
+        let qrResult = localStorage.getItem("qr-result");
         if(qrResult){
+            try{
+                JSON.parse(qrResult)
+            }
+            catch(e){
+                console.log("bad format for qr-result. Incorrect QR code.");
+                localStorage.setItem("qr-result",null);
+                return;
+            }
             clearInterval(intervalHandler);
             console.log("scanned detected");
             onScanned(qrResult);
+            localStorage.setItem("qr-result",null);
         }
     },500)
 }
@@ -41,6 +50,7 @@ export function cancelScannedWaiting(){
     // conversatonResultModal
     if(intervalHandler)
         clearInterval(intervalHandler);
+    localStorage.setItem("qr-result",null);
 }
 
 

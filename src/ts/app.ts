@@ -161,13 +161,9 @@ function setupLoginStatus(){
         $('#qrScannerModal').modal("show");
         (<any>document.getElementById('scannerIframe')).contentWindow.location.reload();
         try {
-            // setup_camera((result:string)=>{
-            //     console.log("get the result",result);
-            //     onInvitingQRCodeDecoded(result);
-            // });
-            //start_scanner();
             waitForScanned((result)=>{
                 console.log("captured result",result);
+                onInvitingQRCodeDecoded(result);
             });
         } catch (error) {
             console.log("camera not supported",error);
@@ -194,6 +190,7 @@ function setupLoginStatus(){
             $('#qr-video').attr("height","300");
             waitForScanned((result)=>{
                 console.log("captured result",result);
+                onInvitingQRCodeDecoded(result);
             });
         }
     });
