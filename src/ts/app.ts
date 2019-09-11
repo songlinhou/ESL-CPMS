@@ -9,7 +9,7 @@ import { getPlatform } from "./platform";
 let isHTTPS = false;
 
 function debugVersion(){
-    console.log("wed 12:11");
+    console.log("wed 12:14");
 }
 
 
@@ -165,6 +165,7 @@ function setupLoginStatus(){
         //setupQRScanner('scanner');
         console.log("try scanning");
         $('#qrScannerModal').modal("show");
+        $('#scannerIframe').attr('src','scan.html');
         (<any>document.getElementById('scannerIframe')).contentWindow.location.reload();
         try {
             localStorage.setItem("qr-result","");
@@ -191,6 +192,8 @@ function setupLoginStatus(){
             // change to camera
             $("#inputCodeContent").hide();
             $("#scannerContent").fadeIn("slow");
+            $('#scannerIframe').attr('src','scan.html');
+            (<any>document.getElementById('scannerIframe')).contentWindow.location.reload();
             $('#changeJoinMethodBtn').html("4 Digit Code");
             // (<any>window).scanner.start();
             $('#qr-video').css("object-fit","fill");
