@@ -5,11 +5,13 @@ var ajax_1 = require("./ajax");
 var qr_1 = require("./qr");
 var codeVerify_1 = require("./codeVerify");
 var location_1 = require("./location");
+var scanner_1 = require("./scanner");
 var platform_1 = require("./platform");
 var isHTTPS = false;
 function setupLoginStatus() {
     checkProtocol();
     platform_1.getPlatform();
+    scanner_1.pause_scanner();
     var login_modal = $("#loginModal");
     var login_content = $('#WPI-login-content');
     var reg_content = $('#WPI-Reg-content');
@@ -149,6 +151,7 @@ function setupLoginStatus() {
             //     console.log("get the result",result);
             //     onInvitingQRCodeDecoded(result);
             // });
+            scanner_1.start_scanner();
         }
         catch (error) {
             console.log("camera not supported", error);

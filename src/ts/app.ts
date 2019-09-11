@@ -3,7 +3,7 @@ import { sendJsonp } from "./ajax";
 import { generateInvitingQRCodeURL, onInvitingQRCodeDecoded } from "./qr";
 import { verifyConversationCode } from "./codeVerify";
 import { processCoordinates, ICoordinate } from "./location";
-import { setup_camera } from "./scanner";
+import { setup_camera, pause_scanner, start_scanner } from "./scanner";
 import { getPlatform } from "./platform";
 
 let isHTTPS = false;
@@ -11,6 +11,7 @@ let isHTTPS = false;
 function setupLoginStatus(){
     checkProtocol();
     getPlatform();
+    pause_scanner();
     let login_modal = $("#loginModal");
     let login_content = $('#WPI-login-content');
     let reg_content = $('#WPI-Reg-content');
@@ -162,6 +163,7 @@ function setupLoginStatus(){
             //     console.log("get the result",result);
             //     onInvitingQRCodeDecoded(result);
             // });
+            start_scanner();
         } catch (error) {
             console.log("camera not supported",error);
             

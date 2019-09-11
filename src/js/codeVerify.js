@@ -4,7 +4,7 @@ function verifyConversationCode() {
     $('#changeJoinMethodBtn').html("QR Code");
     $("#scannerContent").hide();
     $("#inputCodeContent").fadeIn("slow");
-    window.scanner.stop();
+    // (<any>window).scanner.stop();
 }
 exports.verifyConversationCode = verifyConversationCode;
 //# sourceMappingURL=codeVerify.js.map
