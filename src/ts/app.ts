@@ -1,5 +1,5 @@
 import { isInputValid } from "./formatChecker";
-import { sendJsonp } from "./ajax";
+import { sendJsonp, displayServerAddr } from "./ajax";
 import { generateInvitingQRCodeURL, onInvitingQRCodeDecoded } from "./qr";
 import { verifyConversationCode } from "./codeVerify";
 import { processCoordinates, ICoordinate } from "./location";
@@ -33,6 +33,7 @@ function platformInit(){
 
 function setupLoginStatus(){
 
+    displayServerAddr();
     checkProtocol();
     platformInit();
     // getPlatform();
