@@ -25,6 +25,7 @@ function platformInit() {
     }
 }
 function setupLoginStatus() {
+    ajax_1.displayServerAddr();
     checkProtocol();
     platformInit();
     // getPlatform();
