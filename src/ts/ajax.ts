@@ -23,12 +23,14 @@ export function sendJsonp(url:string,data:any,method:string,callback:string){
 
 export function displayServerAddr(){
     if (global_base_url == 'https://www.esl.today'){
-        return "On Product Server";
+        console.log("On Product Server");
+        return;
     }
     else if(global_base_url == 'http://157.245.82.60:8888'){
-        return "On Test Server";
+        console.log("On Test Server");
+        return;
     }
-    return `On Server ${global_base_url}`;
+    console.log(`On Server ${global_base_url}`);
 }
 
 // export function sendHTTPRequest(full_url:string,data:any,method:string){
