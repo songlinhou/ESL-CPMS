@@ -6,8 +6,11 @@ var qr_1 = require("./qr");
 var codeVerify_1 = require("./codeVerify");
 var location_1 = require("./location");
 var scanner_1 = require("./scanner");
+var credential_1 = require("./credential");
+var modal_1 = require("./modal");
 var isHTTPS = false;
 var isIOS = (localStorage.getItem("isIOS") == "y");
+exports.loginInfo = null;
 function debugVersion() {
     console.log("Sat 6:07");
 }
@@ -24,12 +27,61 @@ function platformInit() {
         };
     }
 }
+function deleteLocalCredentials() {
+    exports.loginInfo = null;
+    localStorage.setItem("login", "");
+}
+exports.deleteLocalCredentials = deleteLocalCredentials;
+function getLastLoginInfo(expired_days) {
+    if (expired_days === void 0) { expired_days = 30; }
+    var login_json = localStorage.getItem("login");
+    if (!login_json) {
+        $('#login_panel').removeClass('d-none');
+        $('#user_panel').addClass('d-none');
+        return;
+    }
+    try {
+        exports.loginInfo = JSON.parse(login_json);
+    }
+    catch (error) {
+        localStorage.setItem("login", "");
+        $('#login_panel').removeClass('d-none');
+        $('#user_panel').addClass('d-none');
+        return;
+    }
+    var date = new Date();
+    var now = date.getTime();
+    if (exports.loginInfo) {
+        $('#login_panel').addClass('d-none');
+        $('#user_panel').removeClass('d-none');
+        if ('timestamp' in Object.keys(exports.loginInfo)) {
+            var lastLoginTime = exports.loginInfo['timestamp'];
+            var hours = (now - lastLoginTime) / 1000 / 60 / 60;
+            if (hours / 24 > expired_days) {
+                //expired already
+                $('#login_panel').removeClass('d-none');
+                $('#user_panel').addClass('d-none');
+                exports.loginInfo = null;
+                localStorage.setItem("login", "");
+            }
+        }
+    }
+    else {
+        localStorage.setItem("login", "");
+        $('#login_panel').removeClass('d-none');
+        $('#user_panel').addClass('d-none');
+    }
+    if (exports.loginInfo) {
+        credential_1.showEditPersonalInformation(exports.loginInfo);
+    }
+}
 function setupLoginStatus() {
     ajax_1.displayServerAddr();
     checkProtocol();
     platformInit();
     // getPlatform();
     debugVersion();
+    getLastLoginInfo();
     var login_modal = $("#loginModal");
     var login_content = $('#WPI-login-content');
     var reg_content = $('#WPI-Reg-content');
@@ -45,14 +97,53 @@ function setupLoginStatus() {
         if (login_content.is(":visible")) {
             // start to login
             console.log("start to login with email and password");
-            login_modal.modal('hide');
+            var username = ($('#wpi-username-login-input').val()).toString();
+            var password = ($('#user-login-password-input').val()).toString();
+            $('#password_login_error').html("");
+            $('#email_login_error').html("");
+            $('#login_credential_error').html("");
+            if (!formatChecker_1.isUsernameValid(username)) {
+                $('#email_login_error').html("email is not valid.");
+                return;
+            }
+            if (!formatChecker_1.isStringValid(password)) {
+                $('#password_login_error').html("password cannot be empty.");
+                return;
+            }
+            console.log("start to connect to server");
+            var email = username + "@wpi.edu";
+            credential_1.loginUser(email, password, function (resp) {
+                if (!resp.success) {
+                    setTimeout(function () {
+                        $('#login_credential_error').html(resp.message);
+                    }, 100);
+                    return;
+                }
+                var userData = resp.data;
+                //get the logged in time
+                var date = new Date();
+                var timestamp = date.getTime();
+                userData['timestamp'] = timestamp;
+                localStorage.setItem("login", JSON.stringify(userData));
+                console.log("login successful!");
+                //update UI
+                $('#login_panel').addClass('d-none');
+                $('#user_panel').removeClass('d-none');
+                login_modal.modal('hide');
+                //now change to logged in mode.
+            }, function (error) {
+                console.log("server error!");
+                console.log(error);
+                $('#login_credential_error').html("Server error.");
+            });
+            //login_modal.modal('hide');
         }
         else if (reg_content.is(":visible")) {
             // request a verification code
             var username_input = $('#wpi-username-verify-input').val();
             username_input = username_input.trim();
             console.log("request a verification code for " + username_input);
-            if (!formatChecker_1.isInputValid(username_input)) {
+            if (!formatChecker_1.isUsernameValid(username_input)) {
                 console.log("error in username");
                 //UI show error message
                 return;
@@ -128,6 +219,7 @@ function setupLoginStatus() {
                 return;
             }
             console.log("the password is set to", password);
+            //TODO: Ask for addtional information
         }
     });
     $('.go-to-reg').on("click", function () {
@@ -263,7 +355,34 @@ function checkProtocol() {
         console.log("unknow protocol");
     }
 }
+function setupUserPanelTriggers() {
+    $('#logout_btn').on('click', function (event) {
+        event.preventDefault();
+        var buttonPos = $('#logout_btn').position();
+        console.log('buttonPos', buttonPos);
+        modal_1.showYesNoModal("Logout", "Are you sure you want to log out?", function () {
+            credential_1.logoutUser();
+            console.log("logout successfully");
+        }, function () {
+            console.log("logout cancelled");
+        });
+    });
+}
+function deviceFix() {
+    $('#dropdownMenuButton').on('click', function () {
+        var offset = $('#dropdownMenuButton').offset();
+        if (offset.top > offset.left) {
+            // dropdown-menu-right
+            $('#user-panel-dropdown').removeClass('dropdown-menu-right');
+        }
+        else {
+            $('#user-panel-dropdown').addClass('dropdown-menu-right');
+        }
+    });
+}
 $(document).ready(function () {
+    deviceFix();
     setupLoginStatus();
+    setupUserPanelTriggers();
 });
 //# sourceMappingURL=app.js.map

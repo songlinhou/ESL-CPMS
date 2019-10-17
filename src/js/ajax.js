@@ -1,8 +1,9 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 // let global_base_url = 'https://34.66.91.169:8888';
-var global_base_url = 'https://www.esl.today'; // for production
+// let global_base_url = 'https://www.esl.today'; // for production
 // let global_base_url = 'http://157.245.82.60:8888'; //for development
+Object.defineProperty(exports, "__esModule", { value: true });
+var global_base_url = 'http://127.0.0.1:8888'; // for production
 function sendJsonp(url, data, method, callback) {
     return $.ajax({
         url: global_base_url + url,

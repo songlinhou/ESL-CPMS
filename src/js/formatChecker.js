@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-function isInputValid(username) {
+function isUsernameValid(username) {
     username = username.trim();
     if (username.length == 0) {
         return false;
@@ -10,5 +10,16 @@ function isInputValid(username) {
     }
     return true;
 }
-exports.isInputValid = isInputValid;
+exports.isUsernameValid = isUsernameValid;
+function isStringValid(input) {
+    if (!input) {
+        return false;
+    }
+    input = input.trim();
+    if (!input) {
+        return false;
+    }
+    return true;
+}
+exports.isStringValid = isStringValid;
 //# sourceMappingURL=formatChecker.js.map

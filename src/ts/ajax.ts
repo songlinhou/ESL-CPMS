@@ -1,6 +1,8 @@
 // let global_base_url = 'https://34.66.91.169:8888';
-let global_base_url = 'https://www.esl.today'; // for production
+// let global_base_url = 'https://www.esl.today'; // for production
 // let global_base_url = 'http://157.245.82.60:8888'; //for development
+
+let global_base_url = 'http://127.0.0.1:8888'; // for production
 
 export function sendJsonp(url:string,data:any,method:string,callback:string){
     return $.ajax({
