@@ -10,6 +10,7 @@ var credential_1 = require("./credential");
 var modal_1 = require("./modal");
 var isHTTPS = false;
 var isIOS = (localStorage.getItem("isIOS") == "y");
+var imageToUpload = null;
 exports.loginInfo = null;
 function debugVersion() {
     console.log("Sat 6:07");
@@ -92,6 +93,16 @@ function setupLoginStatus() {
     verify_content.hide();
     password_content.hide();
     $('#login-reg-confirm').html("Login");
+    $('#login_panel>button').on("click", function (event) {
+        // event.preventDefault();
+        $('#WPI-login-content').show();
+        $('#WPI-Reg-content').hide();
+        $('#WPI-Verify-content').hide();
+        $('#WPI-Password-content').hide();
+        $('#email_login_error').html("");
+        $('#password_login_error').html("");
+        $('#login_credential_error').html("");
+    });
     // set up event triggers
     $('#login-reg-confirm').on("click", function () {
         if (login_content.is(":visible")) {
@@ -140,32 +151,58 @@ function setupLoginStatus() {
         }
         else if (reg_content.is(":visible")) {
             // request a verification code
-            var username_input = $('#wpi-username-verify-input').val();
-            username_input = username_input.trim();
-            console.log("request a verification code for " + username_input);
-            if (!formatChecker_1.isUsernameValid(username_input)) {
+            var username_input_1 = $('#wpi-username-verify-input').val();
+            username_input_1 = username_input_1.trim();
+            if (!formatChecker_1.isUsernameValid(username_input_1)) {
                 console.log("error in username");
                 //UI show error message
                 return;
             }
-            var email_1 = username_input + "@wpi.edu";
-            // /request/verification_code
-            ajax_1.sendJsonp("/request/verification_code", { "email": email_1 }, "post", "request_verification_code").done(function (resp) {
-                console.log("verification code status", resp);
-                if (resp.success) {
-                    //go to set up password for current user.
-                    login_content.hide();
-                    reg_content.hide();
-                    password_content.hide();
-                    verify_content.fadeIn("slow");
-                }
-                else {
-                    //wrong verification code
-                    console.log("wrong verification code");
+            var email_1 = username_input_1 + "@wpi.edu";
+            // check database first
+            var accountExist_1 = false;
+            var errorInDB_1 = false;
+            ajax_1.sendJsonp("/account/exist", { "email": email_1 }, "post", "check_exist").done(function (resp) {
+                if (!resp.success) {
+                    var error = resp.message;
+                    errorInDB_1 = true;
                     return;
                 }
-            }).fail(function (resp) {
-                console.log("verification code request failed", "email=", email_1, resp);
+                if (resp.data) {
+                    // account exist, return to login view
+                    $('#WPI-Reg-content').hide();
+                    $('#WPI-Verify-content').hide();
+                    $('#WPI-Password-content').hide();
+                    $('#wpi-username-login-input').val(username_input_1);
+                    $('#WPI-login-content').fadeIn();
+                    $('#email_login_error').html("Please login directly.");
+                    accountExist_1 = true;
+                    return;
+                }
+                else {
+                    // new account
+                    // /request/verification_code
+                    console.log("request a verification code for " + username_input_1);
+                    ajax_1.sendJsonp("/request/verification_code", { "email": email_1 }, "post", "request_verification_code").done(function (resp) {
+                        console.log("verification code status", resp);
+                        if (resp.success) {
+                            //go to set up password for current user.
+                            login_content.hide();
+                            reg_content.hide();
+                            password_content.hide();
+                            verify_content.fadeIn("slow");
+                        }
+                        else {
+                            //wrong verification code
+                            console.log("wrong verification code");
+                            return;
+                        }
+                    }).fail(function (resp) {
+                        console.log("verification code request failed", "email=", email_1, resp);
+                    });
+                }
+            }).fail(function (error) {
+                errorInDB_1 = true;
             });
         }
         else if (verify_content.is(":visible")) {
@@ -365,6 +402,73 @@ function setupUserPanelTriggers() {
             console.log("logout successfully");
         }, function () {
             console.log("logout cancelled");
+        });
+    });
+    $('#avatar-edit-btn').on('click', function (event) {
+        event.preventDefault();
+        $('#avatarEditModal').modal('show');
+    });
+    $('#avatarUploadBtn').on('click', function (event) {
+        event.preventDefault();
+        $('#avatar-size-error').addClass('d-none');
+        $('#avatarUpload').click();
+        // 1000000
+        $('#avatarUpload').off('change');
+        $('#avatarUpload').on('change', function (event) {
+            var file = event.target.files[0];
+            var path = $('#avatarUpload').val();
+            var ext = path.split('.').pop();
+            ext = ext.toLowerCase();
+            if (ext !== 'jpg' && ext !== 'jpeg') {
+                $('#avatar-size-error').removeClass('d-none');
+                $('#avatarEditSave').attr('disabled', 'disabled');
+                $('#avatar-size-error').html('Only .jpg file is accepted.');
+                return;
+            }
+            console.log(file.size, ' bytes');
+            if (file.size > 1000000) {
+                //larger than 1 mb
+                $('#avatar-size-error').removeClass('d-none');
+                $('#avatarEditSave').attr('disabled', 'disabled');
+                $('#avatar-size-error').html('The maximum size of the image is 1MB');
+                return;
+            }
+            $('#avatarEditSave').removeAttr('disabled');
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = function () {
+                // console.log(reader.result);
+                $('#imageEditPreview').attr('src', reader.result);
+                imageToUpload = file;
+            };
+            // console.log(file);
+        });
+    });
+    $('#avatarEditSave').on('click', function (event) {
+        event.preventDefault();
+        var path = ($('#avatarUpload').val());
+        $('#imageUploadProgressBarDiv').addClass('d-none');
+        // let ext = path.split('.').pop();
+        // console.log('ext:',ext);
+        var username = credential_1.getUsernameOfUser();
+        var storageRef = firebase.storage().ref("wpi/" + username + ".jpg");
+        var task = storageRef.put(imageToUpload);
+        $('#imageUploadProgressBarDiv').removeClass('d-none');
+        task.on('state_changed', function (snapshot) {
+            // progress
+            var percentage = snapshot.bytesTransferred / snapshot.totalBytes * 100;
+            console.log("Percent:" + percentage + "%");
+            percentage = Math.floor(percentage);
+            $('#imageUploadProgressBarDiv').removeClass('d-none');
+            $('#imageUploadProgressBar').css('width', percentage + '%').attr('aria-valuenow', percentage);
+        }, function (error) {
+            console.log('error occured in uploading', error);
+        }, function () {
+            //when finished
+            console.log("finished!");
+            setTimeout(function () {
+                $('#avatarEditModal').modal('hide');
+            }, 1000);
         });
     });
 }

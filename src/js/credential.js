@@ -38,7 +38,37 @@ function generateCountryListHTML() {
     });
     return html;
 }
+function getEmailOfUser() {
+    var email = null;
+    if (app_1.loginInfo.role == 'STUDENT') {
+        email = app_1.loginInfo.stuid;
+    }
+    else if (app_1.loginInfo.role == 'PARTNER') {
+        email = app_1.loginInfo.cpid;
+    }
+    else if (app_1.loginInfo.role == 'ADMIN') {
+        email = app_1.loginInfo.adminid;
+    }
+    return email;
+}
+exports.getEmailOfUser = getEmailOfUser;
+function getUsernameOfUser() {
+    var email = getEmailOfUser();
+    var name = email.split('@')[0];
+    return name.trim();
+}
+exports.getUsernameOfUser = getUsernameOfUser;
 function showEditPersonalInformation(loginInfo) {
+    //check if all the fields are filled
+    var showEditModal = false;
+    $.each(loginInfo, function (field, value) {
+        if (!value) {
+            showEditModal = true;
+        }
+    });
+    if (!showEditModal) {
+        return;
+    }
     var email = "unknown";
     if (loginInfo.role == 'STUDENT') {
         email = loginInfo.stuid;
@@ -71,4 +101,15 @@ function showEditPersonalInformation(loginInfo) {
     });
 }
 exports.showEditPersonalInformation = showEditPersonalInformation;
+function getUserImageURL(onObtainedURL, username) {
+    if (!username) {
+        username = getUsernameOfUser();
+    }
+    var storageRef = firebase.storage.ref("wpi/" + username + ".jpg");
+    storageRef.getDownloadURL().then(function (url) {
+        console.log(url);
+        onObtainedURL(url);
+    });
+}
+exports.getUserImageURL = getUserImageURL;
 //# sourceMappingURL=credential.js.map

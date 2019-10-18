@@ -5,13 +5,15 @@ import { verifyConversationCode } from "./codeVerify";
 import { processCoordinates, ICoordinate } from "./location";
 import { waitForScanned, cancelScannedWaiting, setupIOSCamera } from "./scanner";
 import { getPlatform } from "./platform";
-import { loginUser, logoutUser, showEditPersonalInformation } from "./credential";
+import { loginUser, logoutUser, showEditPersonalInformation, getUsernameOfUser } from "./credential";
 import { showYesNoModal } from "./modal";
 
 let isHTTPS = false;
 let isIOS = (localStorage.getItem("isIOS") == "y");
+let imageToUpload: any = null;
 export let loginInfo:any = null;
 
+declare var firebase: any;
 
 
 function debugVersion(){
@@ -103,6 +105,16 @@ function setupLoginStatus(){
     verify_content.hide();
     password_content.hide();
     $('#login-reg-confirm').html("Login");
+    $('#login_panel>button').on("click",(event)=>{
+        // event.preventDefault();
+        $('#WPI-login-content').show();
+        $('#WPI-Reg-content').hide();
+        $('#WPI-Verify-content').hide();
+        $('#WPI-Password-content').hide();
+        $('#email_login_error').html("");
+        $('#password_login_error').html("");
+        $('#login_credential_error').html("");
+    });
 
     // set up event triggers
     $('#login-reg-confirm').on("click",()=>{
@@ -158,7 +170,6 @@ function setupLoginStatus(){
             let username_input:string = <string>$('#wpi-username-verify-input').val();
             username_input = username_input.trim();
     
-            console.log("request a verification code for " + username_input);
             if(!isUsernameValid(username_input)){
                 console.log("error in username");
                 //UI show error message
@@ -166,23 +177,50 @@ function setupLoginStatus(){
             }
             
             let email = `${username_input}@wpi.edu`;
-            // /request/verification_code
-            sendJsonp("/request/verification_code",{"email":email},"post","request_verification_code").done((resp)=>{
-                console.log("verification code status",resp);
-                if (resp.success){
-                    //go to set up password for current user.
-                    login_content.hide();
-                    reg_content.hide();
-                    password_content.hide();
-                    verify_content.fadeIn("slow");
-                }
-                else{
-                    //wrong verification code
-                    console.log("wrong verification code");
+            // check database first
+            let accountExist = false;
+            let errorInDB = false;
+            sendJsonp("/account/exist",{"email":email},"post","check_exist").done((resp)=>{
+                if(!resp.success){
+                    let error = resp.message;
+                    errorInDB = true;
                     return;
                 }
-            }).fail((resp)=>{
-                console.log("verification code request failed","email=",email,resp);
+                if(resp.data){
+                    // account exist, return to login view
+                    $('#WPI-Reg-content').hide();
+                    $('#WPI-Verify-content').hide();
+                    $('#WPI-Password-content').hide();
+                    $('#wpi-username-login-input').val(username_input);
+                    $('#WPI-login-content').fadeIn();
+                    $('#email_login_error').html("Please login directly.");
+                    accountExist = true;
+                    return;
+                }
+                else{
+                    // new account
+                    // /request/verification_code
+                    console.log("request a verification code for " + username_input);
+                    sendJsonp("/request/verification_code",{"email":email},"post","request_verification_code").done((resp)=>{
+                        console.log("verification code status",resp);
+                        if (resp.success){
+                            //go to set up password for current user.
+                            login_content.hide();
+                            reg_content.hide();
+                            password_content.hide();
+                            verify_content.fadeIn("slow");
+                        }
+                        else{
+                            //wrong verification code
+                            console.log("wrong verification code");
+                            return;
+                        }
+                    }).fail((resp)=>{
+                        console.log("verification code request failed","email=",email,resp);
+                    });
+                }
+            }).fail((error)=>{
+                errorInDB = true;
             });
 
         }
@@ -409,6 +447,76 @@ function setupUserPanelTriggers(){
             console.log("logout cancelled");
         });
         
+    });
+    $('#avatar-edit-btn').on('click',(event)=>{
+        event.preventDefault();
+        $('#avatarEditModal').modal('show');
+    });
+
+    $('#avatarUploadBtn').on('click',(event)=>{
+        event.preventDefault();
+        $('#avatar-size-error').addClass('d-none');
+        $('#avatarUpload').click();
+        // 1000000
+        $('#avatarUpload').off('change');
+        $('#avatarUpload').on('change',(event:any)=>{
+            let file = event.target.files[0];
+            let path = <string>$('#avatarUpload').val();
+            let ext = path.split('.').pop();
+            ext = ext.toLowerCase();
+            if(ext !== 'jpg' && ext !== 'jpeg'){
+                $('#avatar-size-error').removeClass('d-none');
+                $('#avatarEditSave').attr('disabled','disabled');
+                $('#avatar-size-error').html('Only .jpg file is accepted.');
+                return;
+            }
+            console.log(file.size,' bytes');
+            if(file.size > 1000000){
+                //larger than 1 mb
+                $('#avatar-size-error').removeClass('d-none');
+                $('#avatarEditSave').attr('disabled','disabled');
+                $('#avatar-size-error').html('The maximum size of the image is 1MB');
+                return;
+            }
+            $('#avatarEditSave').removeAttr('disabled');
+            let reader  = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = ()=>{
+                // console.log(reader.result);
+                $('#imageEditPreview').attr('src',<any>reader.result);
+                imageToUpload = file;
+            };
+            // console.log(file);
+        });
+    });
+
+    $('#avatarEditSave').on('click',(event)=>{
+        event.preventDefault();
+        let path = <string>($('#avatarUpload').val());
+        $('#imageUploadProgressBarDiv').addClass('d-none');
+        // let ext = path.split('.').pop();
+        // console.log('ext:',ext);
+        let username = getUsernameOfUser(); 
+        let storageRef = firebase.storage().ref(`wpi/${username}.jpg`);
+        let task = storageRef.put(imageToUpload);
+        $('#imageUploadProgressBarDiv').removeClass('d-none');
+        task.on('state_changed',
+        (snapshot:any)=>{
+            // progress
+            let percentage = snapshot.bytesTransferred / snapshot.totalBytes * 100;
+            console.log(`Percent:${percentage}%`);
+            percentage = Math.floor(percentage);
+            $('#imageUploadProgressBarDiv').removeClass('d-none');
+            $('#imageUploadProgressBar').css('width', percentage+'%').attr('aria-valuenow', percentage);  
+        },(error:any)=>{
+            console.log('error occured in uploading',error);
+        },()=>{
+            //when finished
+            console.log("finished!");
+            setTimeout(()=>{
+                $('#avatarEditModal').modal('hide');
+            },1000);
+        });
     });
 }
 

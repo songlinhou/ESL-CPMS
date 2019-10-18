@@ -22,7 +22,9 @@
 
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
 
-
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.2.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.2.1/firebase-storage.js"></script>
 
     <!-- Custom styles for this template -->
     <style type="text/css">
@@ -85,7 +87,15 @@
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="fas fa-user" aria-hidden="true" style="color: white;"></span><span style="font-family: 'Manjari', sans-serif; padding-left: 5px;">User</span>
                         </button>
-                        <div class="dropdown-menu " id="user-panel-dropdown" aria-labelledby="dropdownMenuButton">
+                        <div class="dropdown-menu" id="user-panel-dropdown" aria-labelledby="dropdownMenuButton">
+                          <div class="media dropdown-item">
+                            <img style="cursor:pointer;" id="avatar-edit-btn"  src="images/boy.png" class="mr-3 avatar-icon avatar-icon-update" alt="...">
+                            <div class="media-body">
+                              <h5 style="margin-bottom: 0px;">Ray</h5>
+                              <small style="cursor:pointer;" class="text-muted">student</small>
+                            </div>
+                          </div>
+                          <div class="dropdown-divider"></div>
                           <a class="dropdown-item" href="#">Action</a>
                           <a class="dropdown-item" href="#">Another action</a>
                           <a class="dropdown-item" href="#">Something else here</a>
@@ -255,11 +265,11 @@
                       
 
                 <div style="font-size:14px;text-align: center;">
-                        <p class="font-red" style="text-decoration-line: underline; margin-bottom: 0px;">Forget my password.</p>
+                        <p class="font-red" style="text-decoration-line: underline; margin-bottom: 0px;cursor: pointer;">Forget my password.</p>
             
                         <p style="font-size:14px; margin-top: 0px;margin-bottom: 0px;">Or</p>
         
-                        <p class="font-red go-to-reg" style="text-decoration-line: underline; margin-top: 0px;">I am a new member in ESL.</p>
+                        <p class="font-red go-to-reg" style="text-decoration-line: underline; margin-top: 0px;cursor: pointer;">I am a new member in ESL.</p>
                 
                 </div>    
               </div>  
@@ -271,14 +281,15 @@
                  <!-- signup content starts -->
                 <div id="WPI-Reg-content">
                     Your WPI Email:
-                    <div class="input-group mb-3">
+                    <div class="input-group">
                             <input type="text" class="form-control" id="wpi-username-verify-input" placeholder="Your username" aria-label="Your username" aria-describedby="basic-addon2">
                             <div class="input-group-append">
                             <span class="input-group-text" id="basic-addon2">@wpi.edu</span>
                             </div>
                     </div>
+                    <!-- <small class="mb-3" style="color:red;">Account exists. Please login.</small> -->
 
-                    <p class="font-red go-to-login" style="font-size:14px;text-align: center;text-decoration-line: underline;">I already have an ESL account.</p>
+                    <p class="font-red go-to-login" style="font-size:14px;text-align: center;text-decoration-line: underline;cursor: pointer;">I already have an ESL account.</p>
                 </div>
                 <!-- signup content ends      -->
 
@@ -291,15 +302,15 @@
                     
 
                 <div style="text-align: center;font-size:14px">
-                    <p class="font-red" style="text-decoration-line: underline; margin-bottom: 0px;">Change email</p>
+                    <p class="font-red" style="text-decoration-line: underline; margin-bottom: 0px;cursor: pointer;">Change email</p>
             
                     <p style="margin-top: 0px;margin-bottom: 0px;">Or</p>
 
-                    <p class="font-red" style="text-decoration-line: underline; margin-bottom: 0px;">Resend verification code <span>(wait for 30 seconds)</span></p>
+                    <p class="font-red" style="text-decoration-line: underline; margin-bottom: 0px;cursor: pointer;">Resend verification code <span>(wait for 30 seconds)</span></p>
             
                     <p style="margin-top: 0px;margin-bottom: 0px;">Or</p>
 
-                    <p class="font-red go-to-login" style="font-size:14px;text-decoration-line: underline;">I already have an ESL account.</p>
+                    <p class="font-red go-to-login" style="font-size:14px;text-decoration-line: underline;cursor: pointer;">I already have an ESL account.</p>
                 </div>
                 
                   </div>
@@ -532,19 +543,19 @@
                 </div>
                 <div class="form-group">
                   <label for="studentFirstNameInput">First Name</label>
-                  <input type="password" class="form-control" id="studentFirstNameInput" placeholder="">
+                  <input type="text" class="form-control" id="studentFirstNameInput" placeholder="">
                 </div>
                 <div class="form-group">
                     <label for="studentMiddleNameInput">Middle Name(Optional)</label>
-                    <input type="password" class="form-control" id="studentMiddleNameInput" placeholder="">
+                    <input type="text" class="form-control" id="studentMiddleNameInput" placeholder="">
                   </div>
                 <div class="form-group">
                     <label for="studentLastNameInput">Last Name</label>
-                    <input type="password" class="form-control" id="studentLastNameInput" placeholder="">
+                    <input type="text" class="form-control" id="studentLastNameInput" placeholder="">
                   </div>
                 <div class="form-group">
                     <label for="majorInput">Major</label>
-                    <input type="password" class="form-control" id="majorInput" placeholder="">
+                    <input type="text" class="form-control" id="majorInput" placeholder="">
                   </div>
                 
                 <div class="form-group">
@@ -570,15 +581,15 @@
                   </div>
                   <div class="form-group">
                     <label for="adminFirstNameInput">First Name</label>
-                    <input type="password" class="form-control" id="adminFirstNameInput" placeholder="">
+                    <input type="text" class="form-control" id="adminFirstNameInput" placeholder="">
                   </div>
                   <div class="form-group">
                       <label for="adminMiddleNameInput">Middle Name(Optional)</label>
-                      <input type="password" class="form-control" id="adminMiddleNameInput" placeholder="">
+                      <input type="text" class="form-control" id="adminMiddleNameInput" placeholder="">
                     </div>
                   <div class="form-group">
                       <label for="adminLastNameInput">Last Name</label>
-                      <input type="password" class="form-control" id="adminLastNameInput" placeholder="">
+                      <input type="text" class="form-control" id="adminLastNameInput" placeholder="">
                     </div>
                   
                 </form>
@@ -593,6 +604,66 @@
     </div>
   </div>
   <!-- edit personal information model ends here -->
+
+
+  <!-- generic yes/no model starts here -->
+<div class="modal fade" id="avatarEditModal" tabindex="-1"  role="dialog" aria-labelledby="avatarEditLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-red" id="avatarEditLabel">Confirm</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      
+      <div class="modal-body" id="avatarEdit-modal-content">
+      <!-- content start -->
+          <div class="card" style="width: 100%;">
+              <img src="images/boy.png" class="card-img-top image-edit-preview" alt="..." id="imageEditPreview">
+              
+              <div class="card-body">
+                <a href="#" class="card-link" id="avatarUploadBtn">Upload Image</a>
+                <a href="#" class="card-link">Choose Default Avatar</a>
+                <small style="color:red;display:block" class="d-none" id="avatar-size-error">The maximum size of the image is 1MB</small>
+              </div>
+              
+              <div class="progress d-none" style="height: 20px;" id="imageUploadProgressBarDiv">
+                  <div class="progress-bar" id="imageUploadProgressBar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
+            <input type="file" value="upload" id="avatarUpload" class="d-none" accept="image/jpeg">
+        
+      </div>
+      
+      <!-- content ends -->
+      <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="avatarEditSave">Change</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="modalNO">Discard</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- yes/no model ends here -->
+
+
+
+
+  <script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+      apiKey: "AIzaSyBll_TlDEIa17btF05Vi2FhsxaR22HBdas",
+      authDomain: "esl-platform-ca6b6.firebaseapp.com",
+      databaseURL: "https://esl-platform-ca6b6.firebaseio.com",
+      projectId: "esl-platform-ca6b6",
+      storageBucket: "esl-platform-ca6b6.appspot.com",
+      messagingSenderId: "629764141551",
+      appId: "1:629764141551:web:2bd480f19afea37f09861a"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+  </script>
+
 
 
 
