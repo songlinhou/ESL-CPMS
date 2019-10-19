@@ -19,7 +19,7 @@ function processCoordinates(position_handler) {
     function showPosition(position) {
         if (position) {
             console.log("Latitude: " + position.coords.latitude +
-                "<br>Longitude: " + position.coords.longitude);
+                "Longitude: " + position.coords.longitude);
             position_handler(position.coords.latitude, position.coords.longitude);
         }
         else {

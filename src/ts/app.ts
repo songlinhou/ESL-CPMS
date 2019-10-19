@@ -95,6 +95,10 @@ function showQRCode(){
     }
     let date = new Date();
     let username = getFirstNameOfUser();
+    if(!username){
+        username = getUsernameOfUser();
+    }
+    // console.log(getFirstNameOfUser(),getUsernameOfUser());
     //date.getFullYear();
     processCoordinates((lat:number,long:number)=>{
         let position:ICoordinate = {latitude:lat,longitude:long};

@@ -85,6 +85,10 @@ function showQRCode() {
     }
     var date = new Date();
     var username = credential_1.getFirstNameOfUser();
+    if (!username) {
+        username = credential_1.getUsernameOfUser();
+    }
+    // console.log(getFirstNameOfUser(),getUsernameOfUser());
     //date.getFullYear();
     location_1.processCoordinates(function (lat, long) {
         var position = { latitude: lat, longitude: long };
