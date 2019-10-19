@@ -100,6 +100,9 @@
                           <a class="dropdown-item" href="#">Another action</a>
                           <a class="dropdown-item" href="#">Something else here</a>
                           <div class="dropdown-divider"></div>
+                          <a class="dropdown-item" id="account-setting-btn" href="#">Account Settings</a>
+                          <a class="dropdown-item" href="#">Preferences</a>
+                          <div class="dropdown-divider"></div>
                           <a class="dropdown-item" href="#" id='logout_btn'>Log out</a>
                         </div>
                       </div>
@@ -242,7 +245,7 @@
                 
                 <div class="modal-body">
                 <!-- login content starts -->
-
+                <small id="login_first_error" style="color:red;">Please log in first.</small>  
                 <div id="WPI-login-content">
                   Your WPI Email:
                   <div class="input-group">
@@ -482,11 +485,6 @@
           <!-- qr scanner content ends -->
           </div>
 
-          
-
-
-
-
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-primary" id="startConversationProcessBtn">Start!</button>
@@ -544,7 +542,9 @@
                 <div class="form-group">
                   <label for="studentFirstNameInput">First Name</label>
                   <input type="text" class="form-control" id="studentFirstNameInput" placeholder="">
+                  <small class="text-muted">Your name will be displayed in discussions.</small>
                 </div>
+                
                 <div class="form-group">
                     <label for="studentMiddleNameInput">Middle Name(Optional)</label>
                     <input type="text" class="form-control" id="studentMiddleNameInput" placeholder="">
@@ -563,13 +563,26 @@
                     <select class="form-control" id="country_select">
                         <option>Default select</option>
                       </select>
-
+                      <small class="text-muted">This will help us to personalize your learning experiences.</small>
                   </div>
 
-                <div class="form-check">
+                  <div class="form-group">
+                    <label for="countryInput">Access Control</label>
+                    <select class="form-control" id="info_visible_select">
+                        <option value="NONE">Keep all information private</option>
+                        <option value="T">Only teachers can see</option>
+                        <option value="TS" selected>Teachers and classmates can see (Recommended)</option>
+                        <option value="ALL">Public to everyone</option>
+                      </select>
+                      <small class="text-muted">Your activity will not be affected.</small>
+                  </div>
+
+                  
+
+                <!-- <div class="form-check">
                   <input type="checkbox" class="form-check-input" id="exampleCheck1">
                   <label class="form-check-label" for="exampleCheck1">information visible to classmates.</label>
-                </div>
+                </div> -->
                 
               </form>
 
@@ -594,7 +607,7 @@
                   
                 </form>
 
-
+                <small style="color:red;" id="personal_info_edit_error">Error found.</small>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-primary" id="editPersonalInfoSave">Save</button>
@@ -620,9 +633,9 @@
       <div class="modal-body" id="avatarEdit-modal-content">
       <!-- content start -->
           <div class="card" style="width: 100%;">
-              <img src="images/boy.png" class="card-img-top image-edit-preview" alt="..." id="imageEditPreview">
+              <img src="images/boy.png" style="cursor:pointer" class="card-img-top image-edit-preview" alt="..." id="imageEditPreview">
               
-              <div class="card-body">
+              <div class="card-body" style="margin:0 auto">
                 <a href="#" class="card-link" id="avatarUploadBtn">Upload Image</a>
                 <a href="#" class="card-link">Choose Default Avatar</a>
                 <small style="color:red;display:block" class="d-none" id="avatar-size-error">The maximum size of the image is 1MB</small>

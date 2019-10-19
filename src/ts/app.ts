@@ -5,7 +5,7 @@ import { verifyConversationCode } from "./codeVerify";
 import { processCoordinates, ICoordinate } from "./location";
 import { waitForScanned, cancelScannedWaiting, setupIOSCamera } from "./scanner";
 import { getPlatform } from "./platform";
-import { loginUser, logoutUser, showEditPersonalInformation, getUsernameOfUser } from "./credential";
+import { loginUser, logoutUser, showEditPersonalInformation, getUsernameOfUser, getEmailOfUser, syncLocalUserInfo, getFirstNameOfUser } from "./credential";
 import { showYesNoModal } from "./modal";
 
 let isHTTPS = false;
@@ -50,6 +50,7 @@ function getLastLoginInfo(expired_days:number=30){
 
     try {
         loginInfo = JSON.parse(login_json);
+        console.log('loginInfo',loginInfo);
     } catch (error) {
         localStorage.setItem("login","");
         $('#login_panel').removeClass('d-none');
@@ -82,8 +83,24 @@ function getLastLoginInfo(expired_days:number=30){
     }
 
     if(loginInfo){
+        showQRCode();
         showEditPersonalInformation(loginInfo);
     }
+}
+
+function showQRCode(){
+    if(!loginInfo){
+        console.log("login first before generating QR code.");
+        return;
+    }
+    let date = new Date();
+    let username = getFirstNameOfUser();
+    //date.getFullYear();
+    processCoordinates((lat:number,long:number)=>{
+        let position:ICoordinate = {latitude:lat,longitude:long};
+        let qrCodeAddr = generateInvitingQRCodeURL(username,position,date.toJSON().toString(),loginInfo.role);
+        $('#qrGenerateModal').find('img').attr('src',qrCodeAddr);
+    });
 }
 
 
@@ -104,9 +121,11 @@ function setupLoginStatus(){
     reg_content.hide();
     verify_content.hide();
     password_content.hide();
+    
     $('#login-reg-confirm').html("Login");
     $('#login_panel>button').on("click",(event)=>{
         // event.preventDefault();
+        $('#login_first_error').hide();
         $('#WPI-login-content').show();
         $('#WPI-Reg-content').hide();
         $('#WPI-Verify-content').hide();
@@ -151,6 +170,8 @@ function setupLoginStatus(){
                     let timestamp = date.getTime();
                     userData['timestamp'] = timestamp;
                     localStorage.setItem("login", JSON.stringify(userData));
+                    loginInfo = userData;
+                    showQRCode();
                     console.log("login successful!");
                     //update UI
                     $('#login_panel').addClass('d-none');
@@ -302,13 +323,12 @@ function setupLoginStatus(){
 
     $('#startConverstionBtn').on("click",(e)=>{
         e.preventDefault();
-        let date = new Date();
-        //date.getFullYear();
-        processCoordinates((lat:number,long:number)=>{
-            let position:ICoordinate = {latitude:lat,longitude:long};
-            let qrCodeAddr = generateInvitingQRCodeURL("Ray",position,date.toJSON().toString());
-            $('#qrGenerateModal').find('img').attr('src',qrCodeAddr);
-        });
+        if(!loginInfo){
+            $('#login_panel>button').click();
+            $('#login_first_error').show();
+            return;
+        }
+        showQRCode();
         
         $('#qrGenerateModal').modal("show");
         //showCoordinates();
@@ -316,8 +336,13 @@ function setupLoginStatus(){
 
     $('#joinConversationBtn').on("click",(e)=>{
         e.preventDefault();
+        // log in first
+        if(!loginInfo){
+            $('#login_panel>button').click();
+            $('#login_first_error').show();
+            return;
+        }
         // setup QR scanner
-        
         $("#scannerContent").show();
         $("#inputCodeContent").hide();
        
@@ -422,6 +447,8 @@ function setupLoginStatus(){
 }
 
 
+
+
 function checkProtocol(){
     if(window.location.protocol == "http:"){
         isHTTPS = false;
@@ -453,8 +480,7 @@ function setupUserPanelTriggers(){
         $('#avatarEditModal').modal('show');
     });
 
-    $('#avatarUploadBtn').on('click',(event)=>{
-        event.preventDefault();
+    function changeAvatar(){
         $('#avatar-size-error').addClass('d-none');
         $('#avatarUpload').click();
         // 1000000
@@ -488,6 +514,15 @@ function setupUserPanelTriggers(){
             };
             // console.log(file);
         });
+    }
+
+    $('#imageEditPreview').on('click',(event)=>{
+        event.preventDefault();
+        changeAvatar();
+    });
+    $('#avatarUploadBtn').on('click',(event)=>{
+        event.preventDefault();
+        changeAvatar();
     });
 
     $('#avatarEditSave').on('click',(event)=>{
@@ -517,6 +552,72 @@ function setupUserPanelTriggers(){
                 $('#avatarEditModal').modal('hide');
             },1000);
         });
+    });
+
+    $('#editPersonalInfoSave').on('click',(event)=>{
+        event.preventDefault();
+        $('#editPersonalInfoSave').attr('disabled','disabled');
+        $('#personal_info_edit_error').html("");
+        if(loginInfo.role == 'STUDENT'){
+            let firstName = $('#studentFirstNameInput').val();
+            let middleName = $('#studentMiddleNameInput').val();
+            let lastName = $('#studentLastNameInput').val();
+            let major = $('#majorInput').val();
+            let country = $('#country_select').val();
+            let visible = $('#info_visible_select').val();
+            // console.log(firstName,middleName,lastName,major,country,visible);
+            let keys = [];
+            let values = [];
+            
+            if(firstName.toString().trim()){
+                keys.push("stufirstname");
+                values.push(firstName.toString().replace('--',''));
+            }
+            if(middleName.toString().trim()){
+                keys.push("stumidname");
+                values.push(middleName.toString().replace('--',''));
+            }
+            if(lastName.toString().trim()){
+                keys.push("stulastname");
+                values.push(lastName.toString().replace('--',''));
+            }
+            if(major.toString().trim()){
+                keys.push("major");
+                values.push(major.toString().replace('--',''));
+            }
+            if(country.toString().trim()){
+                keys.push("country");
+                values.push(country.toString().replace('--',''));
+            }
+            console.log(keys);
+            console.log(values);
+            let email = getEmailOfUser();
+            let data = {keys:keys.join('--'),values:values.join('--'),email:email,digest:loginInfo.digest}
+            sendJsonp('/student/update',data,'post','update_student').done(resp=>{
+                if(resp.success){
+                    $('#editPersonalInfoModal').modal('hide');
+                    syncLocalUserInfo(); // change the local record
+                    // update UI
+                }
+                else{
+                    $('#personal_info_edit_error').html(resp.message);
+                }
+                $('#editPersonalInfoSave').removeAttr('disabled');
+            }).fail((resp)=>{
+                $('#personal_info_edit_error').html("Error occured on the server. Try again later.");
+            });
+        }
+        else if(loginInfo.role == 'PARTNER'){
+
+        }
+        else if(loginInfo.role == 'ADMIN'){
+
+        }
+    });
+
+    $('#account-setting-btn').on('click',(event)=>{
+        event.preventDefault;
+        showEditPersonalInformation(loginInfo,true);
     });
 }
 

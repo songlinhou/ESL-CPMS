@@ -21,7 +21,7 @@ export function processCoordinates(position_handler:(latitude:number,longitude:n
     function showPosition(position?:any) {
         if(position){
             console.log("Latitude: " + position.coords.latitude +
-            "<br>Longitude: " + position.coords.longitude);
+            "Longitude: " + position.coords.longitude);
             position_handler(position.coords.latitude,position.coords.longitude);
         }
         else{

@@ -1,4 +1,5 @@
 import { ICoordinate, processCoordinates, getDistanceBetween } from "./location";
+import { getEmailOfUser } from "./credential";
 
 declare var Instascan:any;
 
@@ -8,16 +9,21 @@ interface IQRJSON {
     username:string,
     latitude:number,
     longitude:number,
-    timestamp:string
+    timestamp:string,
+    email:string,
+    role:string
 };
 
 
-export function generateInvitingQRCodeURL(username:string,location:ICoordinate,timestamp:string,size:string="150x150"):string{
+export function generateInvitingQRCodeURL(username:string,location:ICoordinate,timestamp:string,role:string,size:string="150x150"):string{
+    let email = getEmailOfUser();
     let dataJSON:IQRJSON = {
         appname:"ESL-CPMS",
         username:username,
         latitude:location.latitude,
         longitude:location.longitude,
+        email:email,
+        role:role,
         timestamp:timestamp
     };
     return generateQRCodeAddr(JSON.stringify(dataJSON),size);

@@ -1,14 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var location_1 = require("./location");
+var credential_1 = require("./credential");
 ;
-function generateInvitingQRCodeURL(username, location, timestamp, size) {
+function generateInvitingQRCodeURL(username, location, timestamp, role, size) {
     if (size === void 0) { size = "150x150"; }
+    var email = credential_1.getEmailOfUser();
     var dataJSON = {
         appname: "ESL-CPMS",
         username: username,
         latitude: location.latitude,
         longitude: location.longitude,
+        email: email,
+        role: role,
         timestamp: timestamp
     };
     return generateQRCodeAddr(JSON.stringify(dataJSON), size);

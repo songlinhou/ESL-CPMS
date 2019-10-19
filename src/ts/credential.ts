@@ -64,17 +64,37 @@ export function getUsernameOfUser(){
     return name.trim();
 }
 
-export function showEditPersonalInformation(loginInfo:any){
-    //check if all the fields are filled
-    let showEditModal = false;
-    $.each(loginInfo,(field,value)=>{
-        if(!value){
-            showEditModal = true;
-        }
-    })
-    if(!showEditModal){
-        return;
+export function getFirstNameOfUser(){
+    if(loginInfo.role == 'STUDENT'){
+        return (<studentInfo>loginInfo).stufirstname;
     }
+    else if(loginInfo.role == 'PARTNER'){
+        return (<partnerInfo>loginInfo).cpfirstname;
+    }
+    else if(loginInfo.role == 'ADMIN'){
+        return (<adminInfo>loginInfo).adminfirstname;
+    }
+    return null;
+}
+
+export function showEditPersonalInformation(loginInfo:any,openByUser=false){
+    //check if all the fields are filled
+    if (!loginInfo){
+        loginInfo = JSON.parse(localStorage.getItem('login'));
+    }
+    if(!openByUser){
+        let showEditModal = false;
+        $('#personal_info_edit_error').html("");
+        $.each(loginInfo,(field,value)=>{
+            if(!value){
+                showEditModal = true;
+            }
+        })
+        if(!showEditModal){
+            return;
+        }
+    }
+    
     let email = "unknown";
 
     if(loginInfo.role == 'STUDENT'){
@@ -97,6 +117,7 @@ export function showEditPersonalInformation(loginInfo:any){
     
 
     $('#country_select').html(generateCountryListHTML());
+    fillPersonalInfo();
     $('#editPersonalInfoModal').modal('show');
     $('#editPersonalInfoDiscard').on('click',()=>{
         $('#editPersonalInfoModal').modal('hide');
@@ -124,5 +145,65 @@ export function getUserImageURL(onObtainedURL:Function,username?:string){
     storageRef.getDownloadURL().then(function(url:string) {
         console.log(url);
         onObtainedURL(url);
+    });
+}
+
+function fillPersonalInfo(){
+    let role = loginInfo.role;
+    if(role == 'STUDENT'){
+        let info = <studentInfo>loginInfo;
+        $('#studentFirstNameInput').val(info.stufirstname);
+        $('#studentMiddleNameInput').val(info.stumidname);
+        $('#studentLastNameInput').val(info.stulastname);
+        $('#majorInput').val(info.major);
+        $('#country_select').val(info.country);
+        // let visible = $('#info_visible_select').val();
+    }
+    else if(role == 'PARTNER'){
+        let info = <partnerInfo>loginInfo;
+        $('#studentFirstNameInput').val(info.cpfirstname);
+        $('#studentMiddleNameInput').val(info.cpmidname);
+        $('#studentLastNameInput').val(info.cplastname);
+        $('#majorInput').val(info.major);
+        $('#country_select').val(info.country);
+    }
+    else if(role == 'ADMIN'){
+        let info = <adminInfo>loginInfo;
+        $('#adminFirstNameInput').val(info.adminfirstname);
+        $('#adminMiddleNameInput').val(info.adminmidname);
+        $('#adminLastNameInput').val(info.adminlastname);
+    }
+    else{
+        console.log("unknown role");
+    }
+}
+
+export function syncLocalUserInfo(){
+    if (!loginInfo){
+        return;
+    }
+    if (!loginInfo.digest){
+        return;
+    }
+    let data = {
+        email: getEmailOfUser(),
+        digest:loginInfo.digest
+    }
+    sendJsonp('/account/sync',data,'post','sync_account').done(resp=>{
+        if(!resp.success){
+            console.log('error occured in sync',resp.message);
+            return;
+        }
+        let data = resp.data;
+        if(loginInfo.role != data.role){
+            console.log('role mismatch! sync stop.');
+            return;
+        }
+        $.each(data,(key,value)=>{
+            loginInfo[key] = value;
+        });
+        localStorage.setItem('login',loginInfo);
+    }).fail(resp=>{
+        console.log("server error occured in sync",resp);
     });
 }

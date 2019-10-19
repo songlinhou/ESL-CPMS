@@ -58,16 +58,36 @@ function getUsernameOfUser() {
     return name.trim();
 }
 exports.getUsernameOfUser = getUsernameOfUser;
-function showEditPersonalInformation(loginInfo) {
+function getFirstNameOfUser() {
+    if (app_1.loginInfo.role == 'STUDENT') {
+        return app_1.loginInfo.stufirstname;
+    }
+    else if (app_1.loginInfo.role == 'PARTNER') {
+        return app_1.loginInfo.cpfirstname;
+    }
+    else if (app_1.loginInfo.role == 'ADMIN') {
+        return app_1.loginInfo.adminfirstname;
+    }
+    return null;
+}
+exports.getFirstNameOfUser = getFirstNameOfUser;
+function showEditPersonalInformation(loginInfo, openByUser) {
+    if (openByUser === void 0) { openByUser = false; }
     //check if all the fields are filled
-    var showEditModal = false;
-    $.each(loginInfo, function (field, value) {
-        if (!value) {
-            showEditModal = true;
+    if (!loginInfo) {
+        loginInfo = JSON.parse(localStorage.getItem('login'));
+    }
+    if (!openByUser) {
+        var showEditModal_1 = false;
+        $('#personal_info_edit_error').html("");
+        $.each(loginInfo, function (field, value) {
+            if (!value) {
+                showEditModal_1 = true;
+            }
+        });
+        if (!showEditModal_1) {
+            return;
         }
-    });
-    if (!showEditModal) {
-        return;
     }
     var email = "unknown";
     if (loginInfo.role == 'STUDENT') {
@@ -88,6 +108,7 @@ function showEditPersonalInformation(loginInfo) {
     $('#userEmailAddressReadonly').attr('placeholder', email);
     $('#adminEmailAddressReadonly').attr('placeholder', email);
     $('#country_select').html(generateCountryListHTML());
+    fillPersonalInfo();
     $('#editPersonalInfoModal').modal('show');
     $('#editPersonalInfoDiscard').on('click', function () {
         $('#editPersonalInfoModal').modal('hide');
@@ -112,4 +133,63 @@ function getUserImageURL(onObtainedURL, username) {
     });
 }
 exports.getUserImageURL = getUserImageURL;
+function fillPersonalInfo() {
+    var role = app_1.loginInfo.role;
+    if (role == 'STUDENT') {
+        var info = app_1.loginInfo;
+        $('#studentFirstNameInput').val(info.stufirstname);
+        $('#studentMiddleNameInput').val(info.stumidname);
+        $('#studentLastNameInput').val(info.stulastname);
+        $('#majorInput').val(info.major);
+        $('#country_select').val(info.country);
+        // let visible = $('#info_visible_select').val();
+    }
+    else if (role == 'PARTNER') {
+        var info = app_1.loginInfo;
+        $('#studentFirstNameInput').val(info.cpfirstname);
+        $('#studentMiddleNameInput').val(info.cpmidname);
+        $('#studentLastNameInput').val(info.cplastname);
+        $('#majorInput').val(info.major);
+        $('#country_select').val(info.country);
+    }
+    else if (role == 'ADMIN') {
+        var info = app_1.loginInfo;
+        $('#adminFirstNameInput').val(info.adminfirstname);
+        $('#adminMiddleNameInput').val(info.adminmidname);
+        $('#adminLastNameInput').val(info.adminlastname);
+    }
+    else {
+        console.log("unknown role");
+    }
+}
+function syncLocalUserInfo() {
+    if (!app_1.loginInfo) {
+        return;
+    }
+    if (!app_1.loginInfo.digest) {
+        return;
+    }
+    var data = {
+        email: getEmailOfUser(),
+        digest: app_1.loginInfo.digest
+    };
+    ajax_1.sendJsonp('/account/sync', data, 'post', 'sync_account').done(function (resp) {
+        if (!resp.success) {
+            console.log('error occured in sync', resp.message);
+            return;
+        }
+        var data = resp.data;
+        if (app_1.loginInfo.role != data.role) {
+            console.log('role mismatch! sync stop.');
+            return;
+        }
+        $.each(data, function (key, value) {
+            app_1.loginInfo[key] = value;
+        });
+        localStorage.setItem('login', app_1.loginInfo);
+    }).fail(function (resp) {
+        console.log("server error occured in sync", resp);
+    });
+}
+exports.syncLocalUserInfo = syncLocalUserInfo;
 //# sourceMappingURL=credential.js.map

@@ -43,6 +43,7 @@ function getLastLoginInfo(expired_days) {
     }
     try {
         exports.loginInfo = JSON.parse(login_json);
+        console.log('loginInfo', exports.loginInfo);
     }
     catch (error) {
         localStorage.setItem("login", "");
@@ -73,8 +74,23 @@ function getLastLoginInfo(expired_days) {
         $('#user_panel').addClass('d-none');
     }
     if (exports.loginInfo) {
+        showQRCode();
         credential_1.showEditPersonalInformation(exports.loginInfo);
     }
+}
+function showQRCode() {
+    if (!exports.loginInfo) {
+        console.log("login first before generating QR code.");
+        return;
+    }
+    var date = new Date();
+    var username = credential_1.getFirstNameOfUser();
+    //date.getFullYear();
+    location_1.processCoordinates(function (lat, long) {
+        var position = { latitude: lat, longitude: long };
+        var qrCodeAddr = qr_1.generateInvitingQRCodeURL(username, position, date.toJSON().toString(), exports.loginInfo.role);
+        $('#qrGenerateModal').find('img').attr('src', qrCodeAddr);
+    });
 }
 function setupLoginStatus() {
     ajax_1.displayServerAddr();
@@ -95,6 +111,7 @@ function setupLoginStatus() {
     $('#login-reg-confirm').html("Login");
     $('#login_panel>button').on("click", function (event) {
         // event.preventDefault();
+        $('#login_first_error').hide();
         $('#WPI-login-content').show();
         $('#WPI-Reg-content').hide();
         $('#WPI-Verify-content').hide();
@@ -136,6 +153,8 @@ function setupLoginStatus() {
                 var timestamp = date.getTime();
                 userData['timestamp'] = timestamp;
                 localStorage.setItem("login", JSON.stringify(userData));
+                exports.loginInfo = userData;
+                showQRCode();
                 console.log("login successful!");
                 //update UI
                 $('#login_panel').addClass('d-none');
@@ -275,18 +294,23 @@ function setupLoginStatus() {
     });
     $('#startConverstionBtn').on("click", function (e) {
         e.preventDefault();
-        var date = new Date();
-        //date.getFullYear();
-        location_1.processCoordinates(function (lat, long) {
-            var position = { latitude: lat, longitude: long };
-            var qrCodeAddr = qr_1.generateInvitingQRCodeURL("Ray", position, date.toJSON().toString());
-            $('#qrGenerateModal').find('img').attr('src', qrCodeAddr);
-        });
+        if (!exports.loginInfo) {
+            $('#login_panel>button').click();
+            $('#login_first_error').show();
+            return;
+        }
+        showQRCode();
         $('#qrGenerateModal').modal("show");
         //showCoordinates();
     });
     $('#joinConversationBtn').on("click", function (e) {
         e.preventDefault();
+        // log in first
+        if (!exports.loginInfo) {
+            $('#login_panel>button').click();
+            $('#login_first_error').show();
+            return;
+        }
         // setup QR scanner
         $("#scannerContent").show();
         $("#inputCodeContent").hide();
@@ -408,8 +432,7 @@ function setupUserPanelTriggers() {
         event.preventDefault();
         $('#avatarEditModal').modal('show');
     });
-    $('#avatarUploadBtn').on('click', function (event) {
-        event.preventDefault();
+    function changeAvatar() {
         $('#avatar-size-error').addClass('d-none');
         $('#avatarUpload').click();
         // 1000000
@@ -443,6 +466,14 @@ function setupUserPanelTriggers() {
             };
             // console.log(file);
         });
+    }
+    $('#imageEditPreview').on('click', function (event) {
+        event.preventDefault();
+        changeAvatar();
+    });
+    $('#avatarUploadBtn').on('click', function (event) {
+        event.preventDefault();
+        changeAvatar();
     });
     $('#avatarEditSave').on('click', function (event) {
         event.preventDefault();
@@ -470,6 +501,67 @@ function setupUserPanelTriggers() {
                 $('#avatarEditModal').modal('hide');
             }, 1000);
         });
+    });
+    $('#editPersonalInfoSave').on('click', function (event) {
+        event.preventDefault();
+        $('#editPersonalInfoSave').attr('disabled', 'disabled');
+        $('#personal_info_edit_error').html("");
+        if (exports.loginInfo.role == 'STUDENT') {
+            var firstName = $('#studentFirstNameInput').val();
+            var middleName = $('#studentMiddleNameInput').val();
+            var lastName = $('#studentLastNameInput').val();
+            var major = $('#majorInput').val();
+            var country = $('#country_select').val();
+            var visible = $('#info_visible_select').val();
+            // console.log(firstName,middleName,lastName,major,country,visible);
+            var keys = [];
+            var values = [];
+            if (firstName.toString().trim()) {
+                keys.push("stufirstname");
+                values.push(firstName.toString().replace('--', ''));
+            }
+            if (middleName.toString().trim()) {
+                keys.push("stumidname");
+                values.push(middleName.toString().replace('--', ''));
+            }
+            if (lastName.toString().trim()) {
+                keys.push("stulastname");
+                values.push(lastName.toString().replace('--', ''));
+            }
+            if (major.toString().trim()) {
+                keys.push("major");
+                values.push(major.toString().replace('--', ''));
+            }
+            if (country.toString().trim()) {
+                keys.push("country");
+                values.push(country.toString().replace('--', ''));
+            }
+            console.log(keys);
+            console.log(values);
+            var email = credential_1.getEmailOfUser();
+            var data = { keys: keys.join('--'), values: values.join('--'), email: email, digest: exports.loginInfo.digest };
+            ajax_1.sendJsonp('/student/update', data, 'post', 'update_student').done(function (resp) {
+                if (resp.success) {
+                    $('#editPersonalInfoModal').modal('hide');
+                    credential_1.syncLocalUserInfo(); // change the local record
+                    // update UI
+                }
+                else {
+                    $('#personal_info_edit_error').html(resp.message);
+                }
+                $('#editPersonalInfoSave').removeAttr('disabled');
+            }).fail(function (resp) {
+                $('#personal_info_edit_error').html("Error occured on the server. Try again later.");
+            });
+        }
+        else if (exports.loginInfo.role == 'PARTNER') {
+        }
+        else if (exports.loginInfo.role == 'ADMIN') {
+        }
+    });
+    $('#account-setting-btn').on('click', function (event) {
+        event.preventDefault;
+        credential_1.showEditPersonalInformation(exports.loginInfo, true);
     });
 }
 function deviceFix() {
