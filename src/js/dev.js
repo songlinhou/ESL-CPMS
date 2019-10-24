@@ -23,9 +23,9 @@ function reviveServer() {
     // to send request to server to wake it up. POOR ME
     var waiting = false;
     var trialHandler = setInterval(function () {
-        if (waiting) {
-            return;
-        }
+        // if(waiting){
+        //     return;
+        // }
         try {
             waiting = true;
             $('#SafeConnectionModal').modal("show");

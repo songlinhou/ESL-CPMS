@@ -22,9 +22,9 @@ export function reviveServer(){
     // to send request to server to wake it up. POOR ME
     let waiting = false;
     let trialHandler = setInterval(()=>{
-        if(waiting){
-            return;
-        }
+        // if(waiting){
+        //     return;
+        // }
         try {
             waiting = true;
             $('#SafeConnectionModal').modal("show");
