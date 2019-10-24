@@ -41,10 +41,10 @@ export function reviveServer(){
              
                 jsonpCallback: "revive"
             }).done((resp)=>{
-                clearInterval(trialHandler);
                 setServerOnline();
                 $('#SafeConnectionModal').modal("hide");
                 waiting = false;
+                clearInterval(trialHandler);
             }).fail((err)=>{
                 waiting = false;
                 setServerOffline();

@@ -38,10 +38,10 @@ function reviveServer() {
                 dataType: "jsonp",
                 jsonpCallback: "revive"
             }).done(function (resp) {
-                clearInterval(trialHandler);
                 ajax_1.setServerOnline();
                 $('#SafeConnectionModal').modal("hide");
                 waiting = false;
+                clearInterval(trialHandler);
             }).fail(function (err) {
                 waiting = false;
                 ajax_1.setServerOffline();
