@@ -114,7 +114,7 @@ function setupLoginStatus(){
     checkProtocol();
     platformInit();
     // getPlatform();
-    debugVersion();
+    // debugVersion();
     getLastLoginInfo();
     let login_modal = $("#loginModal");
     let login_content = $('#WPI-login-content');
