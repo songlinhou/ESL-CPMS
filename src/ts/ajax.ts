@@ -1,10 +1,31 @@
+import { isDev, reviveServer } from "./dev";
+
 // let global_base_url = 'https://34.66.91.169:8888';
 // let global_base_url = 'https://www.esl.today'; // for production
 // let global_base_url = 'http://157.245.82.60:8888'; //for development
 
-let global_base_url = 'http://127.0.0.1:8888'; // for production
+export let global_base_url = "";
+export let serverOnline = false;
+
+if(isDev()){
+    global_base_url = 'http://127.0.0.1:8888';
+}
+else{
+    global_base_url = 'https://esl-server.herokuapp.com';
+}
+
+export function setServerOnline(){
+    serverOnline = true;
+}
+export function setServerOffline(){
+    serverOnline = false;
+}
 
 export function sendJsonp(url:string,data:any,method:string,callback:string){
+    reviveServer();
+    while(!serverOnline){
+        //wait for server
+    }
     return $.ajax({
         url: global_base_url + url,
 

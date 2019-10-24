@@ -1,12 +1,32 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var dev_1 = require("./dev");
 // let global_base_url = 'https://34.66.91.169:8888';
 // let global_base_url = 'https://www.esl.today'; // for production
 // let global_base_url = 'http://157.245.82.60:8888'; //for development
-Object.defineProperty(exports, "__esModule", { value: true });
-var global_base_url = 'http://127.0.0.1:8888'; // for production
+exports.global_base_url = "";
+exports.serverOnline = false;
+if (dev_1.isDev()) {
+    exports.global_base_url = 'http://127.0.0.1:8888';
+}
+else {
+    exports.global_base_url = 'https://esl-server.herokuapp.com';
+}
+function setServerOnline() {
+    exports.serverOnline = true;
+}
+exports.setServerOnline = setServerOnline;
+function setServerOffline() {
+    exports.serverOnline = false;
+}
+exports.setServerOffline = setServerOffline;
 function sendJsonp(url, data, method, callback) {
+    dev_1.reviveServer();
+    while (!exports.serverOnline) {
+        //wait for server
+    }
     return $.ajax({
-        url: global_base_url + url,
+        url: exports.global_base_url + url,
         method: method,
         // The name of the callback parameter, as specified by the YQL service
         jsonp: 'callback',
@@ -19,15 +39,15 @@ function sendJsonp(url, data, method, callback) {
 }
 exports.sendJsonp = sendJsonp;
 function displayServerAddr() {
-    if (global_base_url == 'https://www.esl.today') {
+    if (exports.global_base_url == 'https://www.esl.today') {
         console.log("On Product Server");
         return;
     }
-    else if (global_base_url == 'http://157.245.82.60:8888') {
+    else if (exports.global_base_url == 'http://157.245.82.60:8888') {
         console.log("On Test Server");
         return;
     }
-    console.log("On Server " + global_base_url);
+    console.log("On Server " + exports.global_base_url);
 }
 exports.displayServerAddr = displayServerAddr;
 // export function sendHTTPRequest(full_url:string,data:any,method:string){
