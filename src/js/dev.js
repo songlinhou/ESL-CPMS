@@ -24,12 +24,12 @@ function reviveServer() {
     var waiting = false;
     var closeFirewallHandler = setInterval(function () {
         if (ajax_1.isServerOnline()) {
-            console.log('server online');
+            // console.log('server online');
             $('#SafeConnectionModal').modal("hide");
         }
         else {
             $('#SafeConnectionModal').modal("show");
-            console.log("server lost");
+            // console.log("server lost"); 
         }
     }, 100);
     var trialHandler = setInterval(function () {

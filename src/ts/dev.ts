@@ -23,12 +23,12 @@ export function reviveServer(){
     let waiting = false;
     let closeFirewallHandler = setInterval(()=>{
         if(isServerOnline()){
-            console.log('server online');
+            // console.log('server online');
             $('#SafeConnectionModal').modal("hide");    
         }
         else{
             $('#SafeConnectionModal').modal("show");
-            console.log("server lost"); 
+            // console.log("server lost"); 
         }
     },100);
     let trialHandler = setInterval(()=>{
