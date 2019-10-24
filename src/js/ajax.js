@@ -20,6 +20,10 @@ function setServerOffline() {
     exports.serverOnline = false;
 }
 exports.setServerOffline = setServerOffline;
+function isServerOnline() {
+    return exports.serverOnline;
+}
+exports.isServerOnline = isServerOnline;
 function sendJsonp(url, data, method, callback) {
     return $.ajax({
         url: exports.global_base_url + url,

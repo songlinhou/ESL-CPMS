@@ -22,6 +22,16 @@ function reviveServer() {
     }
     // to send request to server to wake it up. POOR ME
     var waiting = false;
+    var closeFirewallHandler = setInterval(function () {
+        if (ajax_1.isServerOnline()) {
+            console.log('server online');
+            $('#SafeConnectionModal').modal("hide");
+        }
+        else {
+            $('#SafeConnectionModal').modal("show");
+            console.log("server lost");
+        }
+    }, 100);
     var trialHandler = setInterval(function () {
         // if(waiting){
         //     return;
@@ -39,9 +49,9 @@ function reviveServer() {
                 jsonpCallback: "revive"
             }).done(function (resp) {
                 ajax_1.setServerOnline();
-                setTimeout(function () {
-                    $('#SafeConnectionModal').modal("hide");
-                }, 100);
+                // setTimeout(()=>{
+                //     $('#SafeConnectionModal').modal("hide");
+                // },100);
                 waiting = false;
                 clearInterval(trialHandler);
             }).fail(function (err) {

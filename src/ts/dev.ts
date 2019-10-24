@@ -1,4 +1,4 @@
-import { global_base_url, setServerOnline, setServerOffline } from "./ajax";
+import { global_base_url, setServerOnline, setServerOffline, isServerOnline } from "./ajax";
 
 export function isDev(){
     let url = window.location.href;
@@ -21,6 +21,16 @@ export function reviveServer(){
     }
     // to send request to server to wake it up. POOR ME
     let waiting = false;
+    let closeFirewallHandler = setInterval(()=>{
+        if(isServerOnline()){
+            console.log('server online');
+            $('#SafeConnectionModal').modal("hide");    
+        }
+        else{
+            $('#SafeConnectionModal').modal("show");
+            console.log("server lost"); 
+        }
+    },100);
     let trialHandler = setInterval(()=>{
         // if(waiting){
         //     return;
@@ -42,9 +52,9 @@ export function reviveServer(){
                 jsonpCallback: "revive"
             }).done((resp)=>{
                 setServerOnline();
-                setTimeout(()=>{
-                    $('#SafeConnectionModal').modal("hide");
-                },100);
+                // setTimeout(()=>{
+                //     $('#SafeConnectionModal').modal("hide");
+                // },100);
                 
                 waiting = false;
                 clearInterval(trialHandler);

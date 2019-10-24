@@ -21,6 +21,10 @@ export function setServerOffline(){
     serverOnline = false;
 }
 
+export function isServerOnline(){
+    return serverOnline;
+}
+
 export function sendJsonp(url:string,data:any,method:string,callback:string){
     
     return $.ajax({
