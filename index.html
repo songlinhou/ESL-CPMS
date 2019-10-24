@@ -787,9 +787,23 @@
 
         //custom code
 
+        
+        let url = window.location.href;
+        let baseURL = "";
+        if(url.startsWith('https://songlinhou.github.io')){
+          baseURL = url.replace("'https://songlinhou.github.io'","").replace("/index.html","");
+          if(baseURL.endsWith("/")){
+            baseURL = baseURL.substring(0,baseURL.length-1);
+          }
+        }
+        else{
+          baseURL = "/";
+        }
+        console.log("baseURL=",baseURL);
+
         SystemJS.config({
           // baseURL: '/ESL-CPMS',
-          baseURL: '/',
+          baseURL: baseURL,
           packages: {
             '/':{
               defaultExtension: 'js'
