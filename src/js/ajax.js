@@ -24,6 +24,8 @@ function sendJsonp(url, data, method, callback) {
     dev_1.reviveServer();
     while (!exports.serverOnline) {
         //wait for server
+        // console.log("wait");
+        dev_1.reviveServer();
     }
     return $.ajax({
         url: exports.global_base_url + url,

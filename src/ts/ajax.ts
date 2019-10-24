@@ -25,7 +25,10 @@ export function sendJsonp(url:string,data:any,method:string,callback:string){
     reviveServer();
     while(!serverOnline){
         //wait for server
+        // console.log("wait");
+        reviveServer();
     }
+
     return $.ajax({
         url: global_base_url + url,
 
