@@ -7,6 +7,7 @@ import { waitForScanned, cancelScannedWaiting, setupIOSCamera } from "./scanner"
 import { getPlatform } from "./platform";
 import { loginUser, logoutUser, showEditPersonalInformation, getUsernameOfUser, getEmailOfUser, syncLocalUserInfo, getFirstNameOfUser } from "./credential";
 import { showYesNoModal } from "./modal";
+import { reviveServer } from "./dev";
 
 let isHTTPS = false;
 let isIOS = (localStorage.getItem("isIOS") == "y");
@@ -111,6 +112,7 @@ function showQRCode(){
 function setupLoginStatus(){
 
     displayServerAddr();
+    reviveServer();
     checkProtocol();
     platformInit();
     // getPlatform();

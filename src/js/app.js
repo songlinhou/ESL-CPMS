@@ -8,6 +8,7 @@ var location_1 = require("./location");
 var scanner_1 = require("./scanner");
 var credential_1 = require("./credential");
 var modal_1 = require("./modal");
+var dev_1 = require("./dev");
 var isHTTPS = false;
 var isIOS = (localStorage.getItem("isIOS") == "y");
 var imageToUpload = null;
@@ -98,6 +99,7 @@ function showQRCode() {
 }
 function setupLoginStatus() {
     ajax_1.displayServerAddr();
+    dev_1.reviveServer();
     checkProtocol();
     platformInit();
     // getPlatform();

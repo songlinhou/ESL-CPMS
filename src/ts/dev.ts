@@ -27,6 +27,7 @@ export function reviveServer(){
         }
         try {
             waiting = true;
+            $('#SafeConnectionModal').modal("show");
             $.ajax({
                 url: global_base_url + "/test",
         
@@ -42,11 +43,13 @@ export function reviveServer(){
             }).done((resp)=>{
                 clearInterval(trialHandler);
                 setServerOnline();
+                $('#SafeConnectionModal').modal("hide");
                 waiting = false;
             }).fail((err)=>{
                 waiting = false;
                 setServerOffline();
                 console.log("waiting for server");
+                $('#SafeConnectionModal').modal("show");
             });
         } catch (error) {
             
