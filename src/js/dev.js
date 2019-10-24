@@ -50,6 +50,7 @@ function reviveServer() {
             });
         }
         catch (error) {
+            console.log("error in connect");
         }
         ;
     }, 500);

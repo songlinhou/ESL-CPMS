@@ -52,7 +52,7 @@ export function reviveServer(){
                 $('#SafeConnectionModal').modal("show");
             });
         } catch (error) {
-            
+            console.log("error in connect");
         };
     },500);
     
