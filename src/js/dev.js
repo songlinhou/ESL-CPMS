@@ -39,7 +39,9 @@ function reviveServer() {
                 jsonpCallback: "revive"
             }).done(function (resp) {
                 ajax_1.setServerOnline();
-                $('#SafeConnectionModal').modal("hide");
+                setTimeout(function () {
+                    $('#SafeConnectionModal').modal("hide");
+                }, 100);
                 waiting = false;
                 clearInterval(trialHandler);
             }).fail(function (err) {

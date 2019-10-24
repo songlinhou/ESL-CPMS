@@ -42,7 +42,10 @@ export function reviveServer(){
                 jsonpCallback: "revive"
             }).done((resp)=>{
                 setServerOnline();
-                $('#SafeConnectionModal').modal("hide");
+                setTimeout(()=>{
+                    $('#SafeConnectionModal').modal("hide");
+                },100);
+                
                 waiting = false;
                 clearInterval(trialHandler);
             }).fail((err)=>{
