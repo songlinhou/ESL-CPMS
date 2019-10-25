@@ -68,4 +68,11 @@ function reviveServer() {
     }, 500);
 }
 exports.reviveServer = reviveServer;
+function checkDBStatus() {
+    ajax_1.sendJsonp('/db_info', null, "post", "checkDB").done(function (resp) {
+        // console.log(resp);
+        console.log("DB Platform:", resp.data['name']);
+    });
+}
+exports.checkDBStatus = checkDBStatus;
 //# sourceMappingURL=dev.js.map

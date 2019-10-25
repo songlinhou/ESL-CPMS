@@ -1,4 +1,4 @@
-import { global_base_url, setServerOnline, setServerOffline, isServerOnline } from "./ajax";
+import { global_base_url, setServerOnline, setServerOffline, isServerOnline, sendJsonp } from "./ajax";
 
 export function isDev(){
     let url = window.location.href;
@@ -67,7 +67,12 @@ export function reviveServer(){
         } catch (error) {
             console.log("error in connect");
         };
-    },500);
-    
-    
+    },500);   
+}
+
+export function checkDBStatus(){
+    sendJsonp('/db_info',null,"post","checkDB").done((resp)=>{
+        // console.log(resp);
+        console.log("DB Platform:",resp.data['name']);
+    });
 }

@@ -14,7 +14,8 @@ var isIOS = (localStorage.getItem("isIOS") == "y");
 var imageToUpload = null;
 exports.loginInfo = null;
 function debugVersion() {
-    console.log("Sat 6:07");
+    // console.log("Sat 6:07");
+    dev_1.checkDBStatus();
 }
 function platformInit() {
     if (isIOS) {
@@ -103,7 +104,7 @@ function setupLoginStatus() {
     checkProtocol();
     platformInit();
     // getPlatform();
-    // debugVersion();
+    debugVersion();
     getLastLoginInfo();
     var login_modal = $("#loginModal");
     var login_content = $('#WPI-login-content');

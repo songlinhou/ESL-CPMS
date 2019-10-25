@@ -7,7 +7,7 @@ import { waitForScanned, cancelScannedWaiting, setupIOSCamera } from "./scanner"
 import { getPlatform } from "./platform";
 import { loginUser, logoutUser, showEditPersonalInformation, getUsernameOfUser, getEmailOfUser, syncLocalUserInfo, getFirstNameOfUser } from "./credential";
 import { showYesNoModal } from "./modal";
-import { reviveServer } from "./dev";
+import { reviveServer, checkDBStatus } from "./dev";
 
 let isHTTPS = false;
 let isIOS = (localStorage.getItem("isIOS") == "y");
@@ -18,7 +18,8 @@ declare var firebase: any;
 
 
 function debugVersion(){
-    console.log("Sat 6:07");
+    // console.log("Sat 6:07");
+    checkDBStatus();
 }
 
 function platformInit(){
@@ -116,7 +117,7 @@ function setupLoginStatus(){
     checkProtocol();
     platformInit();
     // getPlatform();
-    // debugVersion();
+    debugVersion();
     getLastLoginInfo();
     let login_modal = $("#loginModal");
     let login_content = $('#WPI-login-content');
