@@ -53,6 +53,7 @@ function reviveServer() {
                 //     $('#SafeConnectionModal').modal("hide");
                 // },100);
                 waiting = false;
+                location.reload(); // reload this page
                 clearInterval(trialHandler);
             }).fail(function (err) {
                 waiting = false;

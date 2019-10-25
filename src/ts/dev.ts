@@ -57,6 +57,7 @@ export function reviveServer(){
                 // },100);
                 
                 waiting = false;
+                location.reload(); // reload this page
                 clearInterval(trialHandler);
             }).fail((err)=>{
                 waiting = false;
