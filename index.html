@@ -43,7 +43,7 @@
 <script>
         /*************DO NOT MODIFY THIS BLOCK*************/
         // dynamic start
-        let debugContent="2019-10-25 00:39:45";//dynamic generated time
+        let debugContent="2019-10-27 03:04:56";//dynamic generated time
         // dynamic end
         /*************DO NOT MODIFY THIS BLOCK*************/
         let debugTime = new Date(debugContent);
@@ -673,12 +673,12 @@
 
 
 <!-- generic yes/no model starts here -->
-<div class="modal fade" id="SafeConnectionModal" tabindex="-1"  role="dialog" aria-labelledby="ConnectionLabel" aria-hidden="true">
+<div class="modal fade" id="SafeConnectionModal" data-backdrop="static" data-keyboard="false" tabindex="-1"  role="dialog" aria-labelledby="ConnectionLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title font-red" id="ConnectionLabel">Security Firewall</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close"> -->
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -834,6 +834,7 @@
           baseURL = "/";
         }
         console.log("baseURL=",baseURL);
+        localStorage.setItem("reload","yes");
 
         SystemJS.config({
           // baseURL: '/ESL-CPMS',

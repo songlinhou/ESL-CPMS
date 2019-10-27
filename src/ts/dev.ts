@@ -1,6 +1,9 @@
 import { global_base_url, setServerOnline, setServerOffline, isServerOnline, sendJsonp } from "./ajax";
 
+declare var ENFORCE_PROD:number;
+
 export function isDev(){
+    // return false;
     let url = window.location.href;
     url = url.toLowerCase();
     url = url.replace('http://',"").replace('https://','');
@@ -57,7 +60,13 @@ export function reviveServer(){
                 // },100);
                 
                 waiting = false;
-                location.reload(); // reload this page
+                let reload = localStorage.getItem("reload");
+                if(reload.toLowerCase() == "yes"){
+                    localStorage.setItem("reload","no");
+                    // location.reload(); // reload this page
+                    console.log("reload");
+                }
+                
                 clearInterval(trialHandler);
             }).fail((err)=>{
                 waiting = false;

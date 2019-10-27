@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var ajax_1 = require("./ajax");
 function isDev() {
+    // return false;
     var url = window.location.href;
     url = url.toLowerCase();
     url = url.replace('http://', "").replace('https://', '');
@@ -53,7 +54,12 @@ function reviveServer() {
                 //     $('#SafeConnectionModal').modal("hide");
                 // },100);
                 waiting = false;
-                location.reload(); // reload this page
+                var reload = localStorage.getItem("reload");
+                if (reload.toLowerCase() == "yes") {
+                    localStorage.setItem("reload", "no");
+                    // location.reload(); // reload this page
+                    console.log("reload");
+                }
                 clearInterval(trialHandler);
             }).fail(function (err) {
                 waiting = false;
