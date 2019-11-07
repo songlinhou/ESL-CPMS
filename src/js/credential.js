@@ -74,6 +74,7 @@ exports.getFirstNameOfUser = getFirstNameOfUser;
 function showEditPersonalInformation(loginInfo, openByUser) {
     if (openByUser === void 0) { openByUser = false; }
     //check if all the fields are filled
+    $('#personal_info_edit_error').hide();
     if (!loginInfo) {
         loginInfo = JSON.parse(localStorage.getItem('login'));
     }
@@ -126,7 +127,8 @@ function getUserImageURL(onObtainedURL, username) {
     if (!username) {
         username = getUsernameOfUser();
     }
-    var storageRef = firebase.storage.ref("wpi/" + username + ".jpg");
+    var storage = firebase.storage();
+    var storageRef = storage.ref("wpi/" + username + ".jpg");
     storageRef.getDownloadURL().then(function (url) {
         console.log(url);
         onObtainedURL(url);

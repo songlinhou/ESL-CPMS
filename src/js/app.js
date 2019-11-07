@@ -78,6 +78,7 @@ function getLastLoginInfo(expired_days) {
     if (exports.loginInfo) {
         showQRCode();
         credential_1.showEditPersonalInformation(exports.loginInfo);
+        updateLoggedView();
     }
 }
 function showQRCode() {
@@ -96,6 +97,12 @@ function showQRCode() {
         var position = { latitude: lat, longitude: long };
         var qrCodeAddr = qr_1.generateInvitingQRCodeURL(username, position, date.toJSON().toString(), exports.loginInfo.role);
         $('#qrGenerateModal').find('img').attr('src', qrCodeAddr);
+    });
+}
+function updateLoggedView() {
+    credential_1.getUserImageURL(function (url) {
+        $('#avatar-edit-btn').attr('src', url);
+        $('#imageEditPreview').attr('src', url);
     });
 }
 function setupLoginStatus() {
@@ -168,6 +175,7 @@ function setupLoginStatus() {
                 $('#user_panel').removeClass('d-none');
                 login_modal.modal('hide');
                 //now change to logged in mode.
+                updateLoggedView();
             }, function (error) {
                 console.log("server error!");
                 console.log(error);
@@ -506,6 +514,7 @@ function setupUserPanelTriggers() {
             console.log("finished!");
             setTimeout(function () {
                 $('#avatarEditModal').modal('hide');
+                updateLoggedView();
             }, 1000);
         });
     });
@@ -567,7 +576,7 @@ function setupUserPanelTriggers() {
         }
     });
     $('#account-setting-btn').on('click', function (event) {
-        event.preventDefault;
+        event.preventDefault();
         credential_1.showEditPersonalInformation(exports.loginInfo, true);
     });
 }
@@ -583,9 +592,34 @@ function deviceFix() {
         }
     });
 }
+function populateAnnouncementList() {
+    // /anouncements/all?startIndex=1&endIndex=4
+    function generateAnnouncementRecord(annid, anntitle, timestamp) {
+        var content = "<a href=\"#\" annid=\"" + annid + "\" class=\"list-group-item list-group-item-action d-flex justify-content-between align-items-center ann_item\">\n        " + anntitle + "\n        <small class=\"text-muted\">" + timestamp + "</small>\n      </a>";
+        return content;
+    }
+    var data = { startIndex: 0, endIndex: 11 };
+    ajax_1.sendJsonp('/anouncements/all', data, "post", "get_announcement")
+        .done(function (resp) {
+        var html = "";
+        $.each(resp['data'], function (index, record) {
+            console.log("index=", index);
+            console.log("record=", record);
+            var record_html = generateAnnouncementRecord(record['annid'], record['anntitle'], record['anndate']);
+            html += record_html;
+        });
+        $('#anouncement_list').html(html);
+        $('.ann_item').on('click', function (event) {
+            event.preventDefault();
+            var target = event.target;
+            var annID = $(target).attr('annid');
+        });
+    });
+}
 $(document).ready(function () {
     deviceFix();
     setupLoginStatus();
     setupUserPanelTriggers();
+    populateAnnouncementList();
 });
 //# sourceMappingURL=app.js.map

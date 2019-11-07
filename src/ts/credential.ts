@@ -79,6 +79,7 @@ export function getFirstNameOfUser(){
 
 export function showEditPersonalInformation(loginInfo:any,openByUser=false){
     //check if all the fields are filled
+    $('#personal_info_edit_error').hide();
     if (!loginInfo){
         loginInfo = JSON.parse(localStorage.getItem('login'));
     }
@@ -141,7 +142,8 @@ export function getUserImageURL(onObtainedURL:Function,username?:string){
     if(!username){
         username = getUsernameOfUser();   
     }
-    let storageRef = firebase.storage.ref(`wpi/${username}.jpg`);
+    let storage = firebase.storage();
+    let storageRef = storage.ref(`wpi/${username}.jpg`);
     storageRef.getDownloadURL().then(function(url:string) {
         console.log(url);
         onObtainedURL(url);

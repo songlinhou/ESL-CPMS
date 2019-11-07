@@ -1,0 +1,646 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v3.8.5">
+    <title>ESL Management Console</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.3/examples/dashboard/">
+
+    <!-- Bootstrap core CSS -->
+<link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="node_modules/systemjs/dist/system.js"></script>
+<script src="src/js/fontawesome/fontawesome.js"></script>
+
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+
+      tr:hover {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      }
+
+      .pointer {cursor: pointer;}
+
+      .boxshadow {
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 4px rgba(73, 73, 73, 0.342);
+      }
+
+      .assign_item:hover {
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px rgba(73, 73, 73, 0.6);
+      }
+
+    </style>
+    <!-- Custom styles for this template -->
+    <link href="dashboard.css" rel="stylesheet">
+  </head>
+  <body>
+    <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+  <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">WPI ESL Console</a>
+  <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+  <ul class="navbar-nav px-3">
+    <li class="nav-item text-nowrap">
+      <a class="nav-link" href="#">Sign out</a>
+    </li>
+  </ul>
+</nav>
+
+<div class="container-fluid">
+  <div class="row">
+    <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+      <div class="sidebar-sticky">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link active" href="#">
+              <span data-feather="home"></span>
+              Dashboard <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <span data-feather="file"></span>
+              Orders
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <span data-feather="shopping-cart"></span>
+              Products
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <span data-feather="users"></span>
+              Customers
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <span data-feather="bar-chart-2"></span>
+              Reports
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <span data-feather="layers"></span>
+              Integrations
+            </a>
+          </li>
+        </ul>
+
+        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+          <span>Saved reports</span>
+          <a class="d-flex align-items-center text-muted" href="#">
+            <span data-feather="plus-circle"></span>
+          </a>
+        </h6>
+        <ul class="nav flex-column mb-2">
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <span data-feather="file-text"></span>
+              Current month
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <span data-feather="file-text"></span>
+              Last quarter
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <span data-feather="file-text"></span>
+              Social engagement
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <span data-feather="file-text"></span>
+              Year-end sale
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Dashboard</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+          <div class="btn-group mr-2">
+            <!-- <button type="button" class="btn btn-sm btn-outline-secondary" data-toggle="popover" title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?">Share</button> -->
+            <a tabindex="0" class="btn btn-sm btn-outline-secondary" role="button" data-placement="bottom"  data-toggle="popover" title="Share" data-trigger="hover" data-content="import an existing personnel list">Import</a>
+            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+          </div>
+          <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+            <span data-feather="calendar"></span>
+            This week
+          </button>
+          <!-- <a tabindex="0" class="btn btn-lg btn-danger" role="button" data-toggle="popover" title="Dismissible popover" data-trigger="hover" data-content="And here's some amazing content. It's very engaging. Right?">Dismissible popover</a> -->
+        </div>
+      </div>
+
+      <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
+
+
+
+      <h2>Partner List</h2>
+      <div class="table-responsive">
+        <table class="table table-striped table-sm" >
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Num of Students</th>
+              <th>Meeting Num.</th>
+              <th>Total Hours</th>
+              <th>Avg. Rate</th>
+            </tr>
+          </thead>
+          <tbody id="partner_list_tbody">
+            <tr>
+              <td>1,001</td>
+              <td>Lorem</td>
+              <td>ipsum</td>
+              <td>dolor</td>
+              <td>sit</td>
+              <td>sit</td>
+            </tr>
+            <tr>
+              <td>1,002</td>
+              <td>amet</td>
+              <td>consectetur</td>
+              <td>adipiscing</td>
+              <td>elit</td>
+              <td>sit</td>
+            </tr>
+            <tr>
+              <td>1,003</td>
+              <td>Integer</td>
+              <td>nec</td>
+              <td>odio</td>
+              <td>Praesent</td>
+              <td>sit</td>
+            </tr>
+            <tr>
+              <td>1,003</td>
+              <td>libero</td>
+              <td>Sed</td>
+              <td>cursus</td>
+              <td>ante</td>
+              <td>sit</td>
+            </tr>
+            <tr>
+              <td>1,004</td>
+              <td>dapibus</td>
+              <td>diam</td>
+              <td>Sed</td>
+              <td>nisi</td>
+              <td>sit</td>
+            </tr>
+            <tr>
+              <td>1,005</td>
+              <td>Nulla</td>
+              <td>quis</td>
+              <td>sem</td>
+              <td>at</td>
+              <td>sit</td>
+            </tr>
+            <tr>
+              <td>1,006</td>
+              <td>nibh</td>
+              <td>elementum</td>
+              <td>imperdiet</td>
+              <td>Duis</td>
+              <td>sit</td>
+            </tr>
+            <tr>
+              <td>1,007</td>
+              <td>sagittis</td>
+              <td>ipsum</td>
+              <td>Praesent</td>
+              <td>mauris</td>
+              <td>sit</td>
+            </tr>
+            <tr>
+              <td>1,008</td>
+              <td>Fusce</td>
+              <td>nec</td>
+              <td>tellus</td>
+              <td>sed</td>
+              <td>sit</td>
+            </tr>
+            <tr>
+              <td>1,009</td>
+              <td>augue</td>
+              <td>semper</td>
+              <td>porta</td>
+              <td>Mauris</td>
+              <td>sit</td>
+            </tr>
+            <tr>
+              <td>1,010</td>
+              <td>massa</td>
+              <td>Vestibulum</td>
+              <td>lacinia</td>
+              <td>arcu</td>
+              <td>sit</td>
+            </tr>
+            <tr>
+              <td>1,011</td>
+              <td>eget</td>
+              <td>nulla</td>
+              <td>Class</td>
+              <td>aptent</td>
+              <td>sit</td>
+            </tr>
+            <tr>
+              <td>1,012</td>
+              <td>taciti</td>
+              <td>sociosqu</td>
+              <td>ad</td>
+              <td>litora</td>
+              <td>sit</td>
+            </tr>
+            <tr>
+              <td>1,013</td>
+              <td>torquent</td>
+              <td>per</td>
+              <td>conubia</td>
+              <td>nostra</td>
+              <td>sit</td>
+            </tr>
+            <tr>
+              <td>1,014</td>
+              <td>per</td>
+              <td>inceptos</td>
+              <td>himenaeos</td>
+              <td>Curabitur</td>
+              <td>sit</td>
+            </tr>
+            <tr>
+              <td>1,015</td>
+              <td>sodales</td>
+              <td>ligula</td>
+              <td>in</td>
+              <td>libero</td>
+              <td>sit</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+
+      <h2>Student List</h2>
+      <div class="table-responsive">
+        <table class="table table-striped table-sm">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Partner</th>
+              <th>Meeting Num.</th>
+              <th>Total Hours</th>
+            </tr>
+          </thead>
+          <tbody id="student_list_tbody">
+            <tr>
+              <td>1,001</td>
+              <td>Lorem</td>
+              <td>ipsum</td>
+              <td>dolor</td>
+              <td>sit</td>
+            </tr>
+            <tr>
+              <td>1,002</td>
+              <td>amet</td>
+              <td>consectetur</td>
+              <td>adipiscing</td>
+              <td>elit</td>
+            </tr>
+            <tr>
+              <td>1,003</td>
+              <td>Integer</td>
+              <td>nec</td>
+              <td>odio</td>
+              <td>Praesent</td>
+            </tr>
+            <tr>
+              <td>1,003</td>
+              <td>libero</td>
+              <td>Sed</td>
+              <td>cursus</td>
+              <td>ante</td>
+            </tr>
+            <tr>
+              <td>1,004</td>
+              <td>dapibus</td>
+              <td>diam</td>
+              <td>Sed</td>
+              <td>nisi</td>
+            </tr>
+            <tr>
+              <td>1,005</td>
+              <td>Nulla</td>
+              <td>quis</td>
+              <td>sem</td>
+              <td>at</td>
+            </tr>
+            <tr>
+              <td>1,006</td>
+              <td>nibh</td>
+              <td>elementum</td>
+              <td>imperdiet</td>
+              <td>Duis</td>
+            </tr>
+            <tr>
+              <td>1,007</td>
+              <td>sagittis</td>
+              <td>ipsum</td>
+              <td>Praesent</td>
+              <td>mauris</td>
+            </tr>
+            <tr>
+              <td>1,008</td>
+              <td>Fusce</td>
+              <td>nec</td>
+              <td>tellus</td>
+              <td>sed</td>
+            </tr>
+            <tr>
+              <td>1,009</td>
+              <td>augue</td>
+              <td>semper</td>
+              <td>porta</td>
+              <td>Mauris</td>
+            </tr>
+            <tr>
+              <td>1,010</td>
+              <td>massa</td>
+              <td>Vestibulum</td>
+              <td>lacinia</td>
+              <td>arcu</td>
+            </tr>
+            <tr>
+              <td>1,011</td>
+              <td>eget</td>
+              <td>nulla</td>
+              <td>Class</td>
+              <td>aptent</td>
+            </tr>
+            <tr>
+              <td>1,012</td>
+              <td>taciti</td>
+              <td>sociosqu</td>
+              <td>ad</td>
+              <td>litora</td>
+            </tr>
+            <tr>
+              <td>1,013</td>
+              <td>torquent</td>
+              <td>per</td>
+              <td>conubia</td>
+              <td>nostra</td>
+            </tr>
+            <tr>
+              <td>1,014</td>
+              <td>per</td>
+              <td>inceptos</td>
+              <td>himenaeos</td>
+              <td>Curabitur</td>
+            </tr>
+            <tr>
+              <td>1,015</td>
+              <td>sodales</td>
+              <td>ligula</td>
+              <td>in</td>
+              <td>libero</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <canvas id="chartTest"></canvas>
+
+
+      <h2>Student Assignment</h2>
+      <p class="text-primary">Unassigned Students</p>
+      <ul class="list-group list-group-horizontal pointer" style="overflow-x: scroll;" id="unassigned_student_drag_list">
+        <li class="list-group-item assign_item" studentName="Jack" email="jack@wpi.edu">Jack</li>
+        <li class="list-group-item assign_item" studentName="Dey" email="dey@wpi.edu">Dey</li>
+        <li class="list-group-item assign_item" studentName="morre" email="morre@wpi.edu">Morre</li>
+      </ul>
+      <hr>
+      <p class="text-primary" style="padding-top:10px;">Available Partners</p>
+
+      <div class="text-muted"><i class="fas fa-user-friends" style="padding-right:5px;"></i>Partner 1</div>
+      <div class="card" style="width: 100%;" partner_name="partner1" partner_email="p1@wpi.edu">
+          <div class="card-body">
+            <h5 class="card-title"><img style="cursor:pointer; width:30px;height: 30px;" id="avatar-edit-btn" src="images/boy.png" class="mr-3 avatar-icon avatar-icon-update" alt="...">Partner Name</h5>
+            <!-- <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6> -->
+            <p class="card-text">
+                <ul class="list-group list-group-horizontal pointer" style="overflow-x: scroll;" id="cont1">
+                    <li class="list-group-item assign_item" studentName="ray" email="ray@wpi.edu">
+                      
+                        <img style="cursor:pointer; width:30px;height: 30px;" id="avatar-edit-btn" src="images/boy.png" class="mr-3 avatar-icon avatar-icon-update" alt="...">Ray</li>
+                    <li class="list-group-item assign_item" studentName="mick" email="mick@wpi.edu">
+                        <img style="cursor:pointer; width:30px;height: 30px;" id="avatar-edit-btn" src="images/boy.png" class="mr-3 avatar-icon avatar-icon-update" alt="...">Mick</li>
+                    <li class="list-group-item assign_item" studentName="DD" email="dd@wpi.edu">
+                        <img style="cursor:pointer; width:30px;height: 30px;" id="avatar-edit-btn" src="images/boy.png" class="mr-3 avatar-icon avatar-icon-update" alt="...">DD</li>
+                    <li class="list-group-item assign_item" studentName="ee" email="ee@wpi.edu">
+                        <img style="cursor:pointer; width:30px;height: 30px;" id="avatar-edit-btn" src="images/boy.png" class="mr-3 avatar-icon avatar-icon-update" alt="...">EE</li>
+                  </ul>
+
+
+            </p>
+            <!-- <a href="#" class="card-link">Card link</a>
+            <a href="#" class="card-link">Another link</a> -->
+          </div>
+        </div>
+
+        <div class="text-muted"><i class="fas fa-user-friends" style="padding-right:5px;"></i>Partner 2</div>
+      <div class="card" style="width: 100%; margin-top: 5px;" partner_name="partner2" partner_email="p2@wpi.edu">
+          <div class="card-body">
+            <h5 class="card-title"><img style="cursor:pointer; width:30px;height: 30px;" id="avatar-edit-btn" src="images/boy.png" class="mr-3 avatar-icon avatar-icon-update" alt="...">Partner Name</h5>
+            <!-- <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6> -->
+            <p class="card-text">
+                <ul class="list-group list-group-horizontal pointer" style="overflow-x: scroll;" id="cont2">
+                    <li class="list-group-item assign_item" email="123@wpi.edu" studentName="ray">
+                      
+                        <img style="cursor:pointer; width:30px;height: 30px;" id="avatar-edit-btn" src="images/boy.png" class="mr-3 avatar-icon avatar-icon-update" alt="...">Ray</li>
+                    <li class="list-group-item assign_item" email="234@wpi.edu" studentName="Mike">
+                        <img style="cursor:pointer; width:30px;height: 30px;" id="avatar-edit-btn" src="images/boy.png" class="mr-3 avatar-icon avatar-icon-update" alt="...">Mick</li>
+                    <li class="list-group-item assign_item" email="345@wpi.edu"  studentName="DD">
+                        <img style="cursor:pointer; width:30px;height: 30px;" id="avatar-edit-btn" src="images/boy.png" class="mr-3 avatar-icon avatar-icon-update" alt="...">DD</li>
+                    <li class="list-group-item assign_item" email="456@wpi.edu"  studentName="EE">
+                        <img style="cursor:pointer; width:30px;height: 30px;" id="avatar-edit-btn" src="images/boy.png" class="mr-3 avatar-icon avatar-icon-update" alt="...">EE</li>
+
+                        <li class="list-group-item assign_item" email="ray3@wpi.edu" studentName="Ray3">
+                      
+                            <img style="cursor:pointer; width:30px;height: 30px;" id="avatar-edit-btn" src="images/boy.png" class="mr-3 avatar-icon avatar-icon-update" alt="...">Ray</li>
+                        <li class="list-group-item assign_item" email="mike3@wpi.edu" studentName="Mike3">
+                            <img style="cursor:pointer; width:30px;height: 30px;" id="avatar-edit-btn" src="images/boy.png" class="mr-3 avatar-icon avatar-icon-update" alt="...">Mick</li>
+                        <li class="list-group-item assign_item" email="dd3@wpi.edu" studentName="DD3">
+                            <img style="cursor:pointer; width:30px;height: 30px;" id="avatar-edit-btn" src="images/boy.png" class="mr-3 avatar-icon avatar-icon-update" alt="...">DD</li>
+                        <li class="list-group-item assign_item" email="ee3@wpi.edu" studentName="EE3">
+                            <img style="cursor:pointer; width:30px;height: 30px;" id="avatar-edit-btn" src="images/boy.png" class="mr-3 avatar-icon avatar-icon-update" alt="...">EE</li>
+                  </ul>
+
+
+            </p>
+            <!-- <a href="#" class="card-link">Card link</a>
+            <a href="#" class="card-link">Another link</a> -->
+          </div>
+        </div>
+
+        <div class="text-muted"><i class="fas fa-user-friends" style="padding-right:5px;"></i>Partner 3</div>
+      <div class="card" style="width: 100%; margin-top: 5px;"partner_name="partner3" partner_email="p3@wpi.edu">
+          <div class="card-body">
+            <h5 class="card-title"><img style="cursor:pointer; width:30px;height: 30px;" id="avatar-edit-btn" src="images/boy.png" class="mr-3 avatar-icon avatar-icon-update" alt="...">Partner Name</h5>
+            <!-- <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6> -->
+            <p class="card-text">
+                <ul class="list-group list-group-horizontal pointer" style="overflow-x: scroll;" id="cont3">
+                    <li class="list-group-item assign_item">
+                      
+                        <img style="cursor:pointer; width:30px;height: 30px;" id="avatar-edit-btn" src="images/boy.png" class="mr-3 avatar-icon avatar-icon-update" alt="...">Ray</li>
+                    <li class="list-group-item assign_item" >
+                        <img style="cursor:pointer; width:30px;height: 30px;" id="avatar-edit-btn" src="images/boy.png" class="mr-3 avatar-icon avatar-icon-update" alt="...">Mick</li>
+                    <li class="list-group-item assign_item" >
+                        <img style="cursor:pointer; width:30px;height: 30px;" id="avatar-edit-btn" src="images/boy.png" class="mr-3 avatar-icon avatar-icon-update" alt="...">DD</li>
+                    <li class="list-group-item assign_item">
+                        <img style="cursor:pointer; width:30px;height: 30px;" id="avatar-edit-btn" src="images/boy.png" class="mr-3 avatar-icon avatar-icon-update" alt="...">EE</li>
+
+                        <li class="list-group-item assign_item">
+                      
+                            <img style="cursor:pointer; width:30px;height: 30px;" id="avatar-edit-btn" src="images/boy.png" class="mr-3 avatar-icon avatar-icon-update" alt="...">Ray</li>
+                        <li class="list-group-item assign_item">
+                            <img style="cursor:pointer; width:30px;height: 30px;" id="avatar-edit-btn" src="images/boy.png" class="mr-3 avatar-icon avatar-icon-update" alt="...">Mick</li>
+                        <li class="list-group-item assign_item">
+                            <img style="cursor:pointer; width:30px;height: 30px;" id="avatar-edit-btn" src="images/boy.png" class="mr-3 avatar-icon avatar-icon-update" alt="...">DD</li>
+                        <li class="list-group-item assign_item">
+                            <img style="cursor:pointer; width:30px;height: 30px;" id="avatar-edit-btn" src="images/boy.png" class="mr-3 avatar-icon avatar-icon-update" alt="...">EE</li>
+                  </ul>
+
+
+            </p>
+            <!-- <a href="#" class="card-link">Card link</a>
+            <a href="#" class="card-link">Another link</a> -->
+          </div>
+        </div>
+
+
+
+      
+      
+
+
+      <hr>
+
+      
+
+    </main>
+  </div>
+</div>
+
+
+<div class="modal fade" id="yesNoModal" tabindex="-1"  role="dialog" aria-labelledby="yesNoLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title font-red" id="yesNoLabel">Confirm</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            
+            <div class="modal-body" id="yesNo-modal-content">
+            
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" id="modalYES">Yes</button>
+              <button type="button" class="btn" data-dismiss="modal" id="modalNO">No</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <script src="node_modules/jquery/dist/jquery.min.js"></script>
+       <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+        <script src="src/js/dashboard.js"></script>
+
+        <!-- other libraries -->
+        <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+<script>
+    $(function () {
+        $('[data-toggle="popover"]').popover()
+    });
+</script>
+
+
+<script>
+    var ctx = document.getElementById("chartTest").getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: ["Rate1", "Rate2", "Rate3", "Rate4", "Rate5"],
+            datasets: [{
+            label: 'apples',
+            backgroundColor: "#007bff99",
+            borderColor: "#007bff",
+            data: [12, 19, 3, 17, 28]
+            }]
+        }
+    
+    });
+
+</script>
+
+<script>
+    let url = window.location.href;
+    let baseURL = "";
+    if(url.startsWith('https://songlinhou.github.io')){
+        baseURL = url.replace("https://songlinhou.github.io","").replace("/index.html","");
+        if(baseURL.endsWith("/")){
+        baseURL = baseURL.substring(0,baseURL.length-1);
+        }
+    }
+    else{
+        baseURL = "/";
+    }
+
+    SystemJS.config({
+          // baseURL: '/ESL-CPMS',
+          baseURL: baseURL,
+          packages: {
+            '/':{
+              defaultExtension: 'js'
+            }
+          }
+        });
+
+    SystemJS.import('src/js/console.js');
+
+</script>
+    
+    </body>
+</html>

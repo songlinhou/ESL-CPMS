@@ -1,0 +1,103 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text-html; charset=utf-8">
+<!-- <script type="text/javascript" src="../JSC/JSCharting.js"></script>
+<script type="text/javascript" src="../JSC/modules/toolbar.js"></script>
+<script type="text/javascript" src="../JSC/modules/types.js"></script> -->
+<script
+src="https://code.jscharting.com/latest/jscharting.js"></script>
+
+<title>JSCharting Calendar Exams Chart</title>
+<style type="text/css">/*CSS*/</style></head>
+<body><div id="chartDiv" style="max-width: 470px;height: 430px;margin: 0px auto"></div>
+<script type="text/javascript">/*
+Calendar chart with events marked by a custom svg path.
+Learn how to:
+
+  - Draw custom svg paths inside label text.
+*/
+// JS
+var chart, csvData,
+	palette = JSC.getPalette(0),
+	chartConfig = {
+		debug: true,
+		type: 'calendar month solid',
+		title: {
+			label_text: 'Exam Schedule January 2018',
+			position: 'center',
+			label_style_fontSize: 22
+		},
+		defaultBox_boxVisible:false,
+		legend: {
+			position: 'bottom',
+			template: '%icon %name'
+		},
+		defaultSeries: {
+			//Remove spacing between calendar cells.
+			shape_innerPadding: 0,
+			mouseTracking_enabled: false,
+			legendEntry_visible: false,
+		},
+		defaultPoint: {
+			label: {
+				text: '<b>%name</b><br>%events',
+				align: 'center',
+				verticalAlign: 'top',
+				style_fontSize: 20,
+			},
+			//Make all points have an events attribute.
+			attributes_events: ''
+		},
+		toolbar_items_export_visible: false,
+		yAxis_visible: false,
+	};
+
+
+JSC.fetch('./examSchedule.csv')
+	.then(function(response){
+		if(response.ok){
+			response.text().then(function(text){
+				var parsedData = JSC.parseCsv(text);
+				renderChart(csvData = parsedData.data);
+			})
+		}
+
+	}).catch(function(err){	console.error(err);});
+
+function renderChart(data){
+	chart = JSC.chart('chartDiv',makeChartConfig(data));
+}
+
+function makeChartConfig(rows) {
+	var config = chartConfig,
+		entries = [], points = [];
+
+	//Generate a custom legend entry for each data row
+	config.legend.customEntries  = rows.map(function(row,i){
+		return {			name: row[2],			icon_color:palette[i]		};
+	});
+	//Generate a point for each data row
+	config.series = [{points: rows.map(function(row,i){
+			return {
+				date:[row[0],row[1]],
+				attributes:{
+					subject:row[2],
+					//When attribute strings are wrapped inside an array, they will merge with other point string
+					// that bind to the same date cell.
+					events:['<icon path="M0 0L80 0 L80 6L0 6 z" width="55" height="8" color='+palette[i]+'><br>']
+				}
+			};
+		})
+	}];
+	return config;
+}</script>
+
+<script src="node_modules/jquery/dist/jquery.min.js"></script>
+
+<script>
+function find(event){
+    console.log(event);
+}
+
+</script>
+
+
+</body></html>

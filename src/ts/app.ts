@@ -5,7 +5,7 @@ import { verifyConversationCode } from "./codeVerify";
 import { processCoordinates, ICoordinate } from "./location";
 import { waitForScanned, cancelScannedWaiting, setupIOSCamera } from "./scanner";
 import { getPlatform } from "./platform";
-import { loginUser, logoutUser, showEditPersonalInformation, getUsernameOfUser, getEmailOfUser, syncLocalUserInfo, getFirstNameOfUser } from "./credential";
+import { loginUser, logoutUser, showEditPersonalInformation, getUsernameOfUser, getEmailOfUser, syncLocalUserInfo, getFirstNameOfUser, getUserImageURL } from "./credential";
 import { showYesNoModal } from "./modal";
 import { reviveServer, checkDBStatus } from "./dev";
 
@@ -87,6 +87,7 @@ function getLastLoginInfo(expired_days:number=30){
     if(loginInfo){
         showQRCode();
         showEditPersonalInformation(loginInfo);
+        updateLoggedView();
     }
 }
 
@@ -106,6 +107,13 @@ function showQRCode(){
         let position:ICoordinate = {latitude:lat,longitude:long};
         let qrCodeAddr = generateInvitingQRCodeURL(username,position,date.toJSON().toString(),loginInfo.role);
         $('#qrGenerateModal').find('img').attr('src',qrCodeAddr);
+    });
+}
+
+function updateLoggedView(){
+    getUserImageURL((url:string)=>{
+        $('#avatar-edit-btn').attr('src',url);
+        $('#imageEditPreview').attr('src',url);
     });
 }
 
@@ -185,6 +193,7 @@ function setupLoginStatus(){
                     $('#user_panel').removeClass('d-none');
                     login_modal.modal('hide');
                     //now change to logged in mode.
+                    updateLoggedView();
             },
             (error:any)=>{
                 console.log("server error!");
@@ -557,6 +566,7 @@ function setupUserPanelTriggers(){
             console.log("finished!");
             setTimeout(()=>{
                 $('#avatarEditModal').modal('hide');
+                updateLoggedView();
             },1000);
         });
     });
@@ -623,7 +633,7 @@ function setupUserPanelTriggers(){
     });
 
     $('#account-setting-btn').on('click',(event)=>{
-        event.preventDefault;
+        event.preventDefault();
         showEditPersonalInformation(loginInfo,true);
     });
 }
@@ -639,12 +649,40 @@ function deviceFix(){
             $('#user-panel-dropdown').addClass('dropdown-menu-right');
         }
     });
-    
+}
 
+function populateAnnouncementList(){
+    // /anouncements/all?startIndex=1&endIndex=4
+    function generateAnnouncementRecord(annid:number,anntitle:string,timestamp:string){
+        let content = `<a href="#" annid="${annid}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center ann_item">
+        ${anntitle}
+        <small class="text-muted">${timestamp}</small>
+      </a>`;
+      return content;
+    }
+    let data = {startIndex:0,endIndex:11}
+    sendJsonp('/anouncements/all',data,"post","get_announcement")
+    .done((resp)=>{
+        let html = "";
+        $.each(resp['data'],(index,record)=>{
+            console.log("index=",index);
+            console.log("record=",record);
+            let record_html = generateAnnouncementRecord(record['annid'],record['anntitle'],record['anndate']);
+            html += record_html;
+        });
+        $('#anouncement_list').html(html);
+        $('.ann_item').on('click',(event)=>{
+            event.preventDefault();
+            let target = event.target;
+            let annID = $(target).attr('annid');
+            
+        });
+    });
 }
 
 $(document).ready(()=>{
     deviceFix();
     setupLoginStatus();
     setupUserPanelTriggers();
+    populateAnnouncementList();
 });
