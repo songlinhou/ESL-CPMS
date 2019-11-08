@@ -1,5 +1,23 @@
 import { sendJsonp } from "./ajax";
+import { constructFullname } from "./utils";
 declare var Sortable:any;
+
+interface IRelationshipItem {
+    rid:number,
+    stuid:string,
+    cpid:string,
+    rstatus:number,
+    stufirstname:string,
+    stumidname:string,
+    stulastname:string,
+    cpfirstname:string,
+    cpmidname:string,
+    cplastname:string,
+    stumajor:string,
+    stucountry:string,
+    cpmajor:string,
+    cpcountry:string
+};
 
 console.log('console enter');
 
@@ -89,6 +107,28 @@ function get_student_list(){
     
 }
 
+function getAssignmentList(onObtained:Function,latest:boolean = true){
+    let data = {'latest':'yes'};
+    if(!latest){
+        data['latest'] = 'no';
+    }
+    sendJsonp('stu_and_cp_assignment',data,'post','getRecentAssignmentList').done((resp)=>{
+        onObtained(resp.data);
+    });
+}
+
+function setupAssignmentInitialValues(){
+    getAssignmentList((data_list:IRelationshipItem[])=>{
+        $.each(data_list,(index:number,item)=>{
+            let studentFullname = constructFullname(item.stufirstname,item.stumidname,item.stulastname);
+            let partnerFullname = constructFullname(item.cpfirstname,item.cpmidname,item.cplastname);
+            let studentEmail = item.stuid;
+            let partnerEmail = item.cpid;
+            // TODO
+        })
+    },true);
+}
+
 function setupSortableList(){
     function assignmentAction(from:any,to:any,target:any){
         let ulID = $(from).attr('id');
@@ -163,7 +203,6 @@ function setupSortableList(){
 }
 
 function showNonEditableCalendar(){
-    
     $('#calendar_iframe').contents().find('.add-new').remove();
     $('#calendar_iframe').contents().find('.events').css("height","300px");
     $('#calendar_iframe').contents().find('.events').css("width","280px");
