@@ -162,8 +162,17 @@ function setupSortableList(){
     });
 }
 
+function showNonEditableCalendar(){
+    
+    $('#calendar_iframe').contents().find('.add-new').remove();
+    $('#calendar_iframe').contents().find('.events').css("height","300px");
+    $('#calendar_iframe').contents().find('.events').css("width","280px");
+    $('#calendar_iframe').contents().find('.erase').remove();
+}
+
 $(document).ready(()=>{
     get_partner_list();
     get_student_list();
     setupSortableList();
+    showNonEditableCalendar();
 });

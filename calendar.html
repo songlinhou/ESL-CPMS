@@ -1,0 +1,81 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Calendar Events</title>
+<link rel="stylesheet" href="calendar_doc.css" type="text/css" />
+<link rel="stylesheet" href="jalendar.css" type="text/css" />
+<!-- <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
+<!-- <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script> -->
+<script src="node_modules/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="src/js/jalendar.js"></script>
+<style>
+    body{
+        padding: 0;
+        margin: 0;
+    }
+    .topleft {
+        margin-top: 20px;
+        padding-top: 0px;
+        padding-left: 0px;
+    }
+</style>
+
+</head>
+
+<body>
+    
+<article class="topleft">
+    <div id="myId" class="jalendar" style="margin:0;">
+        <div class="added-event" data-date="14/12/2017" data-time="Tüm Gün" data-title="WWDC 13 on San Francisco, LA"></div>
+        <div class="added-event" data-date="16/12/2017" data-time="20:45" data-title="Tarkan İstanbul Concert on Harbiye Açık Hava Tiyatrosu"></div>
+        <div class="added-event" data-date="17/12/2017" data-time="21:00" data-title="CodeCanyon İstanbul Meeting on Starbucks, Kadıköy"></div>
+        <div class="added-event" data-date="17/12/2017" data-time="22:00" data-title="Front-End Design and Javascript Conferance on Haliç Kongre Merkezi"></div>
+        <div class="added-event" data-date="17/12/2017" data-time="22:00" data-title="Lorem ipsum dolor sit amet"></div>
+    </div>
+<div style="text-align:center;clear:both">
+</div>
+<!-- <div id="myId2" class="jalendar"></div>
+    
+<div id="myId3" class="jalendar mid">
+    <div class="added-event" data-date="9/8/2013" data-time="Tüm Gün" data-title="WWDC 13 on San Francisco, LA"></div>
+    <div class="added-event" data-date="16/8/2013" data-time="20:45" data-title="Tarkan İstanbul Concert on Harbiye Açık Hava Tiyatrosu"></div>
+    <div class="added-event" data-date="17/8/2013" data-time="21:00" data-title="CodeCanyon İstanbul Meeting on Starbucks, Kadıköy"></div>
+    <div class="added-event" data-date="17/8/2013" data-time="22:00" data-title="Front-End Design and Javascript Conferance on Haliç Kongre Merkezi"></div>
+    <div class="added-event" data-date="17/12/2017" data-time="22:00" data-title="Lorem ipsum dolor sit amet"></div>
+</div> -->
+<div style="text-align:center;clear:both">
+<script src="/gg_bd_ad_720x90-2.js" type="text/javascript"></script>
+<script src="/follow.js" type="text/javascript"></script>
+</div>
+</article>
+
+<script>
+    let url = window.location.href;
+    let urlObject = new URL(url);
+    let c = urlObject.searchParams.get("editable");
+    console.log(url,c);
+
+    $(function () {
+    $('#myId').jalendar({
+        customDay: '2017/12/01',  // Format: Year/Month/Day
+        color: '#157ffb', // Unlimited Colors
+        lang: 'EN', // Format: English — 'EN', Türkçe — 'TR',
+        readonly: true
+        });
+    });
+
+    if(c == 'no'){
+        setTimeout(()=>{
+            $('.add-new').remove();
+            $('.events').css("height","300px");
+            $('.events').css("width","280px");
+            $('.erase').remove();
+        },500);
+    }
+
+</script>
+
+</body>
+</html>
