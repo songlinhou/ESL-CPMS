@@ -786,7 +786,7 @@ export function populateDiscussionList(page:number=0,limit:number=5){
         let htmlList:string[] = [];
         let indexList:number[] = [];
         $.each(data,(index:number,record)=>{
-            let avatarID = record.avatarID;
+            let avatarID = parseInt(record.avatarID);
             let discid = record.discid;
             let disctitle = record.disctitle;
             let discdate = record.discdate;

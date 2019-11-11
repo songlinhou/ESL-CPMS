@@ -712,7 +712,7 @@ function populateDiscussionList(page, limit) {
         var htmlList = [];
         var indexList = [];
         $.each(data, function (index, record) {
-            var avatarID = record.avatarID;
+            var avatarID = parseInt(record.avatarID);
             var discid = record.discid;
             var disctitle = record.disctitle;
             var discdate = record.discdate;
