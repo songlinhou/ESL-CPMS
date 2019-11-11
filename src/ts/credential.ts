@@ -177,7 +177,7 @@ export function getUserImageURL(onObtainedURL:Function,avatarID:number=-2,userna
             // console.log(url);
             onObtainedURL(url);
         }
-        else if(loginInfo['avatarID'] == -1){
+        else if(avatarID == -1){
             let storage = firebase.storage();
             let storageRef = storage.ref(`wpi/${username}.jpg`);
             storageRef.getDownloadURL().then(function(url:string) {
