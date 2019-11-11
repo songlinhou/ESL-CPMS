@@ -69,6 +69,6 @@
 .one-row{
     text-align: left;
     width: 350px;
-    overflow: scroll;
+    overflow: hidden;
     white-space: nowrap;
 }
