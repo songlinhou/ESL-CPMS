@@ -65,3 +65,10 @@
     background-position: right center;
     background-repeat: no-repeat;
 }
+
+.one-row{
+    text-align: left;
+    width: 350px;
+    overflow: scroll;
+    white-space: nowrap;
+}

@@ -9,6 +9,9 @@ var scanner_1 = require("./scanner");
 var credential_1 = require("./credential");
 var modal_1 = require("./modal");
 var dev_1 = require("./dev");
+var utils_1 = require("./utils");
+var discussion_1 = require("./discussion");
+var annoucement_1 = require("./annoucement");
 var isHTTPS = false;
 var isIOS = (localStorage.getItem("isIOS") == "y");
 var imageToUpload = null;
@@ -79,6 +82,9 @@ function getLastLoginInfo(expired_days) {
         showQRCode();
         credential_1.showEditPersonalInformation(exports.loginInfo);
         updateLoggedView();
+        $('#name_display_in_menu').html(credential_1.getFirstNameOfUser());
+        $('#role_display_in_menu').html(exports.loginInfo.role.toLowerCase());
+        roleSpecificFunctions(exports.loginInfo.role);
     }
 }
 function showQRCode() {
@@ -104,6 +110,16 @@ function updateLoggedView() {
         $('#avatar-edit-btn').attr('src', url);
         $('#imageEditPreview').attr('src', url);
     });
+}
+function roleSpecificFunctions(role) {
+    if (role == 'STUDENT') {
+        $('#manageConsoleBtnDivier').hide();
+        $('#manageConsoleBtn').hide();
+    }
+    else {
+        $('#manageConsoleBtnDivier').show();
+        $('#manageConsoleBtn').show();
+    }
 }
 function setupLoginStatus() {
     ajax_1.displayServerAddr();
@@ -162,6 +178,7 @@ function setupLoginStatus() {
                     return;
                 }
                 var userData = resp.data;
+                console.log("after login, data=", userData);
                 //get the logged in time
                 var date = new Date();
                 var timestamp = date.getTime();
@@ -176,6 +193,9 @@ function setupLoginStatus() {
                 login_modal.modal('hide');
                 //now change to logged in mode.
                 updateLoggedView();
+                $('#name_display_in_menu').html(credential_1.getFirstNameOfUser());
+                $('#role_display_in_menu').html(exports.loginInfo.role.toLowerCase());
+                roleSpecificFunctions(exports.loginInfo.role);
             }, function (error) {
                 console.log("server error!");
                 console.log(error);
@@ -318,6 +338,10 @@ function setupLoginStatus() {
         $('#qrGenerateModal').modal("show");
         //showCoordinates();
     });
+    $('#newTalkMenuBtn').on("click", function (e) {
+        e.preventDefault();
+        $('#startConverstionBtn').click();
+    });
     $('#joinConversationBtn').on("click", function (e) {
         e.preventDefault();
         // log in first
@@ -355,6 +379,10 @@ function setupLoginStatus() {
                 qr_1.onInvitingQRCodeDecoded(result);
             });
         }
+    });
+    $('#joinTalkMenuBtn').on('click', function (e) {
+        e.preventDefault();
+        $('#joinConversationBtn').click();
     });
     $('#changeJoinMethodBtn').on("click", function (e) {
         e.preventDefault();
@@ -409,6 +437,10 @@ function setupLoginStatus() {
     $('#checkRecordBtn').on("click", function (e) {
         e.preventDefault();
         $('#conversatonResultModal').modal("show");
+    });
+    $('#checkRecordMenuBtn').on("click", function (e) {
+        e.preventDefault();
+        $('#checkRecordBtn').click();
     });
     $('#conversatonResultExitBtn').on("click", function (e) {
         //do some cleaning
@@ -516,6 +548,18 @@ function setupUserPanelTriggers() {
                 $('#avatarEditModal').modal('hide');
                 updateLoggedView();
             }, 1000);
+            //update the avatarID in the account
+            var data = { email: credential_1.getEmailOfUser(), avatarID: -1 };
+            ajax_1.sendJsonp('/update_avatar', data, 'post', 'updateAvatar').done(function (resp) {
+                if (resp.success) {
+                    //save the local storage
+                    exports.loginInfo['avatarID'] = -1;
+                    localStorage.setItem("login", JSON.stringify(exports.loginInfo));
+                }
+                else {
+                    console.log("error in update avatar:" + resp.message);
+                }
+            });
         });
     });
     $('#editPersonalInfoSave').on('click', function (event) {
@@ -579,6 +623,27 @@ function setupUserPanelTriggers() {
         event.preventDefault();
         credential_1.showEditPersonalInformation(exports.loginInfo, true);
     });
+    $('#manageConsoleBtn').on('click', function (event) {
+        event.preventDefault();
+        console.log("manageConsoleBtn");
+        if (!exports.loginInfo) {
+            $('#login_panel>button').click();
+            $('#login_first_error').show();
+            return;
+        }
+        if (exports.loginInfo.role == 'STUDENT') {
+            console.log("no permission");
+            return;
+        }
+        if (exports.loginInfo.role == 'PARTNER') {
+            window.open("/console.html");
+            return;
+        }
+        if (exports.loginInfo.role == 'ADMIN') {
+            window.open("/console.html");
+            return;
+        }
+    });
 }
 function deviceFix() {
     $('#dropdownMenuButton').on('click', function () {
@@ -592,13 +657,138 @@ function deviceFix() {
         }
     });
 }
+function populateDiscussionList(page, limit) {
+    if (page === void 0) { page = 0; }
+    if (limit === void 0) { limit = 5; }
+    function setupPagination(recordNumInPage) {
+        var html = "";
+        ajax_1.sendJsonp('/summary/counts', null, "post", "setupDiscussionPagination").done(function (resp) {
+            var data = resp.data;
+            var discussionNum = -1;
+            $.each(data, function (index, record) {
+                if (record.type == 'discussion') {
+                    discussionNum = record.cnt;
+                }
+            });
+            var disabledClassPrev = '';
+            if (page == 0) {
+                disabledClassPrev = 'disabled';
+            }
+            var liHTML = "<li class=\"page-item " + disabledClassPrev + "\">\n            <a class=\"page-link\" href=\"#\" tabindex=\"-1\">Previous</a>\n            </li>";
+            html += liHTML;
+            var requiredPages = Math.ceil(discussionNum / recordNumInPage);
+            for (var i = 0; i < requiredPages; i++) {
+                if (i == page)
+                    liHTML = "<li class=\"page-item active\"><a class=\"page-link\" href=\"#\">" + (i + 1) + "</a></li>";
+                else {
+                    liHTML = "<li class=\"page-item\"><a class=\"page-link\" href=\"#\">" + (i + 1) + "</a></li>";
+                }
+                html += liHTML;
+            }
+            var disabledClass = 'disabled';
+            if (requiredPages > 1) {
+                disabledClass = '';
+            }
+            if (page + 1 == requiredPages) {
+                disabledClass = 'disabled';
+            }
+            liHTML = "<li class=\"page-item " + disabledClass + "\">\n            <a class=\"page-link\" href=\"#\" tabindex=\"-1\">Next</a>\n            </li>";
+            html += liHTML;
+            $('#discussion_allposts_pagination').html(html);
+            $('#discussion_allposts_pagination').attr("pageCount", requiredPages);
+            discussion_1.setupDiscussionPageTriggers();
+        });
+    }
+    setupPagination(limit);
+    var data = { 'limit': limit, 'page': page };
+    function generateDiscussionRecord(discid, disctitle, discdate, authorid, authorfirstname, authormidname, authorlastname, imageURL) {
+        var fullName = utils_1.constructFullname(authorfirstname, authormidname, authorlastname);
+        var content = "<a href=\"#\" discid=\"" + discid + "\" authorid=\"" + authorid + "\" authorName=\"" + fullName + "\" class=\"list-group-item list-group-item-action d-flex justify-content-between align-items-center\">\n        <span class=\"one-row\"><img style=\"cursor:pointer; width:30px;height: 30px;\"   src=\"" + imageURL + "\" class=\"mr-3 avatar-icon avatar-icon-update\" alt=\"...\">" + disctitle + "</span>\n        <small class=\"text-muted d-none d-sm-block\">" + discdate + "</small>\n        </a>";
+        return content;
+    }
+    ajax_1.sendJsonp('/discussion_list', data, 'post', 'get_discussion_list').done(function (resp) {
+        var data = resp.data;
+        var recordNumber = data.length;
+        var htmlList = [];
+        var indexList = [];
+        $.each(data, function (index, record) {
+            var avatarID = record.avatarID;
+            var discid = record.discid;
+            var disctitle = record.disctitle;
+            var discdate = record.discdate;
+            var authorid = record.authorid;
+            var authorfirstname = record.authorfirstname;
+            var authormidname = record.authormidname;
+            var authorlastname = record.authorlastname;
+            var username = credential_1.getUsernameOfUser(authorid);
+            var recordHTML = "";
+            credential_1.getUserImageURL(function (imageURL) {
+                recordHTML = generateDiscussionRecord(discid, disctitle, discdate, authorid, authorfirstname, authormidname, authorlastname, imageURL);
+                indexList.push(index);
+                htmlList[index] = recordHTML;
+            }, avatarID, username);
+        });
+        var intervalHandler = setInterval(function () {
+            if (indexList.length == recordNumber) {
+                clearInterval(intervalHandler);
+                var html_1 = "";
+                $.each(htmlList, function (index, htmlRec) {
+                    html_1 += htmlRec;
+                });
+                $('#all_discussion_list').html(html_1);
+                discussion_1.setupDiscussionItemTriggers();
+            }
+        }, 200);
+    });
+    discussion_1.setupNewDiscussionModal();
+}
+exports.populateDiscussionList = populateDiscussionList;
 function populateAnnouncementList() {
     // /anouncements/all?startIndex=1&endIndex=4
     function generateAnnouncementRecord(annid, anntitle, timestamp) {
-        var content = "<a href=\"#\" annid=\"" + annid + "\" class=\"list-group-item list-group-item-action d-flex justify-content-between align-items-center ann_item\">\n        " + anntitle + "\n        <small class=\"text-muted\">" + timestamp + "</small>\n      </a>";
+        var content = "<a href=\"#\" annid=\"" + annid + "\" class=\"list-group-item list-group-item-action d-flex justify-content-between align-items-center ann_item\">\n        <span class=\"one-row\">" + anntitle + "</span>\n        <small class=\"text-muted d-none d-sm-block\">" + timestamp + "</small>\n      </a>";
         return content;
     }
-    var data = { startIndex: 0, endIndex: 11 };
+    function setupPagination(recordNumInPage) {
+        var html = "";
+        ajax_1.sendJsonp('/summary/counts', null, "post", "setupAnnouncementPagination").done(function (resp) {
+            var data = resp.data;
+            var announcementNum = -1;
+            $.each(data, function (index, record) {
+                if (record.type == 'announcement') {
+                    announcementNum = record.cnt;
+                }
+            });
+            var liHTML = "<li class=\"page-item disabled\">\n            <a class=\"page-link\" href=\"#\" tabindex=\"-1\">Previous</a>\n            </li>";
+            html += liHTML;
+            var requiredPages = Math.ceil(announcementNum / recordNumInPage);
+            for (var i = 0; i < requiredPages; i++) {
+                if (i == 0)
+                    liHTML = "<li class=\"page-item active\"><a class=\"page-link\" href=\"#\">" + (i + 1) + "</a></li>";
+                else {
+                    liHTML = "<li class=\"page-item\"><a class=\"page-link\" href=\"#\">" + (i + 1) + "</a></li>";
+                }
+                html += liHTML;
+            }
+            var disabledClass = 'disabled';
+            if (requiredPages > 1) {
+                disabledClass = '';
+            }
+            if (requiredPages > 1) {
+                disabledClass = '';
+            }
+            // if(page+1 == requiredPages){
+            //     disabledClass = 'disabled';
+            // }
+            liHTML = "<li class=\"page-item " + disabledClass + "\">\n            <a class=\"page-link\" href=\"#\" tabindex=\"-1\">Next</a>\n            </li>";
+            html += liHTML;
+            $('#annoucement_pagination').html(html);
+            $('#annoucement_pagination').attr("pageCount", requiredPages);
+        });
+    }
+    var recordNumInPage = 10;
+    setupPagination(recordNumInPage);
+    var data = { startIndex: 0, endIndex: recordNumInPage + 1 };
     ajax_1.sendJsonp('/anouncements/all', data, "post", "get_announcement")
         .done(function (resp) {
         var html = "";
@@ -609,11 +799,7 @@ function populateAnnouncementList() {
             html += record_html;
         });
         $('#anouncement_list').html(html);
-        $('.ann_item').on('click', function (event) {
-            event.preventDefault();
-            var target = event.target;
-            var annID = $(target).attr('annid');
-        });
+        annoucement_1.setupAnnouncementItemTriggers();
     });
 }
 $(document).ready(function () {
@@ -621,5 +807,6 @@ $(document).ready(function () {
     setupLoginStatus();
     setupUserPanelTriggers();
     populateAnnouncementList();
+    populateDiscussionList();
 });
 //# sourceMappingURL=app.js.map

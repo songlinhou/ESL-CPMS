@@ -58,8 +58,10 @@ export function getEmailOfUser():string{
     return email;
 }
 
-export function getUsernameOfUser(){
-    let email = getEmailOfUser();
+export function getUsernameOfUser(email?:string){
+    if(!email)
+        email = getEmailOfUser();
+    console.log("getUsernameOfUser",email);
     let name = email.split('@')[0];
     return name.trim();
 }
@@ -138,16 +140,55 @@ export function showEditPersonalInformation(loginInfo:any,openByUser=false){
     });
 }
 
-export function getUserImageURL(onObtainedURL:Function,username?:string){
-    if(!username){
-        username = getUsernameOfUser();   
+export function getUserImageURL(onObtainedURL:Function,avatarID:number=-2,username?:string){
+    if(avatarID == -2){
+        if(!username){
+            username = getUsernameOfUser();  
+        }
+         
+    
+        if(loginInfo['avatarID'] == 0){
+            let url = 'images/girl.png';
+            console.log(url);
+            onObtainedURL(url);
+        }
+        else if(loginInfo['avatarID'] == 1){
+            let url = 'images/boy.png';
+            console.log(url);
+            onObtainedURL(url);
+        }
+        else if(loginInfo['avatarID'] == -1){
+            let storage = firebase.storage();
+            let storageRef = storage.ref(`wpi/${username}.jpg`);
+            storageRef.getDownloadURL().then(function(url:string) {
+                console.log(url);
+                onObtainedURL(url);
+            });
+        } 
     }
-    let storage = firebase.storage();
-    let storageRef = storage.ref(`wpi/${username}.jpg`);
-    storageRef.getDownloadURL().then(function(url:string) {
-        console.log(url);
-        onObtainedURL(url);
-    });
+    else{
+        if(avatarID == 0){
+            let url = 'images/girl.png';
+            // console.log(url);
+            onObtainedURL(url);
+        }
+        else if(avatarID == 1){
+            let url = 'images/boy.png';
+            // console.log(url);
+            onObtainedURL(url);
+        }
+        else if(loginInfo['avatarID'] == -1){
+            let storage = firebase.storage();
+            let storageRef = storage.ref(`wpi/${username}.jpg`);
+            storageRef.getDownloadURL().then(function(url:string) {
+                console.log(url);
+                onObtainedURL(url);
+            });
+        }
+        else{
+            console.log("unknown avatarID",avatarID);
+        }
+    } 
 }
 
 function fillPersonalInfo(){

@@ -52,8 +52,10 @@ function getEmailOfUser() {
     return email;
 }
 exports.getEmailOfUser = getEmailOfUser;
-function getUsernameOfUser() {
-    var email = getEmailOfUser();
+function getUsernameOfUser(email) {
+    if (!email)
+        email = getEmailOfUser();
+    console.log("getUsernameOfUser", email);
     var name = email.split('@')[0];
     return name.trim();
 }
@@ -123,16 +125,54 @@ function showEditPersonalInformation(loginInfo, openByUser) {
     });
 }
 exports.showEditPersonalInformation = showEditPersonalInformation;
-function getUserImageURL(onObtainedURL, username) {
-    if (!username) {
-        username = getUsernameOfUser();
+function getUserImageURL(onObtainedURL, avatarID, username) {
+    if (avatarID === void 0) { avatarID = -2; }
+    if (avatarID == -2) {
+        if (!username) {
+            username = getUsernameOfUser();
+        }
+        if (app_1.loginInfo['avatarID'] == 0) {
+            var url = 'images/girl.png';
+            console.log(url);
+            onObtainedURL(url);
+        }
+        else if (app_1.loginInfo['avatarID'] == 1) {
+            var url = 'images/boy.png';
+            console.log(url);
+            onObtainedURL(url);
+        }
+        else if (app_1.loginInfo['avatarID'] == -1) {
+            var storage = firebase.storage();
+            var storageRef = storage.ref("wpi/" + username + ".jpg");
+            storageRef.getDownloadURL().then(function (url) {
+                console.log(url);
+                onObtainedURL(url);
+            });
+        }
     }
-    var storage = firebase.storage();
-    var storageRef = storage.ref("wpi/" + username + ".jpg");
-    storageRef.getDownloadURL().then(function (url) {
-        console.log(url);
-        onObtainedURL(url);
-    });
+    else {
+        if (avatarID == 0) {
+            var url = 'images/girl.png';
+            // console.log(url);
+            onObtainedURL(url);
+        }
+        else if (avatarID == 1) {
+            var url = 'images/boy.png';
+            // console.log(url);
+            onObtainedURL(url);
+        }
+        else if (app_1.loginInfo['avatarID'] == -1) {
+            var storage = firebase.storage();
+            var storageRef = storage.ref("wpi/" + username + ".jpg");
+            storageRef.getDownloadURL().then(function (url) {
+                console.log(url);
+                onObtainedURL(url);
+            });
+        }
+        else {
+            console.log("unknown avatarID", avatarID);
+        }
+    }
 }
 exports.getUserImageURL = getUserImageURL;
 function fillPersonalInfo() {

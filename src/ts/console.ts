@@ -124,6 +124,7 @@ function setupAssignmentInitialValues(){
             let partnerFullname = constructFullname(item.cpfirstname,item.cpmidname,item.cplastname);
             let studentEmail = item.stuid;
             let partnerEmail = item.cpid;
+            // let 
             // TODO
         })
     },true);

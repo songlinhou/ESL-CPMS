@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var ajax_1 = require("./ajax");
+var utils_1 = require("./utils");
+;
 console.log('console enter');
 function get_partner_list() {
     function generate_popover(title, content, value) {
@@ -69,6 +71,28 @@ function get_student_list() {
         });
         $('#student_list_tbody').html(html);
     });
+}
+function getAssignmentList(onObtained, latest) {
+    if (latest === void 0) { latest = true; }
+    var data = { 'latest': 'yes' };
+    if (!latest) {
+        data['latest'] = 'no';
+    }
+    ajax_1.sendJsonp('stu_and_cp_assignment', data, 'post', 'getRecentAssignmentList').done(function (resp) {
+        onObtained(resp.data);
+    });
+}
+function setupAssignmentInitialValues() {
+    getAssignmentList(function (data_list) {
+        $.each(data_list, function (index, item) {
+            var studentFullname = utils_1.constructFullname(item.stufirstname, item.stumidname, item.stulastname);
+            var partnerFullname = utils_1.constructFullname(item.cpfirstname, item.cpmidname, item.cplastname);
+            var studentEmail = item.stuid;
+            var partnerEmail = item.cpid;
+            // let 
+            // TODO
+        });
+    }, true);
 }
 function setupSortableList() {
     function assignmentAction(from, to, target) {
