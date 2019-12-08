@@ -196,6 +196,7 @@ function setupLoginStatus() {
                 $('#name_display_in_menu').html(credential_1.getFirstNameOfUser());
                 $('#role_display_in_menu').html(exports.loginInfo.role.toLowerCase());
                 roleSpecificFunctions(exports.loginInfo.role);
+                $('#reservationBtn').closest("li").show();
             }, function (error) {
                 console.log("server error!");
                 console.log(error);
@@ -450,6 +451,10 @@ function setupLoginStatus() {
     $('#startConversationProcessBtn').on('click', function (e) {
         e.preventDefault();
         console.log("start conversation now!!!");
+    });
+    $('#reservationBtn').on("click", function (e) {
+        console.log("reservation button");
+        $("#scheduleModal").modal("show");
     });
 }
 function checkProtocol() {

@@ -46,7 +46,7 @@
 <script>
         /*************DO NOT MODIFY THIS BLOCK*************/
         // dynamic start
-        let debugContent="2019-11-11 13:24:24";//dynamic generated time
+        let debugContent="2019-12-08 09:42:02";//dynamic generated time
         // dynamic end
         /*************DO NOT MODIFY THIS BLOCK*************/
         let debugTime = new Date(debugContent);
@@ -70,6 +70,9 @@
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
                     <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#" id="reservationBtn">Reservation</a>
                 </li>
                 <!-- <li class="nav-item">
                     <a class="nav-link" href="#">Link</a>
@@ -885,6 +888,51 @@
   <!-- new discussion model ends here -->
 
 
+<!-- scheduleModal model starts here -->
+<div class="modal fade" id="scheduleModal" data-backdrop="static" data-keyboard="false" tabindex="-1"  role="dialog" aria-labelledby="scheduleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title font-red" id="scheduleModalLabel">Reservation</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      
+      <div class="modal-body" id="scheduleModal-content">
+        <div class="row">
+          <div class="col-4">
+            <div class="list-group" id="list-tab" role="tablist">
+              <a class="list-group-item list-group-item-action active" id="reserv_1" data-toggle="list" href="#list-reserv_1" role="tab" aria-controls="home">Home</a>
+              <a class="list-group-item list-group-item-action" id="reserv_2" data-toggle="list" href="#list-reserv_2" role="tab" aria-controls="profile">Profile</a>
+              <a class="list-group-item list-group-item-action" id="reserv_3" data-toggle="list" href="#list-reserv_3" role="tab" aria-controls="messages">Messages</a>
+              <a class="list-group-item list-group-item-action" id="reserv_4" data-toggle="list" href="#list-reserv_4" role="tab" aria-controls="settings">Settings</a>
+              <a class="list-group-item list-group-item-action" id="reserv_5" data-toggle="list" href="#list-reserv_5" role="tab" aria-controls="settings">Settings</a>
+              <a class="list-group-item list-group-item-action" id="reserv_6" data-toggle="list" href="#list-reserv_6" role="tab" aria-controls="settings">Settings</a>
+              <a class="list-group-item list-group-item-action" id="reserv_7" data-toggle="list" href="#list-reserv_7" role="tab" aria-controls="settings">Settings</a>
+            </div>
+          </div>
+          <div class="col-8">
+            <div class="tab-content" id="nav-tabContent">
+              <div class="tab-pane fade show active" id="list-reserv_1" role="tabpanel" aria-labelledby="list-home-list">...</div>
+              <div class="tab-pane fade" id="list-reserv_2" role="tabpanel" aria-labelledby="list-profile-list">...</div>
+              <div class="tab-pane fade" id="list-reserv_3" role="tabpanel" aria-labelledby="list-messages-list">...</div>
+              <div class="tab-pane fade" id="list-reserv_4" role="tabpanel" aria-labelledby="list-settings-list">...</div>
+              <div class="tab-pane fade" id="list-reserv_5" role="tabpanel" aria-labelledby="list-settings-list">...</div>
+              <div class="tab-pane fade" id="list-reserv_6" role="tabpanel" aria-labelledby="list-settings-list">...</div>
+              <div class="tab-pane fade" id="list-reserv_7" role="tabpanel" aria-labelledby="list-settings-list">...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn" id="modalConnection">Yes</button>
+        <button type="button" class="btn" data-dismiss="modal" id="modalNO">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- scheduleModal ends here -->
 
 
 

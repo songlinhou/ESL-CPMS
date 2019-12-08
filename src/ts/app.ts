@@ -155,6 +155,7 @@ function setupLoginStatus(){
     verify_content.hide();
     password_content.hide();
     
+    
     $('#login-reg-confirm').html("Login");
     $('#login_panel>button').on("click",(event)=>{
         // event.preventDefault();
@@ -216,6 +217,7 @@ function setupLoginStatus(){
                     $('#name_display_in_menu').html(getFirstNameOfUser());
                     $('#role_display_in_menu').html(loginInfo.role.toLowerCase());
                     roleSpecificFunctions(loginInfo.role);
+                    $('#reservationBtn').closest("li").show();
             },
             (error:any)=>{
                 console.log("server error!");
@@ -497,6 +499,11 @@ function setupLoginStatus(){
     $('#startConversationProcessBtn').on('click',(e)=>{
         e.preventDefault();
         console.log("start conversation now!!!");
+    });
+
+    $('#reservationBtn').on("click",(e)=>{
+        console.log("reservation button");
+        $("#scheduleModal").modal("show");
     });
 
 }
