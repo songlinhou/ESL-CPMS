@@ -130,7 +130,7 @@ function setupAssignmentInitialValues(){
     },true);
 }
 
-function setupSortableList(){
+function setupSortableList(numberOfDragableLists:number){
     function assignmentAction(from:any,to:any,target:any){
         let ulID = $(from).attr('id');
         let studentName = $(target).attr("studentName");
@@ -138,6 +138,15 @@ function setupSortableList(){
         console.log("operate on student " + studentName + " with email=" + email);
         if (ulID == "unassigned_student_drag_list"){
             let partnerName = $(to).closest('.card').attr("partner_name");
+            let PartnerEmail = $(to).closest('.card').attr("partner_email");
+            let args = {
+                'email1':email,
+                'email2':PartnerEmail
+            };
+            sendJsonp("/relationship/assign_new_relationship_andupdate",args,'post','relationshipupdate').done((resp)=>{
+                console.log(args);
+                console.log("DB changed");
+            });
             console.log("assign a new student to " + partnerName);
         }
         else{
@@ -145,6 +154,14 @@ function setupSortableList(){
             let partnerEmail = $(from).closest('.card').attr("partner_email");
             let newPartnerName = $(to).closest('.card').attr("partner_name");
             let newPartnerEmail = $(to).closest('.card').attr("partner_email");
+            let args = {
+                'email1':email,
+                'email2':newPartnerEmail
+            };
+            sendJsonp("/relationship/assign_new_relationship_andupdate",args,'post','relationshipupdate').done((resp)=>{
+                console.log(args);
+                console.log("DB changed");
+            });
             console.log("unlink with former partner " + partnerName + " email="+partnerEmail);
             console.log("link with new partner " + newPartnerName + " email=" + newPartnerEmail);
         }
@@ -163,44 +180,59 @@ function setupSortableList(){
         }
       });
 
-    Sortable.create($('#cont1')[0],{
-        group: {
-          name: 'cont1',
-          put: true,
-          pull: true
-        },
-        animation: 100,
-        onAdd: (event:any)=>{
-            console.log(event,event.to,event.from);
-            assignmentAction(event.from,event.to,event.item);
-        }
-      });
-    
-    Sortable.create($('#cont2')[0],{
-    group: {
-        name: 'cont2',
-        put: true,
-        pull: true
-    },
-    animation: 100,
-    onAdd: (event:any)=>{
-        console.log(event,event.to,event.from);
-        assignmentAction(event.from,event.to,event.item);
+    for(let i=0;i<numberOfDragableLists;i++){
+        Sortable.create($('#cont'+(i))[0],{
+            group: {
+              name: 'cont'+(i),
+              put: true,
+              pull: true
+            },
+            animation: 100,
+            onAdd: (event:any)=>{
+                console.log(event,event.to,event.from);
+                assignmentAction(event.from,event.to,event.item);
+            }
+          });
     }
-    });
 
-    Sortable.create($('#cont3')[0],{
-        group: {
-          name: 'cont3',
-          put: true,
-          pull: true
-        },
-    animation: 100,
-    onAdd: (event:any)=>{
-        console.log(event,event.to,event.from);
-        assignmentAction(event.from,event.to,event.item);
-    }
-    });
+    // Sortable.create($('#cont1')[0],{
+    //     group: {
+    //       name: 'cont1',
+    //       put: true,
+    //       pull: true
+    //     },
+    //     animation: 100,
+    //     onAdd: (event:any)=>{
+    //         console.log(event,event.to,event.from);
+    //         assignmentAction(event.from,event.to,event.item);
+    //     }
+    //   });
+    
+    // Sortable.create($('#cont2')[0],{
+    // group: {
+    //     name: 'cont2',
+    //     put: true,
+    //     pull: true
+    // },
+    // animation: 100,
+    // onAdd: (event:any)=>{
+    //     console.log(event,event.to,event.from);
+    //     assignmentAction(event.from,event.to,event.item);
+    // }
+    // });
+
+    // Sortable.create($('#cont3')[0],{
+    //     group: {
+    //       name: 'cont3',
+    //       put: true,
+    //       pull: true
+    //     },
+    // animation: 100,
+    // onAdd: (event:any)=>{
+    //     console.log(event,event.to,event.from);
+    //     assignmentAction(event.from,event.to,event.item);
+    // }
+    // });
 }
 
 function showNonEditableCalendar(){
@@ -210,9 +242,102 @@ function showNonEditableCalendar(){
     $('#calendar_iframe').contents().find('.erase').remove();
 }
 
+function demoSend(){
+    console.log("demo");
+    sendJsonp("/get_nullrelatipnship_student",null,'post','nullrelationship').done((resp)=>{
+        if(!resp.success){
+            return;
+        }
+        let data = resp.data;
+        let html = "";
+        $.each(data,(index:number,element)=>{
+            let name = constructFullname(element.stufirstname,element.stumidname,element.stulastname);
+            let html_ = `<li class="list-group-item assign_item" studentName="${name}" email="${element.stuid}">${element.stufirstname}</li>`;
+            html += html_;
+            console.log(element,element.stuid);
+        });
+        $("#unassigned_student_drag_list").html(html);
+        console.log(resp);
+    });
+
+}
+function relationshipsendstu(cpIDs: any){
+    console.log(cpIDs);
+    $.each(cpIDs,(cpID:string,valueDict:any)=>{
+        let html = "";
+        $.each(valueDict.students,(stu:number,value:any)=>{
+            let html_ = `<li class="list-group-item assign_item" studentName="${value.fullname}" email="${value.stuid}">
+            <img   src="images/boy.png" class="mr-3 avatar-icon avatar-icon-update avatar_li" alt="...">${value.firstName}</li>`;
+            html += html_;
+        });
+        $(`#${valueDict.htmlid}`).html(html);
+    });
+    console.log('success');
+}
+
+function relationshipsend(){
+    console.log("relation");
+    sendJsonp("/get_all_relationship",null,'post','relationship').done((resp)=>{
+        if(!resp.success){
+            return;
+        }
+        let data = resp.data;
+        let html = "";
+        let cpIDs:any = {};
+        let numOfPartners = 0;
+        $.each(data,(index:number,element)=>{
+            let cpname = constructFullname(element.cpfirstname,element.cpmidname,element.cplastname);
+            let cpID = element.cpid;
+            let studentInfo = {
+                'stuid':element.stuid,
+                'avatarID':element.stuavater,
+                'fullName':constructFullname(element.stufirstname,element.stumidname,element.stulastname),
+                'firstName':element.stufirstname
+            };
+
+            if((<any>Object.keys(cpIDs)).includes(cpID)){
+                cpIDs[cpID]['students'].push(studentInfo);
+            }
+            else{
+                cpIDs[cpID] = {};
+                cpIDs[cpID]['name'] = cpname;
+                cpIDs[cpID]['avatar'] = element.cpavatar;
+                cpIDs[cpID]['htmlid'] = 'cont'+ numOfPartners;
+                cpIDs[cpID]['students'] = [];
+                cpIDs[cpID]['students'].push(studentInfo);
+                numOfPartners++;
+            }
+        });
+        console.log("cpIDs=",cpIDs);
+        let numOfPartners1 = 1;
+        $.each(cpIDs,(cpID:string,valueDict:any)=>{
+            let html_ = `<div class="text-muted"><i class="fas fa-user-friends" style="padding-right:5px;"></i>Partner${numOfPartners1}</div>
+            <div class="card" style="width: 100%;" partner_name="${valueDict.name}" partner_email="${cpID}">
+                <div class="card-body">
+                  <h5 class="card-title"><img style="cursor:pointer; width:30px;height: 30px;"   src="images/boy.png" class="mr-3 avatar-icon avatar-icon-update" alt="...">${valueDict.name}</h5>
+                  <p class="card-text">
+                      <ul class="list-group list-group-horizontal pointer" style="overflow-x: scroll;" id="${valueDict.htmlid}">
+                        </ul>    
+                  </p>
+                </div>
+              </div>`;
+            html += html_;
+            numOfPartners1++;
+            console.log(cpID);
+        });
+        $("#available_partners").html(html);
+        relationshipsendstu(cpIDs);
+        setupSortableList(numOfPartners);
+        console.log(resp);
+    });
+
+
+}
+
 $(document).ready(()=>{
     get_partner_list();
     get_student_list();
-    setupSortableList();
     showNonEditableCalendar();
+    demoSend();
+    relationshipsend();
 });
