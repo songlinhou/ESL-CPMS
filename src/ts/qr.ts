@@ -35,13 +35,23 @@ export function onInvitingQRCodeDecoded(result:string){
     let initDate = new Date(dataJSON.timestamp);
     let now = new Date();
     let durationInMinutes = (now.getTime() - initDate.getTime()) / 1000 / 60;
+    let role = "Student";
+    if(dataJSON.role.toUpperCase() == "STUDENT"){
+        role = "Student";
+    }
+    else if(dataJSON.role.toUpperCase() == "PARTNER"){
+        role = "Partner";
+    }
+    else if(dataJSON.role.toUpperCase() == "ADMIN"){
+        role = "Admin";
+    }
     if(durationInMinutes > 5){
         //expired
         $('#debugGroupInfo').html("expried already");
         $('#qrScannerModal').modal("hide");
         // $('#conversatonResultModal').modal("show");
 
-        showStartChatModal(dataJSON.username,dataJSON.email);
+        showStartChatModal(dataJSON.username,dataJSON.email,role);
         console.log("already expired");
     }
     else{
@@ -55,7 +65,7 @@ export function onInvitingQRCodeDecoded(result:string){
             $('#debugGroupInfo').html("positions from both devices are not enabled;");
             $('#qrScannerModal').modal("hide");
             // $('#conversatonResultModal').modal("show");
-            showStartChatModal(dataJSON.username,dataJSON.email);
+            showStartChatModal(dataJSON.username,dataJSON.email,dataJSON.role);
             return;
         }
 
@@ -67,7 +77,7 @@ export function onInvitingQRCodeDecoded(result:string){
                 $('#debugGroupInfo').html("positions from one device is not enabled;");
                 $('#qrScannerModal').modal("hide");
                 // $('#conversatonResultModal').modal("show");
-                showStartChatModal(dataJSON.username,dataJSON.email);
+                showStartChatModal(dataJSON.username,dataJSON.email,role);
                 return;
             }
             let distanceInKM = getDistanceBetween(lat,long,dataJSON.latitude,dataJSON.longitude,'K');
@@ -79,7 +89,7 @@ export function onInvitingQRCodeDecoded(result:string){
                 $('#debugGroupInfo').html("positions check successful;");
                 $('#qrScannerModal').modal("hide");
                 // $('#conversatonResultModal').modal("show");
-                showStartChatModal(dataJSON.username,dataJSON.email);
+                showStartChatModal(dataJSON.username,dataJSON.email,role);
                 return;
             }
             else{
@@ -89,7 +99,7 @@ export function onInvitingQRCodeDecoded(result:string){
                 $('#debugGroupInfo').html("positions check failed!!");
                 $('#qrScannerModal').modal("hide");
                 // $('#conversatonResultModal').modal("show");
-                showStartChatModal(dataJSON.username,dataJSON.email);
+                showStartChatModal(dataJSON.username,dataJSON.email,role);
                 return;
             }
         });

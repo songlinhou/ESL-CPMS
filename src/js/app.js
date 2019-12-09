@@ -117,6 +117,10 @@ function roleSpecificFunctions(role) {
         $('#manageConsoleBtnDivier').hide();
         $('#manageConsoleBtn').hide();
     }
+    else if (role == 'PARTNER') {
+        $('#manageConsoleBtnDivier').hide();
+        $('#manageConsoleBtn').hide();
+    }
     else {
         $('#manageConsoleBtnDivier').show();
         $('#manageConsoleBtn').show();
@@ -438,7 +442,8 @@ function setupLoginStatus() {
     });
     $('#checkRecordBtn').on("click", function (e) {
         e.preventDefault();
-        $('#conversatonResultModal').modal("show");
+        // $('#inProgressModal').modal("show");
+        appointment_1.showProgressModal();
     });
     $('#checkRecordMenuBtn').on("click", function (e) {
         e.preventDefault();
@@ -452,6 +457,7 @@ function setupLoginStatus() {
     $('#startConversationProcessBtn').on('click', function (e) {
         e.preventDefault();
         console.log("start conversation now!!!");
+        appointment_1.showProgressModal();
     });
     $('#reservationBtn').on("click", function (e) {
         console.log("reservation button");

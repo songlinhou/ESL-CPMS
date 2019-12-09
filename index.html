@@ -46,7 +46,7 @@
 <script>
         /*************DO NOT MODIFY THIS BLOCK*************/
         // dynamic start
-        let debugContent="2019-12-09 10:55:30";//dynamic generated time
+        let debugContent="2019-12-09 13:31:42";//dynamic generated time
         // dynamic end
         /*************DO NOT MODIFY THIS BLOCK*************/
         let debugTime = new Date(debugContent);
@@ -541,7 +541,7 @@
                   <img src="images/boy.png" class="mr-3 avatar-icon" alt="...">
                   <div class="media-body">
                     <h5 class="mt-0 mb-1" id="name1InChat">Ray</h5>
-                    Challenge everything.
+                    <span id="role1InConversationModal">Partner</span>
                     <p style="color: #888888;font-size:14px" id="email1InChat">shou@wpi.edu</p>
                   </div>
                 </li>
@@ -549,7 +549,7 @@
                   <img src="images/girl.png" class="mr-3 avatar-icon" alt="...">
                   <div class="media-body">
                     <h5 class="mt-0 mb-1" id="name2InChat">Mike</h5>
-                    Nice to meet ya.
+                    <span id="role2InConversationModal">Student</span>
                     <p style="color: #888888;font-size:14px" id="email2InChat">mike@wpi.edu</p>
                   </div>
                 </li>
@@ -886,6 +886,39 @@
   </div>
   </div>
   <!-- new discussion model ends here -->
+
+   <!-- in progress model starts here -->
+<div class="modal fade" id="inProgressModal" data-backdrop="static" data-keyboard="false" tabindex="-1"  role="dialog" aria-labelledby="inProgressLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title font-red" ><span id="inProgressTitle">In Progress</span>
+            <!-- <p style="margin-bottom: 0px;"><small class="text-muted" id="newinProgress">Today</small></p> -->
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        
+        <div class="modal-body" >
+            <div id="inProgressContent">
+                  <p></p>
+                  <p><span style="font-weight:bold">Start Time:</span><span id="progressStartTime"></span></p>
+                  <p><span style="font-weight:bold">Estimated End Time:</span><span id="estimatedEndTime"></span></p>
+                  <p><span style="font-weight:bold">Remaining Minutes:</span><span id="remaingTime"></span></p>
+            </div>
+            
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="inProgressSubmit">Finish Now</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="inProgressCancel">Cancel</button>
+        </div>
+        
+    </div>
+  </div>
+  </div>
+  <!-- in progress model ends here -->
 
 
 <!-- scheduleModal model starts here -->

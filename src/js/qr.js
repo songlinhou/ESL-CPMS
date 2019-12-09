@@ -24,12 +24,22 @@ function onInvitingQRCodeDecoded(result) {
     var initDate = new Date(dataJSON.timestamp);
     var now = new Date();
     var durationInMinutes = (now.getTime() - initDate.getTime()) / 1000 / 60;
+    var role = "Student";
+    if (dataJSON.role.toUpperCase() == "STUDENT") {
+        role = "Student";
+    }
+    else if (dataJSON.role.toUpperCase() == "PARTNER") {
+        role = "Partner";
+    }
+    else if (dataJSON.role.toUpperCase() == "ADMIN") {
+        role = "Admin";
+    }
     if (durationInMinutes > 5) {
         //expired
         $('#debugGroupInfo').html("expried already");
         $('#qrScannerModal').modal("hide");
         // $('#conversatonResultModal').modal("show");
-        appointment_1.showStartChatModal(dataJSON.username, dataJSON.email);
+        appointment_1.showStartChatModal(dataJSON.username, dataJSON.email, role);
         console.log("already expired");
     }
     else {
@@ -41,7 +51,7 @@ function onInvitingQRCodeDecoded(result) {
             $('#debugGroupInfo').html("positions from both devices are not enabled;");
             $('#qrScannerModal').modal("hide");
             // $('#conversatonResultModal').modal("show");
-            appointment_1.showStartChatModal(dataJSON.username, dataJSON.email);
+            appointment_1.showStartChatModal(dataJSON.username, dataJSON.email, dataJSON.role);
             return;
         }
         location_1.processCoordinates(function (lat, long) {
@@ -52,7 +62,7 @@ function onInvitingQRCodeDecoded(result) {
                 $('#debugGroupInfo').html("positions from one device is not enabled;");
                 $('#qrScannerModal').modal("hide");
                 // $('#conversatonResultModal').modal("show");
-                appointment_1.showStartChatModal(dataJSON.username, dataJSON.email);
+                appointment_1.showStartChatModal(dataJSON.username, dataJSON.email, role);
                 return;
             }
             var distanceInKM = location_1.getDistanceBetween(lat, long, dataJSON.latitude, dataJSON.longitude, 'K');
@@ -64,7 +74,7 @@ function onInvitingQRCodeDecoded(result) {
                 $('#debugGroupInfo').html("positions check successful;");
                 $('#qrScannerModal').modal("hide");
                 // $('#conversatonResultModal').modal("show");
-                appointment_1.showStartChatModal(dataJSON.username, dataJSON.email);
+                appointment_1.showStartChatModal(dataJSON.username, dataJSON.email, role);
                 return;
             }
             else {
@@ -74,7 +84,7 @@ function onInvitingQRCodeDecoded(result) {
                 $('#debugGroupInfo').html("positions check failed!!");
                 $('#qrScannerModal').modal("hide");
                 // $('#conversatonResultModal').modal("show");
-                appointment_1.showStartChatModal(dataJSON.username, dataJSON.email);
+                appointment_1.showStartChatModal(dataJSON.username, dataJSON.email, role);
                 return;
             }
         });

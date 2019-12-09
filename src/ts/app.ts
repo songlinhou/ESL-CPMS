@@ -11,7 +11,7 @@ import { reviveServer, checkDBStatus } from "./dev";
 import { constructFullname } from "./utils";
 import { setupDiscussionItemTriggers, setupNewDiscussionModal, setupDiscussionPageTriggers } from "./discussion";
 import { setupAnnouncementItemTriggers } from "./annoucement";
-import { setupStudentAppointmentView, setupPartnerAppointmentView } from "./appointment";
+import { setupStudentAppointmentView, setupPartnerAppointmentView, showProgressModal } from "./appointment";
 
 let isHTTPS = false;
 let isIOS = (localStorage.getItem("isIOS") == "y");
@@ -127,6 +127,10 @@ function updateLoggedView(){
 
 function roleSpecificFunctions(role:string){
     if(role == 'STUDENT'){
+        $('#manageConsoleBtnDivier').hide();
+        $('#manageConsoleBtn').hide();
+    }
+    else if(role == 'PARTNER'){
         $('#manageConsoleBtnDivier').hide();
         $('#manageConsoleBtn').hide();
     }
@@ -483,7 +487,8 @@ function setupLoginStatus(){
 
     $('#checkRecordBtn').on("click",(e)=>{
         e.preventDefault();
-        $('#conversatonResultModal').modal("show");
+        // $('#inProgressModal').modal("show");
+        showProgressModal();
     });
 
     $('#checkRecordMenuBtn').on("click",(e)=>{
@@ -500,6 +505,7 @@ function setupLoginStatus(){
     $('#startConversationProcessBtn').on('click',(e)=>{
         e.preventDefault();
         console.log("start conversation now!!!");
+        showProgressModal();
     });
 
     $('#reservationBtn').on("click",(e)=>{

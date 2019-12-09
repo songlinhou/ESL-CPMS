@@ -1,6 +1,9 @@
 import { sendJsonp } from "./ajax";
 import { constructFullname } from "./utils";
 import { loginInfo } from "./app";
+import { showYesNoModal } from "./modal";
+
+let endTme:Date;
 
 function generateAppointmentItem(date:string,finished:boolean,topic:string,name:string,isStudent:boolean,venue:string,time:string){
     let finish_ = "Missing";
@@ -168,24 +171,73 @@ export function setupStudentAppointmentView(studentEmail:string){
     });
 }
 
-export function showStartChatModal(personName:string,personEmail:string){
+export function showStartChatModal(personName:string,personEmail:string,role:string){
     $('#conversatonResultModal').modal("show");
     if(loginInfo.role == "STUDENT"){
         let name = constructFullname(loginInfo.stufirstname,loginInfo.stumidname,loginInfo.stulastname);
         $('#name1InChat').html(name);
         $('#email1InChat').html(loginInfo.stuid);
+        $('#role1InConversationModal').html("Student");
     }
     else if(loginInfo.role == "PARTNER"){
         let name = constructFullname(loginInfo.cpfirstname,loginInfo.cpmidname,loginInfo.cplastname);
         $('#name1InChat').html(name);
         $('#email1InChat').html(loginInfo.cpid);
+        $('#role1InConversationModal').html("Partner");
     }
     else if(loginInfo.role == "ADMIN"){
         let name = constructFullname(loginInfo.adminfirstname,loginInfo.adminmidname,loginInfo.adminlastname);
         $('#name1InChat').html(name);
         $('#email1InChat').html(loginInfo.adminid);
+        $('#role1InConversationModal').html("Admin");
     }
 
     $('#name2InChat').html(personName);
     $('#email2InChat').html(personEmail);
+    
+    $('#role2InConversationModal').html(role);
+}
+
+export function showProgressModal(){
+    $('#conversatonResultModal').modal("hide");
+    $('#inProgressModal').modal("show");
+    let now = new Date();
+    endTme = new Date();
+    endTme.setHours(endTme.getHours() + 1);
+    $('#progressStartTime').html(`${now.toDateString()} ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`);
+    $('#estimatedEndTime').html(`${now.toDateString()} ${endTme.getHours()}:${endTme.getMinutes()}:${endTme.getSeconds()}`);
+    let handler = setInterval(()=>{
+        let now_ = new Date();
+        let diff = <any>endTme - <any>now_;
+        var remainingHours = Math.floor((diff % 86400000) / 3600000); // hours
+        var remaingMinutes = Math.floor(((diff % 86400000) % 3600000) / 60000); // minutes
+        var remaingSeconds = Math.round((endTme.getTime() - now_.getTime()) / 1000) % 60;
+        $('#remaingTime').html(`${remainingHours}:${remaingMinutes}:${remaingSeconds}`);
+        console.log("remaingTime");
+    },1000);
+    $('#inProgressSubmit').off("click");
+    $('#inProgressCancel').off("click");
+    $('#inProgressSubmit').on("click",(event)=>{
+        event.preventDefault();
+        $('#inProgressModal').modal("hide");
+        let html = `<div style="color:red;font-weight:bold;">Conversation hasn't yet finished? Record and quit anyway?</div>`;
+        showYesNoModal("Confirm?",html,()=>{
+            $('#inProgressModal').modal("hide");
+        },()=>{
+            $('#inProgressModal').modal("hide");
+            $('#inProgressModal').modal("show");
+        },false,"Record And Quit","Continue");
+    });
+
+    $('#inProgressCancel').on("click",(event)=>{
+        event.preventDefault();
+        $('#inProgressModal').modal("hide");
+        let html = `<div style="color:red;font-weight:bold;">Conversation hasn't yet finished? Terminate without saving?</div>`;
+        showYesNoModal("Confirm?",html,()=>{
+            $('#inProgressModal').modal("hide");
+        },()=>{
+            $('#inProgressModal').modal("hide");
+            $('#inProgressModal').modal("show");
+        },false,"Terminate without Saving","Continue");
+    });
 }
