@@ -112,7 +112,7 @@ function getAssignmentList(onObtained:Function,latest:boolean = true){
     if(!latest){
         data['latest'] = 'no';
     }
-    sendJsonp('stu_and_cp_assignment',data,'post','getRecentAssignmentList').done((resp)=>{
+    sendJsonp('/stu_and_cp_assignment',data,'post','getRecentAssignmentList').done((resp)=>{
         onObtained(resp.data);
     });
 }

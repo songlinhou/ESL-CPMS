@@ -11,6 +11,7 @@ import { reviveServer, checkDBStatus } from "./dev";
 import { constructFullname } from "./utils";
 import { setupDiscussionItemTriggers, setupNewDiscussionModal, setupDiscussionPageTriggers } from "./discussion";
 import { setupAnnouncementItemTriggers } from "./annoucement";
+import { setupStudentAppointmentView } from "./appointment";
 
 let isHTTPS = false;
 let isIOS = (localStorage.getItem("isIOS") == "y");
@@ -503,6 +504,24 @@ function setupLoginStatus(){
 
     $('#reservationBtn').on("click",(e)=>{
         console.log("reservation button");
+        console.log("login",loginInfo);
+        if(loginInfo.role == 'STUDENT'){
+            // let data = {"email":loginInfo.stuid};
+            setupStudentAppointmentView(loginInfo.stuid)
+        }
+        else if(loginInfo.role == 'PARTNER'){
+            let data = {"email":loginInfo.cpid};
+            sendJsonp("/schedule/partner_view_schedule",data,"get","partnerSchedule").done((resp)=>{
+                console.log(resp);
+            });
+        }
+        else if(loginInfo.role == 'ADMIN'){
+            let data = {"email":loginInfo.adminid};
+            sendJsonp("/schedule/admin_view_allschedule",data,"get","adminSchedule").done((resp)=>{
+                console.log(resp);
+            });
+        }
+        
         $("#scheduleModal").modal("show");
     });
 

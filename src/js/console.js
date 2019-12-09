@@ -78,7 +78,7 @@ function getAssignmentList(onObtained, latest) {
     if (!latest) {
         data['latest'] = 'no';
     }
-    ajax_1.sendJsonp('stu_and_cp_assignment', data, 'post', 'getRecentAssignmentList').done(function (resp) {
+    ajax_1.sendJsonp('/stu_and_cp_assignment', data, 'post', 'getRecentAssignmentList').done(function (resp) {
         onObtained(resp.data);
     });
 }

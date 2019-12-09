@@ -46,7 +46,7 @@
 <script>
         /*************DO NOT MODIFY THIS BLOCK*************/
         // dynamic start
-        let debugContent="2019-12-08 09:42:02";//dynamic generated time
+        let debugContent="2019-12-08 18:54:00";//dynamic generated time
         // dynamic end
         /*************DO NOT MODIFY THIS BLOCK*************/
         let debugTime = new Date(debugContent);
@@ -900,21 +900,42 @@
       </div>
       
       <div class="modal-body" id="scheduleModal-content">
+        <div id="data">
         <div class="row">
           <div class="col-4">
             <div class="list-group" id="list-tab" role="tablist">
-              <a class="list-group-item list-group-item-action active" id="reserv_1" data-toggle="list" href="#list-reserv_1" role="tab" aria-controls="home">Home</a>
-              <a class="list-group-item list-group-item-action" id="reserv_2" data-toggle="list" href="#list-reserv_2" role="tab" aria-controls="profile">Profile</a>
-              <a class="list-group-item list-group-item-action" id="reserv_3" data-toggle="list" href="#list-reserv_3" role="tab" aria-controls="messages">Messages</a>
-              <a class="list-group-item list-group-item-action" id="reserv_4" data-toggle="list" href="#list-reserv_4" role="tab" aria-controls="settings">Settings</a>
-              <a class="list-group-item list-group-item-action" id="reserv_5" data-toggle="list" href="#list-reserv_5" role="tab" aria-controls="settings">Settings</a>
-              <a class="list-group-item list-group-item-action" id="reserv_6" data-toggle="list" href="#list-reserv_6" role="tab" aria-controls="settings">Settings</a>
-              <a class="list-group-item list-group-item-action" id="reserv_7" data-toggle="list" href="#list-reserv_7" role="tab" aria-controls="settings">Settings</a>
+              <a class="list-group-item list-group-item-action active" id="reserv_1" data-toggle="list" href="#list-reserv_1" role="tab" aria-controls="home">Sun.</a>
+              <a class="list-group-item list-group-item-action" id="reserv_2" data-toggle="list" href="#list-reserv_2" role="tab" aria-controls="profile">Mon.</a>
+              <a class="list-group-item list-group-item-action" id="reserv_3" data-toggle="list" href="#list-reserv_3" role="tab" aria-controls="messages">Tue.</a>
+              <a class="list-group-item list-group-item-action" id="reserv_4" data-toggle="list" href="#list-reserv_4" role="tab" aria-controls="settings">Wed.</a>
+              <a class="list-group-item list-group-item-action" id="reserv_5" data-toggle="list" href="#list-reserv_5" role="tab" aria-controls="settings">Thu.</a>
+              <a class="list-group-item list-group-item-action" id="reserv_6" data-toggle="list" href="#list-reserv_6" role="tab" aria-controls="settings">Fri.</a>
+              <a class="list-group-item list-group-item-action" id="reserv_7" data-toggle="list" href="#list-reserv_7" role="tab" aria-controls="settings">Sat.</a>
             </div>
           </div>
           <div class="col-8">
             <div class="tab-content" id="nav-tabContent">
-              <div class="tab-pane fade show active" id="list-reserv_1" role="tabpanel" aria-labelledby="list-home-list">...</div>
+              <div class="tab-pane fade show active" id="list-reserv_1" role="tabpanel" aria-labelledby="list-home-list">
+                <!-- sunday -->
+                <ul class="list-unstyled">
+                  <li class="media">
+                    <div class="fas fa-calendar-week mr-3"></div>
+                    <div class="media-body">
+                      <h5 class="mt-0 mb-1">December 8</h5><span style="color:green">Finished</span>
+                      <p><div class="fas fa-comments" style="margin-left:5px;"></div> <span>Topic</span></p>
+                      <p class="text-muted">This is the topic area</p>
+                      <p><div class="fas fa-user" style="margin-left:5px;"></div> <span>Student</span></p>
+                      <p class="text-muted">This is the student name</p>
+                      <p><div class="fas fa-map-marker-alt" style="margin-left:5px;"></div> <span>Venue</span></p>
+                      <p class="text-muted">This is the venue</p>
+                      <p><div class="fas fa-stopwatch" style="margin-left:5px;"></div> <span>Time</span></p>
+                      <p class="text-muted">This is the time</p>
+                      
+                    </div>
+                  </li>
+          
+                </ul>
+              </div>
               <div class="tab-pane fade" id="list-reserv_2" role="tabpanel" aria-labelledby="list-profile-list">...</div>
               <div class="tab-pane fade" id="list-reserv_3" role="tabpanel" aria-labelledby="list-messages-list">...</div>
               <div class="tab-pane fade" id="list-reserv_4" role="tabpanel" aria-labelledby="list-settings-list">...</div>
@@ -924,6 +945,7 @@
             </div>
           </div>
         </div>
+      </div>
       </div>
       <div class="modal-footer">
           <button type="button" class="btn" id="modalConnection">Yes</button>

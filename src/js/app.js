@@ -12,6 +12,7 @@ var dev_1 = require("./dev");
 var utils_1 = require("./utils");
 var discussion_1 = require("./discussion");
 var annoucement_1 = require("./annoucement");
+var appointment_1 = require("./appointment");
 var isHTTPS = false;
 var isIOS = (localStorage.getItem("isIOS") == "y");
 var imageToUpload = null;
@@ -454,6 +455,23 @@ function setupLoginStatus() {
     });
     $('#reservationBtn').on("click", function (e) {
         console.log("reservation button");
+        console.log("login", exports.loginInfo);
+        if (exports.loginInfo.role == 'STUDENT') {
+            // let data = {"email":loginInfo.stuid};
+            appointment_1.setupStudentAppointmentView(exports.loginInfo.stuid);
+        }
+        else if (exports.loginInfo.role == 'PARTNER') {
+            var data = { "email": exports.loginInfo.cpid };
+            ajax_1.sendJsonp("/schedule/partner_view_schedule", data, "get", "partnerSchedule").done(function (resp) {
+                console.log(resp);
+            });
+        }
+        else if (exports.loginInfo.role == 'ADMIN') {
+            var data = { "email": exports.loginInfo.adminid };
+            ajax_1.sendJsonp("/schedule/admin_view_allschedule", data, "get", "adminSchedule").done(function (resp) {
+                console.log(resp);
+            });
+        }
         $("#scheduleModal").modal("show");
     });
 }
