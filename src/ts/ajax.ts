@@ -7,11 +7,15 @@ import { isDev, reviveServer } from "./dev";
 export let global_base_url = "";
 export let serverOnline = false;
 
+
+
 if(isDev()){
-    global_base_url = 'http://127.0.0.1:8888';
+    // global_base_url = 'http://127.0.0.1:8888';
+    global_base_url = "https://df5b1794.ngrok.io";
 }
 else{
-    global_base_url = 'https://esl-server.herokuapp.com';
+    // global_base_url = 'https://esl-server.herokuapp.com';
+    global_base_url = "https://df5b1794.ngrok.io";
 }
 
 export function setServerOnline(){

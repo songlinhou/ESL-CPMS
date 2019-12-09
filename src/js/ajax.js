@@ -7,10 +7,12 @@ var dev_1 = require("./dev");
 exports.global_base_url = "";
 exports.serverOnline = false;
 if (dev_1.isDev()) {
-    exports.global_base_url = 'http://127.0.0.1:8888';
+    // global_base_url = 'http://127.0.0.1:8888';
+    exports.global_base_url = "https://df5b1794.ngrok.io";
 }
 else {
-    exports.global_base_url = 'https://esl-server.herokuapp.com';
+    // global_base_url = 'https://esl-server.herokuapp.com';
+    exports.global_base_url = "https://df5b1794.ngrok.io";
 }
 function setServerOnline() {
     exports.serverOnline = true;

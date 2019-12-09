@@ -46,11 +46,7 @@
 <script>
         /*************DO NOT MODIFY THIS BLOCK*************/
         // dynamic start
-<<<<<<< HEAD
-        let debugContent="2019-12-08 18:54:00";//dynamic generated time
-=======
-        let debugContent="2019-12-08 18:51:40";//dynamic generated time
->>>>>>> 61a1736583704f144fa601eff9b34a3337ef7b3a
+        let debugContent="2019-12-09 10:55:30";//dynamic generated time
         // dynamic end
         /*************DO NOT MODIFY THIS BLOCK*************/
         let debugTime = new Date(debugContent);
@@ -544,17 +540,17 @@
                 <li class="media">
                   <img src="images/boy.png" class="mr-3 avatar-icon" alt="...">
                   <div class="media-body">
-                    <h5 class="mt-0 mb-1">Ray</h5>
+                    <h5 class="mt-0 mb-1" id="name1InChat">Ray</h5>
                     Challenge everything.
-                    <p style="color: #888888;font-size:14px">shou@wpi.edu</p>
+                    <p style="color: #888888;font-size:14px" id="email1InChat">shou@wpi.edu</p>
                   </div>
                 </li>
                 <li class="media">
                   <img src="images/girl.png" class="mr-3 avatar-icon" alt="...">
                   <div class="media-body">
-                    <h5 class="mt-0 mb-1">Mike</h5>
+                    <h5 class="mt-0 mb-1" id="name2InChat">Mike</h5>
                     Nice to meet ya.
-                    <p style="color: #888888;font-size:14px">mike@wpi.edu</p>
+                    <p style="color: #888888;font-size:14px" id="email2InChat">mike@wpi.edu</p>
                   </div>
                 </li>
               </ul>
@@ -904,7 +900,10 @@
       </div>
       
       <div class="modal-body" id="scheduleModal-content">
-        <div id="data">
+
+        
+        
+        <!-- <div id="data"> -->
         <div class="row">
           <div class="col-4">
             <div class="list-group" id="list-tab" role="tablist">
@@ -920,7 +919,7 @@
           <div class="col-8">
             <div class="tab-content" id="nav-tabContent">
               <div class="tab-pane fade show active" id="list-reserv_1" role="tabpanel" aria-labelledby="list-home-list">
-                <!-- sunday -->
+                
                 <ul class="list-unstyled">
                   <li class="media">
                     <div class="fas fa-calendar-week mr-3"></div>
@@ -940,20 +939,27 @@
           
                 </ul>
               </div>
-              <div class="tab-pane fade" id="list-reserv_2" role="tabpanel" aria-labelledby="list-profile-list">...</div>
-              <div class="tab-pane fade" id="list-reserv_3" role="tabpanel" aria-labelledby="list-messages-list">...</div>
-              <div class="tab-pane fade" id="list-reserv_4" role="tabpanel" aria-labelledby="list-settings-list">...</div>
-              <div class="tab-pane fade" id="list-reserv_5" role="tabpanel" aria-labelledby="list-settings-list">...</div>
-              <div class="tab-pane fade" id="list-reserv_6" role="tabpanel" aria-labelledby="list-settings-list">...</div>
-              <div class="tab-pane fade" id="list-reserv_7" role="tabpanel" aria-labelledby="list-settings-list">...</div>
+              <div class="tab-pane fade" id="list-reserv_2" role="tabpanel" aria-labelledby="list-profile-list">loading...</div>
+              <div class="tab-pane fade" id="list-reserv_3" role="tabpanel" aria-labelledby="list-messages-list">loading...</div>
+              <div class="tab-pane fade" id="list-reserv_4" role="tabpanel" aria-labelledby="list-settings-list">loading...</div>
+              <div class="tab-pane fade" id="list-reserv_5" role="tabpanel" aria-labelledby="list-settings-list">loading...</div>
+              <div class="tab-pane fade" id="list-reserv_6" role="tabpanel" aria-labelledby="list-settings-list">loading...</div>
+              <div class="tab-pane fade" id="list-reserv_7" role="tabpanel" aria-labelledby="list-settings-list">loading...</div>
             </div>
           </div>
         </div>
-      </div>
+      <!-- </div> -->
+    
+
+  
+    
+
+
+
       </div>
       <div class="modal-footer">
-          <button type="button" class="btn" id="modalConnection">Yes</button>
-        <button type="button" class="btn" data-dismiss="modal" id="modalNO">No</button>
+          <button type="button" class="btn btn-primary" id="appointmentConfirm">Yes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="appointmentCancel">No</button>
       </div>
     </div>
   </div>

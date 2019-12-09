@@ -461,10 +461,7 @@ function setupLoginStatus() {
             appointment_1.setupStudentAppointmentView(exports.loginInfo.stuid);
         }
         else if (exports.loginInfo.role == 'PARTNER') {
-            var data = { "email": exports.loginInfo.cpid };
-            ajax_1.sendJsonp("/schedule/partner_view_schedule", data, "get", "partnerSchedule").done(function (resp) {
-                console.log(resp);
-            });
+            appointment_1.setupPartnerAppointmentView(exports.loginInfo.cpid);
         }
         else if (exports.loginInfo.role == 'ADMIN') {
             var data = { "email": exports.loginInfo.adminid };

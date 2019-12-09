@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var location_1 = require("./location");
 var credential_1 = require("./credential");
+var appointment_1 = require("./appointment");
 ;
 function generateInvitingQRCodeURL(username, location, timestamp, role, size) {
     if (size === void 0) { size = "150x150"; }
@@ -27,7 +28,8 @@ function onInvitingQRCodeDecoded(result) {
         //expired
         $('#debugGroupInfo').html("expried already");
         $('#qrScannerModal').modal("hide");
-        $('#conversatonResultModal').modal("show");
+        // $('#conversatonResultModal').modal("show");
+        appointment_1.showStartChatModal(dataJSON.username, dataJSON.email);
         console.log("already expired");
     }
     else {
@@ -38,7 +40,8 @@ function onInvitingQRCodeDecoded(result) {
             console.log("skip position check. group formed!");
             $('#debugGroupInfo').html("positions from both devices are not enabled;");
             $('#qrScannerModal').modal("hide");
-            $('#conversatonResultModal').modal("show");
+            // $('#conversatonResultModal').modal("show");
+            appointment_1.showStartChatModal(dataJSON.username, dataJSON.email);
             return;
         }
         location_1.processCoordinates(function (lat, long) {
@@ -48,7 +51,8 @@ function onInvitingQRCodeDecoded(result) {
                 console.log("skip position check. group formed!");
                 $('#debugGroupInfo').html("positions from one device is not enabled;");
                 $('#qrScannerModal').modal("hide");
-                $('#conversatonResultModal').modal("show");
+                // $('#conversatonResultModal').modal("show");
+                appointment_1.showStartChatModal(dataJSON.username, dataJSON.email);
                 return;
             }
             var distanceInKM = location_1.getDistanceBetween(lat, long, dataJSON.latitude, dataJSON.longitude, 'K');
@@ -59,7 +63,8 @@ function onInvitingQRCodeDecoded(result) {
                 console.log("position check successful. group formed!");
                 $('#debugGroupInfo').html("positions check successful;");
                 $('#qrScannerModal').modal("hide");
-                $('#conversatonResultModal').modal("show");
+                // $('#conversatonResultModal').modal("show");
+                appointment_1.showStartChatModal(dataJSON.username, dataJSON.email);
                 return;
             }
             else {
@@ -68,7 +73,8 @@ function onInvitingQRCodeDecoded(result) {
                 console.log("position check fail. group not formed!");
                 $('#debugGroupInfo').html("positions check failed!!");
                 $('#qrScannerModal').modal("hide");
-                $('#conversatonResultModal').modal("show");
+                // $('#conversatonResultModal').modal("show");
+                appointment_1.showStartChatModal(dataJSON.username, dataJSON.email);
                 return;
             }
         });
